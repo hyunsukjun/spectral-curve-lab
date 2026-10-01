@@ -10,6 +10,8 @@ Audio Curve Lab의 화면·노드 편집 방식을 바탕으로 만든 독립적
 
 ## 실행
 
+[공개 웹 테스트](https://hyunsukjun.github.io/spectral-curve-lab/) — GitHub Pages에서 실행합니다. 음원은 브라우저 안에서 처리하며 업로드하지 않습니다.
+
 이 폴더에서 `python3 -m http.server 8769 --bind 127.0.0.1` 실행 후 `http://localhost:8769`를 여세요. 로컬 HTTP 또는 HTTPS가 필요합니다. Chrome 및 Codex 내장 브라우저에서 수치·UI를 검증했으며 다른 브라우저의 청감·성능 검증은 남아 있습니다.
 
 - Open Audio: 로컬 모노/스테레오 음원. 파일을 업로드하지 않습니다.
