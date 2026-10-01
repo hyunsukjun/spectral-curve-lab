@@ -1,0 +1,27 @@
+<!doctype html><meta charset="utf-8"><title>Spectral Stretch integration checks</title><style>body{font:15px system-ui;padding:25px;background:#172026;color:#edf3f2}pre{white-space:pre-wrap}button{padding:12px}</style><h1>Spectral Stretch · browser integration</h1><button id="run">Run Stretch preview and WAV checks</button><pre id="result">Ready</pre>
+<script type="module">
+import {renderOffline} from '../src/offline-render.js?v=20260929-transport1';
+import {stretchToNorm,stretchFrequency} from '../src/spectral-stretch.js?v=20260929-transport1';
+const result=document.querySelector('#result'),button=document.querySelector('#run');
+const amp=(data,hz)=>{let re=0,im=0;const start=24000,end=data.length-24000;for(let i=start;i<end;i++){re+=data[i]*Math.cos(2*Math.PI*hz*i/48000);im+=data[i]*Math.sin(2*Math.PI*hz*i/48000);}return 2*Math.hypot(re,im)/(end-start);};
+button.onclick=async()=>{
+ button.disabled=true;let ctx;
+ try{
+  ctx=new AudioContext({sampleRate:48000});await ctx.resume();const rows=[];
+  const source=new AudioBuffer({sampleRate:48000,numberOfChannels:2,length:96000});
+  for(let i=0;i<source.length;i++){source.getChannelData(0)[i]=.15*Math.sin(2*Math.PI*500*i/48000)+.15*Math.sin(2*Math.PI*1000*i/48000)+.15*Math.sin(2*Math.PI*2000*i/48000);source.getChannelData(1)[i]=-.5*source.getChannelData(0)[i];}
+  for(const amount of [.5,1,2])for(const shiftHz of [0,200]){
+   const shift=[{x:0,y:.5+shiftHz/4000},{x:1,y:.5+shiftHz/4000}],stretch=[{x:0,y:stretchToNorm(amount)},{x:1,y:stretchToNorm(amount)}];
+   const context=new OfflineAudioContext(2,source.length,48000);await context.audioWorklet.addModule('./browser-worklet.js?v=20260929-transport1');
+   const node=new AudioWorkletNode(context,'test-neutral',{numberOfInputs:0,outputChannelCount:[2],processorOptions:{channels:[source.getChannelData(0),source.getChannelData(1)],curve:shift,stretchCurve:stretch}});node.connect(context.destination);
+   const preview=await context.startRendering();
+   const rendered=await renderOffline({audioBuffer:source,curves:{shift,stretch}}),wav=await rendered.blob.arrayBuffer(),header=new DataView(wav),out=await ctx.decodeAudioData(wav.slice(0));
+   const hz=[500,1000,2000].map(f=>stretchFrequency(f,amount)+shiftHz),previewAmplitudes=hz.map(f=>amp(preview.getChannelData(0),f)),renderAmplitudes=hz.map(f=>amp(out.getChannelData(0),f));
+   let stereoError=0;for(let i=0;i<out.length;i++)stereoError=Math.max(stereoError,Math.abs(out.getChannelData(1)[i]+out.getChannelData(0)[i]*.5));
+   rows.push({amount,shiftHz,hz,previewAmplitudes,renderAmplitudes,stereoError,length:out.length,bits:header.getUint16(34,true),pass:previewAmplitudes.concat(renderAmplitudes).every(a=>a>.135&&a<.165)&&stereoError<2e-7&&out.length===source.length&&header.getUint16(34,true)===24});
+   result.textContent=`${rows.length}/6 finished…`;
+  }
+  result.textContent=JSON.stringify({rows,pass:rows.every(r=>r.pass)},null,2);
+ }catch(e){result.textContent=e.stack;}finally{await ctx?.close();button.disabled=false;}
+};
+</script>

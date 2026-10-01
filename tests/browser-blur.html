@@ -1,0 +1,19 @@
+<!doctype html><meta charset="utf-8"><title>Spectral Blur integration</title><style>body{font:15px system-ui;padding:24px;background:#172026;color:#edf3f2}pre{white-space:pre-wrap}button{padding:12px}</style><h1>Spectral Blur · preview and WAV checks</h1><button id="run">Run Blur checks</button><pre id="result">Ready</pre>
+<script type="module">
+import {renderOffline} from '../src/offline-render.js?v=20260929-transport1';
+const flat=y=>[{x:0,y},{x:1,y}],rate=48000;
+const amplitude=(d,hz,a,b)=>{let r=0,q=0;for(let i=Math.round(a*rate);i<Math.round(b*rate);i++){r+=d[i]*Math.cos(2*Math.PI*hz*i/rate);q+=d[i]*Math.sin(2*Math.PI*hz*i/rate);}return 2*Math.hypot(r,q)/((b-a)*rate);};
+document.querySelector('#run').onclick=async()=>{const result=document.querySelector('#result');document.querySelector('#run').disabled=true;let ctx;try{
+ctx=new AudioContext({sampleRate:rate});await ctx.resume();const rows=[];
+for(const blur of [0,.5,1])for(const combined of [false,true]){
+ const source=new AudioBuffer({numberOfChannels:2,length:rate*3,sampleRate:rate});for(let i=0;i<source.length;i++){const hz=i<rate?500:1500,v=.25*Math.sin(2*Math.PI*hz*i/rate);source.getChannelData(0)[i]=v;source.getChannelData(1)[i]=-.5*v;}
+ const curve=flat(combined?.55:.5),stretchCurve=flat(combined?1:.5),blurCurve=flat(blur);
+ const off=new OfflineAudioContext(2,source.length,rate);await off.audioWorklet.addModule('./browser-worklet.js?v=20260929-transport1');const node=new AudioWorkletNode(off,'test-neutral',{numberOfInputs:0,outputChannelCount:[2],processorOptions:{channels:[source.getChannelData(0),source.getChannelData(1)],curve,stretchCurve,blurCurve}});node.connect(off.destination);const preview=await off.startRendering();
+ const rendered=await renderOffline({audioBuffer:source,curves:{shift:curve,stretch:stretchCurve,blur:blurCurve}}),wav=await rendered.blob.arrayBuffer(),bits=new DataView(wav).getUint16(34,true),decoded=await ctx.decodeAudioData(wav.slice(0));
+ const hz=combined?[450,2450]:[500,1500];let stereoError=0;for(let i=0;i<decoded.length;i++)stereoError=Math.max(stereoError,Math.abs(decoded.getChannelData(1)[i]+.5*decoded.getChannelData(0)[i]));
+ const values=[preview,decoded].map(b=>({old:amplitude(b.getChannelData(0),hz[0],1.15,1.25),current:amplitude(b.getChannelData(0),hz[1],2.4,2.7)}));
+ const pass=values.every(v=>v.current>.21&&v.current<.28&&(blur===0?v.old<.005:v.old>.005))&&stereoError<2e-7&&decoded.length===source.length&&bits===24;
+ rows.push({blur,combined,values,stereoError,length:decoded.length,bits,pass});result.textContent=`${rows.length}/6 finished`;
+}result.textContent=JSON.stringify({rows,pass:rows.every(r=>r.pass)},null,2);
+}catch(e){result.textContent=e.stack;}finally{await ctx?.close();document.querySelector('#run').disabled=false;}};
+</script>

@@ -1,0 +1,30 @@
+{
+  "clock": "AudioWorklet Date.now (1ms resolution)",
+  "quantumBudgetMs": 2.6666666666666665,
+  "beforeNeutralWarmupFix": {
+    "processTotalMs": 114,
+    "maxProcessMs": 4,
+    "overBudget": 1,
+    "maxSampleError": 0
+  },
+  "afterNeutralWarmupFix": {
+    "processTotalMs": 113,
+    "maxProcessMs": 2,
+    "overBudget": 0,
+    "maxSampleError": 0
+  },
+  "spectralShiftDynamicCurve": {
+    "durationSeconds": 8,
+    "processTotalMs": 123,
+    "maxProcessMs": 2,
+    "quanta": 3004,
+    "overBudget": 0,
+    "maxSampleErrorVsSharedEngine": 0,
+    "processWallFraction": 0.015375
+  },
+  "limitations": [
+    "coarse 1ms timing",
+    "output capture precedes device",
+    "not a system CPU reading or hardware underrun detector"
+  ]
+}

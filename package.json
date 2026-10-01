@@ -1,0 +1,8 @@
+{
+  "name": "spectral-curve-lab",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node tests/neutral.mjs && node tests/shift.mjs && node tests/stretch.mjs && node tests/blur.mjs && node tests/spectrogram.mjs && node tests/transport.mjs"
+  }
+}

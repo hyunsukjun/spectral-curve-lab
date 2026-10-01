@@ -1,0 +1,14 @@
+{
+  "date": "2026-09-27",
+  "durationSeconds": 8,
+  "clock": "Date.now (1ms resolution)",
+  "totalProcessMs": 710,
+  "maxProcessMs": 2,
+  "calls": 3008,
+  "overBudget": 0,
+  "maxError": 0,
+  "renderQuantumMs": 2.6666666666666665,
+  "measuredProcessWallFraction": 0.08875,
+  "pass": true,
+  "note": "Before-device capture; hardware underruns and perceptual quality not measured."
+}

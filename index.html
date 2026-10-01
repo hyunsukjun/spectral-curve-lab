@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Spectral Curve Lab</title>
+    <link rel="stylesheet" href="src/styles.css?v=20261001-playback1">
+  </head>
+  <body>
+    <main class="app">
+      <header class="topbar">
+        <div class="brand">
+          <svg class="brandMark" viewBox="0 0 48 48" aria-hidden="true"><path d="M5 24h5m28 0h5M10 19v10m5-17v24m6-30v36m6-29v22m6-17v12m5-7v2"/></svg>
+          <div class="brandCopy"><h1><span>Spectral </span><span class="brandAccent">Curve Lab</span></h1>
+          <p class="tagline">Draw spectral shift, stretch and blur across time.</p>
+          <p class="statusLine"><span id="fileStatus">No audio loaded</span><span class="privacyNote">Local browser processing. No upload.</span></p>
+          <p class="formatNote">Recommended: WAV, MP3. Some formats may vary by browser.</p></div>
+        </div>
+        <div class="transport">
+          <label class="fileButton">
+            Open Audio
+            <input id="fileInput" type="file" accept="audio/*">
+          </label>
+          <button id="downloadButton" type="button" disabled>Download WAV</button>
+        </div>
+      </header>
+
+      <section class="editor">
+        <div class="legend">
+          <div class="modeButtons">
+            <button id="shiftMode" class="active curveMode" type="button">Spectral Shift</button>
+            <button id="stretchMode" title="Compress or expand frequency spacing around 1 kHz. Playback speed and duration stay unchanged." class="curveMode" type="button">Spectral Stretch</button>
+            <button id="blurMode" class="curveMode" type="button" title="Smooth spectral changes over time. 0% keeps the original. File duration stays unchanged.">Spectral Blur</button>
+            <div class="toolToggle" role="group" aria-label="Curve editing tool">
+              <button id="selectTool" type="button" aria-label="Select" aria-pressed="false" title="Select: move existing points">↖</button>
+              <button id="penTool" class="active" type="button" aria-label="Pen" aria-pressed="true" title="Pen: add or move points">
+                <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L9 17l-4 1 1-4Z"/></svg>
+              </button>
+              <button id="eraserTool" type="button" aria-label="Eraser" aria-pressed="false" title="Eraser: click a point to delete. Mac: Command-click; PC: Ctrl-click">
+                <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 21-4-4a2 2 0 0 1 0-3L13 4a2 2 0 0 1 3 0l6 6a2 2 0 0 1 0 3l-8 8"/><path d="M22 21H7"/><path d="m5 11 9 9"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="curveLegend" id="curveLegend">Shift −2000…+2000 Hz · 0 Hz = original spectrum</div>
+          <div class="curveActions">
+            <button id="clearCurveButton" type="button">Clear Current</button>
+            <button id="resetButton" type="button">Reset All</button>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="readout"><span>Spectral Shift</span><strong id="shiftReadout">0.0 Hz</strong></div>
+          <div class="readout"><span>Spectral Stretch</span><strong id="stretchReadout">1.000</strong></div>
+          <div class="readout"><span>Spectral Blur</span><strong id="blurReadout">0%</strong></div>
+          <div class="readout">
+            <span>Curve</span>
+            <strong id="modeReadout">Spectral Shift</strong>
+          </div>
+          <div class="readout">
+            <span>Points</span>
+            <strong id="pointsReadout">2</strong>
+          </div>
+          <div class="readout">
+            <span>Engine</span>
+            <strong>Spectral STFT</strong>
+          </div>
+          <div class="readout">
+            <span>WAV · 48 kHz / 24-bit</span>
+            <strong id="downloadReadout">not ready</strong>
+          </div>
+        </div>
+        <div class="canvasFrame">
+          <canvas id="waveCanvas" width="1400" height="620"></canvas>
+        </div>
+      </section>
+      <section class="spectrogramSection" aria-label="Spectrogram comparison">
+        <label class="spectrogramSwitch"><input id="spectrogramToggle" type="checkbox"> SOURCE / OUTPUT Spectrogram</label>
+        <div id="spectrogramPanel" hidden>
+          <div class="spectrogramControls"><button id="updateSpectrogram" type="button">Update comparison</button><span id="spectrogramStatus" role="status">Update needed</span></div>
+          <p class="spectrogramNote">Same frequency and colour scales · Mean channel power · Preview result, before WAV clipping</p>
+          <div class="spectrogramPair">
+            <figure><figcaption>SOURCE · Original</figcaption><canvas id="sourceSpectrogram" aria-label="Source spectrogram: frequency over time" role="img"></canvas></figure>
+            <figure><figcaption>OUTPUT · Current curves</figcaption><canvas id="outputSpectrogram" aria-label="Output spectrogram: frequency over time" role="img"></canvas></figure>
+          </div>
+          <div class="spectrogramScale"><span>−90 dBFS</span><span class="spectrogramGradient"></span><span>0 dBFS</span></div>
+          <p class="spectrogramNote">Overview only: short events may fall between columns. Curve edits need an update. Pause playback to analyse.</p>
+        </div>
+      </section>
+      <footer class="playbackBar" aria-label="Playback and output monitoring">
+        <div class="bottomTransport" aria-label="Transport controls">
+          <button id="playButton" type="button" disabled>Play</button>
+          <button id="stopButton" type="button" disabled>Stop</button>
+        </div>
+        <output id="timeStatus" aria-label="Current playback time and duration">00:00.00 / 00:00.00</output>
+        <label class="scrubberGroup" for="playbackScrubber">
+          <span>Position</span>
+          <input id="playbackScrubber" type="range" min="0" max="1" step="0.0001" value="0" disabled>
+        </label>
+        <section class="outputMeter" aria-label="Stereo output level meter">
+          <div class="meterTitle">OUT</div>
+          <div class="meterChannels">
+            <div class="meterRow" data-meter-channel="0"><span class="meterChannelLabel">L</span><div class="meterTrack" aria-hidden="true"><div class="meterRms"></div><div class="meterPeak"></div><div class="meterHold"></div></div><span class="meterValue">-∞</span></div>
+            <div class="meterRow" data-meter-channel="1"><span class="meterChannelLabel">R</span><div class="meterTrack" aria-hidden="true"><div class="meterRms"></div><div class="meterPeak"></div><div class="meterHold"></div></div><span class="meterValue">-∞</span></div>
+          </div>
+          <button id="meterClipButton" class="meterClip" type="button" aria-pressed="false" title="Clip indicator. Click to reset.">CLIP</button>
+        </section>
+      </footer>
+    </main>
+
+    <div id="resetDialog" class="dialogBackdrop" hidden>
+      <div class="confirmDialog" role="dialog" aria-modal="true" aria-labelledby="resetDialogTitle" aria-describedby="resetDialogDescription">
+        <h2 id="resetDialogTitle">Reset all curves?</h2>
+        <p id="resetDialogDescription">All curve nodes will be removed and the curves will return to their default state. This action cannot be undone.</p>
+        <div class="dialogActions">
+          <button id="cancelResetButton" type="button">Cancel</button>
+          <button id="confirmResetButton" type="button">Reset All</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="src/app.js?v=20261001-playback1" type="module"></script>
+  </body>
+</html>

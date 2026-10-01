@@ -1,0 +1,588 @@
+{
+  "results": [
+    {
+      "name": "sine",
+      "size": 2048,
+      "length": 1,
+      "peakError": 0,
+      "rmsError": 0,
+      "elapsedMs": 4.589915999999999
+    },
+    {
+      "name": "harmonic",
+      "size": 2048,
+      "length": 1,
+      "peakError": 0,
+      "rmsError": 0,
+      "elapsedMs": 0.50075
+    },
+    {
+      "name": "whiteNoise",
+      "size": 2048,
+      "length": 1,
+      "peakError": 0,
+      "rmsError": 0,
+      "elapsedMs": 0.4707909999999984
+    },
+    {
+      "name": "transient",
+      "size": 2048,
+      "length": 1,
+      "peakError": 0,
+      "rmsError": 0,
+      "elapsedMs": 0.40920799999999957
+    },
+    {
+      "name": "silence",
+      "size": 2048,
+      "length": 1,
+      "peakError": 0,
+      "rmsError": 0,
+      "elapsedMs": 0.4208749999999988
+    },
+    {
+      "name": "dc",
+      "size": 2048,
+      "length": 1,
+      "peakError": 0,
+      "rmsError": 0,
+      "elapsedMs": 0.4115000000000002
+    },
+    {
+      "name": "sine",
+      "size": 2048,
+      "length": 17,
+      "peakError": 8.673617379884035e-19,
+      "rmsError": 1.4875131087175868e-19,
+      "elapsedMs": 0.4108330000000002
+    },
+    {
+      "name": "harmonic",
+      "size": 2048,
+      "length": 17,
+      "peakError": 5.827586677109586e-19,
+      "rmsError": 9.994228699196285e-20,
+      "elapsedMs": 0.42337500000000006
+    },
+    {
+      "name": "whiteNoise",
+      "size": 2048,
+      "length": 17,
+      "peakError": 0,
+      "rmsError": 0,
+      "elapsedMs": 0.4172079999999987
+    },
+    {
+      "name": "transient",
+      "size": 2048,
+      "length": 17,
+      "peakError": 0,
+      "rmsError": 0,
+      "elapsedMs": 0.4174160000000029
+    },
+    {
+      "name": "silence",
+      "size": 2048,
+      "length": 17,
+      "peakError": 0,
+      "rmsError": 0,
+      "elapsedMs": 0.46558299999999875
+    },
+    {
+      "name": "dc",
+      "size": 2048,
+      "length": 17,
+      "peakError": 0,
+      "rmsError": 0,
+      "elapsedMs": 0.40783300000000366
+    },
+    {
+      "name": "sine",
+      "size": 2048,
+      "length": 511,
+      "peakError": 1.6479873021779667e-17,
+      "rmsError": 5.154996956519013e-19,
+      "elapsedMs": 0.5572909999999993
+    },
+    {
+      "name": "harmonic",
+      "size": 2048,
+      "length": 511,
+      "peakError": 3.505586886506362e-18,
+      "rmsError": 1.0965672919245427e-19,
+      "elapsedMs": 0.4497909999999976
+    },
+    {
+      "name": "whiteNoise",
+      "size": 2048,
+      "length": 511,
+      "peakError": 0,
+      "rmsError": 0,
+      "elapsedMs": 0.45591699999999946
+    },
+    {
+      "name": "transient",
+      "size": 2048,
+      "length": 511,
+      "peakError": 0,
+      "rmsError": 0,
+      "elapsedMs": 0.43762499999999704
+    },
+    {
+      "name": "silence",
+      "size": 2048,
+      "length": 511,
+      "peakError": 0,
+      "rmsError": 0,
+      "elapsedMs": 0.4450000000000003
+    },
+    {
+      "name": "dc",
+      "size": 2048,
+      "length": 511,
+      "peakError": 0,
+      "rmsError": 0,
+      "elapsedMs": 0.3888329999999982
+    },
+    {
+      "name": "sine",
+      "size": 2048,
+      "length": 2048,
+      "peakError": 8.962737683486632e-18,
+      "rmsError": 1.4004277630447863e-19,
+      "elapsedMs": 0.762874999999994
+    },
+    {
+      "name": "harmonic",
+      "size": 2048,
+      "length": 2048,
+      "peakError": 6.718956505196729e-18,
+      "rmsError": 1.050808459604721e-19,
+      "elapsedMs": 0.7880830000000003
+    },
+    {
+      "name": "whiteNoise",
+      "size": 2048,
+      "length": 2048,
+      "peakError": 0,
+      "rmsError": 0,
+      "elapsedMs": 0.796875
+    },
+    {
+      "name": "transient",
+      "size": 2048,
+      "length": 2048,
+      "peakError": 0,
+      "rmsError": 0,
+      "elapsedMs": 0.8136670000000024
+    },
+    {
+      "name": "silence",
+      "size": 2048,
+      "length": 2048,
+      "peakError": 0,
+      "rmsError": 0,
+      "elapsedMs": 0.7606660000000005
+    },
+    {
+      "name": "dc",
+      "size": 2048,
+      "length": 2048,
+      "peakError": 0,
+      "rmsError": 0,
+      "elapsedMs": 0.8317920000000001
+    },
+    {
+      "name": "sine",
+      "size": 2048,
+      "length": 48001,
+      "peakError": 1.2900311786682994e-17,
+      "rmsError": 6.057640767412142e-20,
+      "elapsedMs": 11.236041000000007
+    },
+    {
+      "name": "harmonic",
+      "size": 2048,
+      "length": 48001,
+      "peakError": 1.8577126599181315e-17,
+      "rmsError": 1.6094629576093993e-19,
+      "elapsedMs": 11.143666999999994
+    },
+    {
+      "name": "whiteNoise",
+      "size": 2048,
+      "length": 48001,
+      "peakError": 0,
+      "rmsError": 0,
+      "elapsedMs": 11.513583999999994
+    },
+    {
+      "name": "transient",
+      "size": 2048,
+      "length": 48001,
+      "peakError": 0,
+      "rmsError": 0,
+      "elapsedMs": 11.034458
+    },
+    {
+      "name": "silence",
+      "size": 2048,
+      "length": 48001,
+      "peakError": 0,
+      "rmsError": 0,
+      "elapsedMs": 11.13145800000001
+    },
+    {
+      "name": "dc",
+      "size": 2048,
+      "length": 48001,
+      "peakError": 0,
+      "rmsError": 0,
+      "elapsedMs": 12.312457999999992
+    },
+    {
+      "name": "sine",
+      "size": 2048,
+      "length": 480000,
+      "peakError": 4.7813315806610746e-17,
+      "rmsError": 1.0415952386677693e-19,
+      "elapsedMs": 109.60399999999998
+    },
+    {
+      "name": "harmonic",
+      "size": 2048,
+      "length": 480000,
+      "peakError": 2.882622526095835e-17,
+      "rmsError": 1.7121322265992102e-19,
+      "elapsedMs": 111.313875
+    },
+    {
+      "name": "whiteNoise",
+      "size": 2048,
+      "length": 480000,
+      "peakError": 0,
+      "rmsError": 0,
+      "elapsedMs": 110.25141700000006
+    },
+    {
+      "name": "transient",
+      "size": 2048,
+      "length": 480000,
+      "peakError": 0,
+      "rmsError": 0,
+      "elapsedMs": 108.27995899999996
+    },
+    {
+      "name": "silence",
+      "size": 2048,
+      "length": 480000,
+      "peakError": 0,
+      "rmsError": 0,
+      "elapsedMs": 108.52487500000007
+    },
+    {
+      "name": "dc",
+      "size": 2048,
+      "length": 480000,
+      "peakError": 0,
+      "rmsError": 0,
+      "elapsedMs": 112.41075000000001
+    },
+    {
+      "name": "sine",
+      "size": 4096,
+      "length": 1,
+      "peakError": 0,
+      "rmsError": 0,
+      "elapsedMs": 0.9712919999999485
+    },
+    {
+      "name": "harmonic",
+      "size": 4096,
+      "length": 1,
+      "peakError": 0,
+      "rmsError": 0,
+      "elapsedMs": 0.8672920000001341
+    },
+    {
+      "name": "whiteNoise",
+      "size": 4096,
+      "length": 1,
+      "peakError": 0,
+      "rmsError": 0,
+      "elapsedMs": 0.9754170000001068
+    },
+    {
+      "name": "transient",
+      "size": 4096,
+      "length": 1,
+      "peakError": 0,
+      "rmsError": 0,
+      "elapsedMs": 0.9227499999999509
+    },
+    {
+      "name": "silence",
+      "size": 4096,
+      "length": 1,
+      "peakError": 0,
+      "rmsError": 0,
+      "elapsedMs": 0.8794580000001133
+    },
+    {
+      "name": "dc",
+      "size": 4096,
+      "length": 1,
+      "peakError": 0,
+      "rmsError": 0,
+      "elapsedMs": 0.9420830000001388
+    },
+    {
+      "name": "sine",
+      "size": 4096,
+      "length": 17,
+      "peakError": 2.457524855368759e-18,
+      "rmsError": 4.2146203564829083e-19,
+      "elapsedMs": 0.9322500000000673
+    },
+    {
+      "name": "harmonic",
+      "size": 4096,
+      "length": 17,
+      "peakError": 7.657177843178875e-19,
+      "rmsError": 1.3131951662897446e-19,
+      "elapsedMs": 0.9982919999999922
+    },
+    {
+      "name": "whiteNoise",
+      "size": 4096,
+      "length": 17,
+      "peakError": 0,
+      "rmsError": 0,
+      "elapsedMs": 0.8957499999999072
+    },
+    {
+      "name": "transient",
+      "size": 4096,
+      "length": 17,
+      "peakError": 0,
+      "rmsError": 0,
+      "elapsedMs": 0.9038749999999709
+    },
+    {
+      "name": "silence",
+      "size": 4096,
+      "length": 17,
+      "peakError": 0,
+      "rmsError": 0,
+      "elapsedMs": 0.9045839999998861
+    },
+    {
+      "name": "dc",
+      "size": 4096,
+      "length": 17,
+      "peakError": 0,
+      "rmsError": 0,
+      "elapsedMs": 0.9230420000001232
+    },
+    {
+      "name": "sine",
+      "size": 4096,
+      "length": 511,
+      "peakError": 4.0476879727491145e-18,
+      "rmsError": 1.2661395602310892e-19,
+      "elapsedMs": 0.9165419999999358
+    },
+    {
+      "name": "harmonic",
+      "size": 4096,
+      "length": 511,
+      "peakError": 5.240310672675899e-19,
+      "rmsError": 1.6391986475355215e-20,
+      "elapsedMs": 0.9420410000000174
+    },
+    {
+      "name": "whiteNoise",
+      "size": 4096,
+      "length": 511,
+      "peakError": 0,
+      "rmsError": 0,
+      "elapsedMs": 1.0011250000000018
+    },
+    {
+      "name": "transient",
+      "size": 4096,
+      "length": 511,
+      "peakError": 0,
+      "rmsError": 0,
+      "elapsedMs": 0.9637499999998909
+    },
+    {
+      "name": "silence",
+      "size": 4096,
+      "length": 511,
+      "peakError": 0,
+      "rmsError": 0,
+      "elapsedMs": 0.9107079999998859
+    },
+    {
+      "name": "dc",
+      "size": 4096,
+      "length": 511,
+      "peakError": 0,
+      "rmsError": 0,
+      "elapsedMs": 0.9322919999999613
+    },
+    {
+      "name": "sine",
+      "size": 4096,
+      "length": 2048,
+      "peakError": 2.168404344971009e-17,
+      "rmsError": 3.3881317890172014e-19,
+      "elapsedMs": 1.2386669999998503
+    },
+    {
+      "name": "harmonic",
+      "size": 4096,
+      "length": 2048,
+      "peakError": 8.940035711575115e-18,
+      "rmsError": 1.5886611331181823e-19,
+      "elapsedMs": 1.1989160000000538
+    },
+    {
+      "name": "whiteNoise",
+      "size": 4096,
+      "length": 2048,
+      "peakError": 0,
+      "rmsError": 0,
+      "elapsedMs": 1.2407909999999447
+    },
+    {
+      "name": "transient",
+      "size": 4096,
+      "length": 2048,
+      "peakError": 0,
+      "rmsError": 0,
+      "elapsedMs": 1.1614580000000387
+    },
+    {
+      "name": "silence",
+      "size": 4096,
+      "length": 2048,
+      "peakError": 0,
+      "rmsError": 0,
+      "elapsedMs": 1.1411249999998745
+    },
+    {
+      "name": "dc",
+      "size": 4096,
+      "length": 2048,
+      "peakError": 0,
+      "rmsError": 0,
+      "elapsedMs": 1.2646249999997963
+    },
+    {
+      "name": "sine",
+      "size": 4096,
+      "length": 48001,
+      "peakError": 5.0647488048123634e-17,
+      "rmsError": 2.251770233660913e-19,
+      "elapsedMs": 12.464124999999967
+    },
+    {
+      "name": "harmonic",
+      "size": 4096,
+      "length": 48001,
+      "peakError": 3.0381377752117245e-17,
+      "rmsError": 2.7509553737865267e-19,
+      "elapsedMs": 12.566708999999946
+    },
+    {
+      "name": "whiteNoise",
+      "size": 4096,
+      "length": 48001,
+      "peakError": 0,
+      "rmsError": 0,
+      "elapsedMs": 13.030499999999847
+    },
+    {
+      "name": "transient",
+      "size": 4096,
+      "length": 48001,
+      "peakError": 0,
+      "rmsError": 0,
+      "elapsedMs": 12.344291000000112
+    },
+    {
+      "name": "silence",
+      "size": 4096,
+      "length": 48001,
+      "peakError": 0,
+      "rmsError": 0,
+      "elapsedMs": 12.200708000000077
+    },
+    {
+      "name": "dc",
+      "size": 4096,
+      "length": 48001,
+      "peakError": 0,
+      "rmsError": 0,
+      "elapsedMs": 12.45983299999989
+    },
+    {
+      "name": "sine",
+      "size": 4096,
+      "length": 480000,
+      "peakError": 7.508100044462118e-17,
+      "rmsError": 1.5398869337150883e-19,
+      "elapsedMs": 118.08012500000018
+    },
+    {
+      "name": "harmonic",
+      "size": 4096,
+      "length": 480000,
+      "peakError": 3.99257450017787e-17,
+      "rmsError": 2.932004108871361e-19,
+      "elapsedMs": 118.84279199999992
+    },
+    {
+      "name": "whiteNoise",
+      "size": 4096,
+      "length": 480000,
+      "peakError": 0,
+      "rmsError": 0,
+      "elapsedMs": 117.0341249999999
+    },
+    {
+      "name": "transient",
+      "size": 4096,
+      "length": 480000,
+      "peakError": 0,
+      "rmsError": 0,
+      "elapsedMs": 114.97974999999997
+    },
+    {
+      "name": "silence",
+      "size": 4096,
+      "length": 480000,
+      "peakError": 0,
+      "rmsError": 0,
+      "elapsedMs": 117.20508300000006
+    },
+    {
+      "name": "dc",
+      "size": 4096,
+      "length": 480000,
+      "peakError": 0,
+      "rmsError": 0,
+      "elapsedMs": 117.45887500000026
+    }
+  ],
+  "longResult": {
+    "seconds": 180,
+    "elapsedMs": 1988.5844169999996,
+    "maxHopMs": 2.2666659999999865,
+    "hopBudgetMs": 10.666666666666666
+  },
+  "worklet": "128-frame output, stereo, seek, pause, stop and natural end passed",
+  "wav": "24-bit / 48kHz mono odd-byte padding passed"
+}

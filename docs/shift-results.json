@@ -1,0 +1,150 @@
+{
+  "rows": [
+    {
+      "size": 2048,
+      "shift": -2000,
+      "inputHz": 3500,
+      "expectedHz": 1500,
+      "amplitude": 0.30000000364247786,
+      "residualRms": 5.831683423348391e-9
+    },
+    {
+      "size": 2048,
+      "shift": -200,
+      "inputHz": 440,
+      "expectedHz": 240,
+      "amplitude": 0.2999999275365895,
+      "residualRms": 0.000002508011629902657
+    },
+    {
+      "size": 2048,
+      "shift": -137.25,
+      "inputHz": 440,
+      "expectedHz": 302.75,
+      "amplitude": 0.2999916333320874,
+      "residualRms": 3.225633958693195e-7
+    },
+    {
+      "size": 2048,
+      "shift": 0,
+      "inputHz": 440,
+      "expectedHz": 440,
+      "amplitude": 0.2999999995196807,
+      "residualRms": 6.110614180337427e-9
+    },
+    {
+      "size": 2048,
+      "shift": 137.25,
+      "inputHz": 440,
+      "expectedHz": 577.25,
+      "amplitude": 0.29999159170902684,
+      "residualRms": 0.0000013354756572164053
+    },
+    {
+      "size": 2048,
+      "shift": 200,
+      "inputHz": 440,
+      "expectedHz": 640,
+      "amplitude": 0.29999999880120165,
+      "residualRms": 0.0000013345935245938524
+    },
+    {
+      "size": 2048,
+      "shift": 2000,
+      "inputHz": 440,
+      "expectedHz": 2440,
+      "amplitude": 0.299999998940293,
+      "residualRms": 0.0000013346014082464226
+    },
+    {
+      "size": 4096,
+      "shift": -2000,
+      "inputHz": 3500,
+      "expectedHz": 1500,
+      "amplitude": 0.3000000036181513,
+      "residualRms": 5.513840595459242e-9
+    },
+    {
+      "size": 4096,
+      "shift": -200,
+      "inputHz": 440,
+      "expectedHz": 240,
+      "amplitude": 0.2999999928790965,
+      "residualRms": 6.375474372709624e-7
+    },
+    {
+      "size": 4096,
+      "shift": -137.25,
+      "inputHz": 440,
+      "expectedHz": 302.75,
+      "amplitude": 0.29999164657951577,
+      "residualRms": 9.737032881108447e-8
+    },
+    {
+      "size": 4096,
+      "shift": 0,
+      "inputHz": 440,
+      "expectedHz": 440,
+      "amplitude": 0.2999999995196807,
+      "residualRms": 6.110614180337427e-9
+    },
+    {
+      "size": 4096,
+      "shift": 137.25,
+      "inputHz": 440,
+      "expectedHz": 577.25,
+      "amplitude": 0.2999915928696641,
+      "residualRms": 1.3386216060856065e-7
+    },
+    {
+      "size": 4096,
+      "shift": 200,
+      "inputHz": 440,
+      "expectedHz": 640,
+      "amplitude": 0.2999999993270183,
+      "residualRms": 1.3382550455307021e-7
+    },
+    {
+      "size": 4096,
+      "shift": 2000,
+      "inputHz": 440,
+      "expectedHz": 2440,
+      "amplitude": 0.29999999946751926,
+      "residualRms": 1.3386697899012523e-7
+    }
+  ],
+  "harmonicResult": {
+    "at640": 0.19999999969772383,
+    "at1080": 0.20000000017191757,
+    "at1280": 2.0203133941161386e-10
+  },
+  "edgeResults": [
+    {
+      "hz": 200,
+      "shift": -2000,
+      "size": 2048,
+      "rms": 9.011240578234982e-9
+    },
+    {
+      "hz": 200,
+      "shift": -2000,
+      "size": 4096,
+      "rms": 5.3453396760977435e-9
+    },
+    {
+      "hz": 23000,
+      "shift": 2000,
+      "size": 2048,
+      "rms": 2.7432349528530453e-8
+    },
+    {
+      "hz": 23000,
+      "shift": 2000,
+      "size": 4096,
+      "rms": 5.156200121291739e-9
+    }
+  ],
+  "neutralMaxError": 1.8258133991245346e-16,
+  "previewRenderInteriorRms": 0.0000013010972791548263,
+  "extremeAndLiveEdits": "pass"
+}

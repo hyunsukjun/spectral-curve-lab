@@ -1,0 +1,33 @@
+{
+  "inputSampleRates": [
+    44100,
+    48000,
+    96000
+  ],
+  "shiftHz": [
+    0,
+    200,
+    -200
+  ],
+  "cases": 9,
+  "allPassed": true,
+  "outputSampleRate": 48000,
+  "outputSamples": 48000,
+  "maxStereoRatioError": 5.960464477539063e-08,
+  "amplitudeRange": [
+    0.19973815017467336,
+    0.2000000046646321
+  ],
+  "targetAmplitude": 0.2,
+  "actualWorkletInputHz": 440,
+  "actualWorkletShiftHz": 200,
+  "actualWorkletAmplitudeAt640Hz": 0.29999999880120165,
+  "actualWorkletTargetAmplitude": 0.3,
+  "uiCelloExport": {
+    "file": "Downloads/Spectral-Curve-Lab-shift.wav",
+    "bytes": 149240,
+    "channels": 1,
+    "sampleRate": 48000,
+    "bits": 24
+  }
+}

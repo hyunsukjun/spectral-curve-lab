@@ -1,0 +1,42 @@
+{
+  "date": "2026-09-27",
+  "browser": "Codex in-app browser",
+  "cases": [
+    {
+      "stretch": 0.5,
+      "shiftHz": 0,
+      "pass": true
+    },
+    {
+      "stretch": 0.5,
+      "shiftHz": 200,
+      "pass": true
+    },
+    {
+      "stretch": 1,
+      "shiftHz": 0,
+      "pass": true
+    },
+    {
+      "stretch": 1,
+      "shiftHz": 200,
+      "pass": true
+    },
+    {
+      "stretch": 2,
+      "shiftHz": 0,
+      "pass": true
+    },
+    {
+      "stretch": 2,
+      "shiftHz": 200,
+      "pass": true
+    }
+  ],
+  "frames": 96000,
+  "rate": 48000,
+  "bits": 24,
+  "maxStereoRatioError": 5.960464477539063e-08,
+  "pass": true,
+  "note": "Actual AudioWorklet in OfflineAudioContext and production render Worker; warmup precomputed in numerical wrapper. UI output inspected."
+}

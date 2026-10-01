@@ -1,0 +1,20 @@
+{
+  "date": "2026-09-27",
+  "cases": [
+    "neutral",
+    "shift",
+    "stretch",
+    "blur",
+    "combined"
+  ],
+  "workerVersusNativeWorkletMaximumError": 0,
+  "pass": true,
+  "fixtureExport": {
+    "path": "Downloads/Spectral-Curve-Lab-export (1).wav",
+    "channels": 1,
+    "sampleRate": 48000,
+    "bits": 24,
+    "frames": 49732
+  },
+  "humanListening": "not performed"
+}

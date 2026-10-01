@@ -1,0 +1,25 @@
+<!doctype html><meta charset="utf-8"><title>Spectral Curve Lab realtime validation</title><style>body{font:15px system-ui;padding:25px;background:#172026;color:#edf3f2}pre{white-space:pre-wrap}button{padding:12px}</style><h1>Realtime AudioWorklet validation</h1><button id="run">Run 8-second stereo check</button><pre id="result">Ready</pre>
+<script type="module">
+import {SpectralEngine} from '../src/spectral-engine.js?v=20260929-transport1';
+const button=document.querySelector('#run'),result=document.querySelector('#result');
+button.onclick=async()=>{
+ button.disabled=true;let ctx;
+ try{
+  ctx=new AudioContext({sampleRate:48000});await ctx.resume();await ctx.audioWorklet.addModule('./realtime-worklet.js?v=20260929-transport1');
+  const channels=[new Float32Array(48000*8),new Float32Array(48000*8)];let seed=19,pink=0;
+  for(let i=0;i<channels[0].length;i++){seed=(1664525*seed+1013904223)>>>0;const white=seed/2147483648-1;pink=.98*pink+.02*white;channels[0][i]=.15*Math.sin(i*.1)+pink;channels[1][i]=i%8192===0?.8:-channels[0][i]*.5;}
+  const curve=new URLSearchParams(location.search).has('shift')?[{x:0,y:.55},{x:.4,y:1},{x:.40001,y:0},{x:.8,y:.5},{x:1,y:.5}]:[{x:0,y:.5},{x:1,y:.5}];
+  const stretchCurve=new URLSearchParams(location.search).has('stretch')?[{x:0,y:.5},{x:.3,y:1},{x:.30001,y:0},{x:.7,y:1},{x:1,y:.5}]:[{x:0,y:.5},{x:1,y:.5}];
+  const blurCurve=new URLSearchParams(location.search).has('blur')?[{x:0,y:1},{x:.3,y:.2},{x:.6,y:1},{x:1,y:0}]:[{x:0,y:0},{x:1,y:0}];
+  const expected=channels.map(c=>new Float32Array(c.length));const reference=new SpectralEngine(channels,2048,48000,curve,stretchCurve,0,blurCurve);
+  for(let p=0;p<reference.length;p+=reference.hop){const b=reference.nextHop();expected.forEach((c,i)=>c.set(b[i].subarray(0,Math.min(reference.hop,c.length-p)),p));}
+  const node=new AudioWorkletNode(ctx,'measured-spectral',{numberOfInputs:0,outputChannelCount:[2],processorOptions:{channels,curve,stretchCurve,blurCurve}});
+  // Zero monitor gain keeps the test graph running without playing synthetic tones.
+  const mute=ctx.createGain();mute.gain.value=0;node.connect(mute).connect(ctx.destination);
+  result.textContent='Running real-time graph for 8 seconds…';
+  const data=await new Promise((resolve,reject)=>{const timeout=setTimeout(()=>reject(Error('Realtime graph timed out')),20000);node.port.onmessage=({data})=>{if(data.type==='failure'){clearTimeout(timeout);reject(Error(data.message));}if(data.type==='measurement'){clearTimeout(timeout);resolve(data);}};node.onprocessorerror=()=>reject(Error('Processor failed'));});
+  let maxError=0;for(let c=0;c<2;c++)for(let i=0;i<channels[c].length;i++)maxError=Math.max(maxError,Math.abs(expected[c][i]-data.channels[c][i]));
+  delete data.channels;result.textContent=JSON.stringify({...data,maxError,renderQuantumMs:128/48000*1000,measuredProcessWallFraction:data.totalProcessMs/8000,pass:maxError<1e-6,note:'Actual realtime AudioContext and production process method; clock resolution limits timing. Capture is before device output, so hardware underruns are not measured.'},null,2);
+ }catch(e){result.textContent=e.stack;}finally{await ctx?.close();button.disabled=false;}
+};
+</script>

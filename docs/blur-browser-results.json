@@ -1,0 +1,59 @@
+{
+  "date": "2026-09-27",
+  "browser": "Codex in-app browser",
+  "cases": [
+    {
+      "blur": 0,
+      "combined": false,
+      "pass": true
+    },
+    {
+      "blur": 0,
+      "combined": true,
+      "pass": true
+    },
+    {
+      "blur": 0.5,
+      "combined": false,
+      "pass": true
+    },
+    {
+      "blur": 0.5,
+      "combined": true,
+      "pass": true
+    },
+    {
+      "blur": 1,
+      "combined": false,
+      "pass": true
+    },
+    {
+      "blur": 1,
+      "combined": true,
+      "pass": true
+    }
+  ],
+  "frameCount": 144000,
+  "sampleRate": 48000,
+  "bits": 24,
+  "maxStereoRatioError": 5.960464477539063e-08,
+  "realtime": {
+    "seconds": 8,
+    "calls": 3008,
+    "totalProcessMs": 779,
+    "maxProcessMs": 2,
+    "overBudget": 0,
+    "maxError": 0,
+    "clock": "Date.now 1ms",
+    "deviceUnderrunsMeasured": false
+  },
+  "fixtureWav": {
+    "file": "Downloads/Spectral-Curve-Lab-export (1).wav",
+    "bytes": 149240,
+    "frames": 49732,
+    "channels": 1,
+    "rate": 48000,
+    "bits": 24
+  },
+  "humanListening": "not verified"
+}

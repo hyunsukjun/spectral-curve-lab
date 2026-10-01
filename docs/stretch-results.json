@@ -1,0 +1,344 @@
+{
+  "neutralMaxError": 6.574330923408978e-17,
+  "shiftRegressionMaxError": 0,
+  "tonal": [
+    {
+      "size": 2048,
+      "amount": 0.5,
+      "inputHz": 250,
+      "expectedHz": 500,
+      "amplitude": 0.29232013699693926,
+      "nearby2HzAmplitude": 0.0000015832578151861047
+    },
+    {
+      "size": 2048,
+      "amount": 0.5,
+      "inputHz": 500,
+      "expectedHz": 707.1067811865476,
+      "amplitude": 0.29582432223919536,
+      "nearby2HzAmplitude": 0.00004022248814915472
+    },
+    {
+      "size": 2048,
+      "amount": 0.5,
+      "inputHz": 1000,
+      "expectedHz": 1000,
+      "amplitude": 0.29999999743358136,
+      "nearby2HzAmplitude": 2.3616507580986116e-10
+    },
+    {
+      "size": 2048,
+      "amount": 0.5,
+      "inputHz": 2000,
+      "expectedHz": 1414.213562373095,
+      "amplitude": 0.29980662144697884,
+      "nearby2HzAmplitude": 0.00003305479574840151
+    },
+    {
+      "size": 2048,
+      "amount": 0.75,
+      "inputHz": 250,
+      "expectedHz": 353.5533905932738,
+      "amplitude": 0.2913288255747358,
+      "nearby2HzAmplitude": 0.000043831509272770115
+    },
+    {
+      "size": 2048,
+      "amount": 0.75,
+      "inputHz": 500,
+      "expectedHz": 594.6035575013606,
+      "amplitude": 0.2990769026293546,
+      "nearby2HzAmplitude": 0.00004901271241997236
+    },
+    {
+      "size": 2048,
+      "amount": 0.75,
+      "inputHz": 1000,
+      "expectedHz": 1000,
+      "amplitude": 0.299999999771868,
+      "nearby2HzAmplitude": 1.2484130032215364e-10
+    },
+    {
+      "size": 2048,
+      "amount": 0.75,
+      "inputHz": 2000,
+      "expectedHz": 1681.792830507429,
+      "amplitude": 0.29132327447475187,
+      "nearby2HzAmplitude": 0.00002638465525057934
+    },
+    {
+      "size": 2048,
+      "amount": 1,
+      "inputHz": 250,
+      "expectedHz": 250,
+      "amplitude": 0.300000001628066,
+      "nearby2HzAmplitude": 2.6656478130367566e-15
+    },
+    {
+      "size": 2048,
+      "amount": 1,
+      "inputHz": 500,
+      "expectedHz": 500,
+      "amplitude": 0.3000000031402784,
+      "nearby2HzAmplitude": 6.423714452717751e-15
+    },
+    {
+      "size": 2048,
+      "amount": 1,
+      "inputHz": 1000,
+      "expectedHz": 1000,
+      "amplitude": 0.3000000024389503,
+      "nearby2HzAmplitude": 4.251798636182561e-15
+    },
+    {
+      "size": 2048,
+      "amount": 1,
+      "inputHz": 2000,
+      "expectedHz": 2000,
+      "amplitude": 0.3000000045445051,
+      "nearby2HzAmplitude": 1.3832899202055165e-14
+    },
+    {
+      "size": 2048,
+      "amount": 1.5,
+      "inputHz": 250,
+      "expectedHz": 125,
+      "amplitude": 0.29231789816576154,
+      "nearby2HzAmplitude": 0.0000033653799070979535
+    },
+    {
+      "size": 2048,
+      "amount": 1.5,
+      "inputHz": 500,
+      "expectedHz": 353.5533905932738,
+      "amplitude": 0.29390104322000277,
+      "nearby2HzAmplitude": 0.00004408128721658324
+    },
+    {
+      "size": 2048,
+      "amount": 1.5,
+      "inputHz": 1000,
+      "expectedHz": 1000,
+      "amplitude": 0.29999999817229456,
+      "nearby2HzAmplitude": 2.7938132543957037e-10
+    },
+    {
+      "size": 2048,
+      "amount": 1.5,
+      "inputHz": 2000,
+      "expectedHz": 2828.42712474619,
+      "amplitude": 0.2921318837385224,
+      "nearby2HzAmplitude": 0.0000064917883115370366
+    },
+    {
+      "size": 2048,
+      "amount": 2,
+      "inputHz": 250,
+      "expectedHz": 62.5,
+      "amplitude": 0.29994796295319,
+      "nearby2HzAmplitude": 0.000006324603161768384
+    },
+    {
+      "size": 2048,
+      "amount": 2,
+      "inputHz": 500,
+      "expectedHz": 250,
+      "amplitude": 0.29232147660978064,
+      "nearby2HzAmplitude": 0.0000011174623719755735
+    },
+    {
+      "size": 2048,
+      "amount": 2,
+      "inputHz": 1000,
+      "expectedHz": 1000,
+      "amplitude": 0.2999999934682918,
+      "nearby2HzAmplitude": 5.667239882651973e-10
+    },
+    {
+      "size": 2048,
+      "amount": 2,
+      "inputHz": 2000,
+      "expectedHz": 4000,
+      "amplitude": 0.29232065470900603,
+      "nearby2HzAmplitude": 0.0000013371512707453442
+    },
+    {
+      "size": 4096,
+      "amount": 0.5,
+      "inputHz": 250,
+      "expectedHz": 500,
+      "amplitude": 0.2923163168021363,
+      "nearby2HzAmplitude": 0.00000451056642802632
+    },
+    {
+      "size": 4096,
+      "amount": 0.5,
+      "inputHz": 500,
+      "expectedHz": 707.1067811865476,
+      "amplitude": 0.29237416116294696,
+      "nearby2HzAmplitude": 0.000045540902947119175
+    },
+    {
+      "size": 4096,
+      "amount": 0.5,
+      "inputHz": 1000,
+      "expectedHz": 1000,
+      "amplitude": 0.3000000018184062,
+      "nearby2HzAmplitude": 2.9299225222639866e-11
+    },
+    {
+      "size": 4096,
+      "amount": 0.5,
+      "inputHz": 2000,
+      "expectedHz": 1414.213562373095,
+      "amplitude": 0.29968012098397684,
+      "nearby2HzAmplitude": 0.0000331461631329788
+    },
+    {
+      "size": 4096,
+      "amount": 0.75,
+      "inputHz": 250,
+      "expectedHz": 353.5533905932738,
+      "amplitude": 0.2957636719723968,
+      "nearby2HzAmplitude": 0.00004661149819627339
+    },
+    {
+      "size": 4096,
+      "amount": 0.75,
+      "inputHz": 500,
+      "expectedHz": 594.6035575013606,
+      "amplitude": 0.29814020510963707,
+      "nearby2HzAmplitude": 0.00004773430805149277
+    },
+    {
+      "size": 4096,
+      "amount": 0.75,
+      "inputHz": 1000,
+      "expectedHz": 1000,
+      "amplitude": 0.3000000023838872,
+      "nearby2HzAmplitude": 2.942504885805165e-11
+    },
+    {
+      "size": 4096,
+      "amount": 0.75,
+      "inputHz": 2000,
+      "expectedHz": 1681.792830507429,
+      "amplitude": 0.2960722308188003,
+      "nearby2HzAmplitude": 0.000024974607520190596
+    },
+    {
+      "size": 4096,
+      "amount": 1,
+      "inputHz": 250,
+      "expectedHz": 250,
+      "amplitude": 0.300000001628066,
+      "nearby2HzAmplitude": 2.6656478130367566e-15
+    },
+    {
+      "size": 4096,
+      "amount": 1,
+      "inputHz": 500,
+      "expectedHz": 500,
+      "amplitude": 0.3000000031402784,
+      "nearby2HzAmplitude": 6.423688564652635e-15
+    },
+    {
+      "size": 4096,
+      "amount": 1,
+      "inputHz": 1000,
+      "expectedHz": 1000,
+      "amplitude": 0.3000000024389503,
+      "nearby2HzAmplitude": 4.251800162619356e-15
+    },
+    {
+      "size": 4096,
+      "amount": 1,
+      "inputHz": 2000,
+      "expectedHz": 2000,
+      "amplitude": 0.3000000045445051,
+      "nearby2HzAmplitude": 1.3832221801210165e-14
+    },
+    {
+      "size": 4096,
+      "amount": 1.5,
+      "inputHz": 250,
+      "expectedHz": 125,
+      "amplitude": 0.29231571431467124,
+      "nearby2HzAmplitude": 0.00000508852482080401
+    },
+    {
+      "size": 4096,
+      "amount": 1.5,
+      "inputHz": 500,
+      "expectedHz": 353.5533905932738,
+      "amplitude": 0.29105027550955864,
+      "nearby2HzAmplitude": 0.00004046759057593247
+    },
+    {
+      "size": 4096,
+      "amount": 1.5,
+      "inputHz": 1000,
+      "expectedHz": 1000,
+      "amplitude": 0.3000000019357324,
+      "nearby2HzAmplitude": 4.807478541568132e-11
+    },
+    {
+      "size": 4096,
+      "amount": 1.5,
+      "inputHz": 2000,
+      "expectedHz": 2828.42712474619,
+      "amplitude": 0.2927351539750998,
+      "nearby2HzAmplitude": 0.0000047974218994346346
+    },
+    {
+      "size": 4096,
+      "amount": 2,
+      "inputHz": 250,
+      "expectedHz": 62.5,
+      "amplitude": 0.29999922215103275,
+      "nearby2HzAmplitude": 4.698443924425832e-7
+    },
+    {
+      "size": 4096,
+      "amount": 2,
+      "inputHz": 500,
+      "expectedHz": 250,
+      "amplitude": 0.2923169079085276,
+      "nearby2HzAmplitude": 0.000003981545204092838
+    },
+    {
+      "size": 4096,
+      "amount": 2,
+      "inputHz": 1000,
+      "expectedHz": 1000,
+      "amplitude": 0.30000000113709024,
+      "nearby2HzAmplitude": 9.694184186853904e-11
+    },
+    {
+      "size": 4096,
+      "amount": 2,
+      "inputHz": 2000,
+      "expectedHz": 4000,
+      "amplitude": 0.2923164760603871,
+      "nearby2HzAmplitude": 0.00000437525610521427
+    }
+  ],
+  "combinedPeaks": [
+    {
+      "hz": 450,
+      "amplitude": 0.14616042337844248
+    },
+    {
+      "hz": 1200,
+      "amplitude": 0.14999926669789304
+    },
+    {
+      "hz": 4200,
+      "amplitude": 0.14616018742625037
+    }
+  ],
+  "proportionalArtifact": 2.720083656126429e-7,
+  "stereoError": 0,
+  "extremePeak": 0.5683945417404175,
+  "aboveNyquistRms": 0
+}

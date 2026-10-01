@@ -1,0 +1,12 @@
+{
+  "file": "cello.wav",
+  "sampleRate": 48000,
+  "channels": 1,
+  "duration": 1.0360833333333332,
+  "actualBrowserWorklet": {"peakError": 0, "rmsError": 0},
+  "workerWav": {"peakError": 5.960464477539063e-8, "rmsError": 3.462672864526947e-8},
+  "wav": {"sampleRate": 48000, "bits": 24, "channels": 1, "length": 49732},
+  "cancelled": true,
+  "mainThreadCoreBenchmark": {"meanHopMs": 0.1163265305210133, "p99HopMs": 3.7000000029802322, "maxHopMs": 3.7000000029802322, "note": "Main-thread DSP benchmark; not AudioWorklet CPU profiling."},
+  "pass": true
+}

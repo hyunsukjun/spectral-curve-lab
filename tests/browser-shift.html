@@ -1,0 +1,26 @@
+<!doctype html><meta charset="utf-8"><title>Spectral Shift integration checks</title><style>body{font:15px system-ui;padding:25px;background:#172026;color:#edf3f2}pre{white-space:pre-wrap}button{padding:12px}</style><h1>Spectral Shift · browser integration</h1><button id="run">Run preview and WAV checks</button><pre id="result">Ready</pre>
+<script type="module">
+import {renderOffline} from '../src/offline-render.js?v=20260929-transport1';
+const result=document.querySelector('#result'),button=document.querySelector('#run');
+const amp=(data,hz,rate=48000)=>{let re=0,im=0;const start=Math.round(rate*.2),end=data.length-start;for(let i=start;i<end;i++){re+=data[i]*Math.cos(2*Math.PI*hz*i/rate);im+=data[i]*Math.sin(2*Math.PI*hz*i/rate);}return 2*Math.hypot(re,im)/(end-start);};
+button.onclick=async()=>{
+ button.disabled=true;let ctx;
+ try {
+  result.textContent='Running…';ctx=new AudioContext({sampleRate:48000});await ctx.resume();const rows=[];
+  for(const rate of [44100,48000,96000])for(const shift of [0,200,-200]){
+   const source=new AudioBuffer({sampleRate:rate,numberOfChannels:2,length:rate});
+   for(let i=0;i<rate;i++){source.getChannelData(0)[i]=.2*Math.sin(2*Math.PI*440*i/rate)+.2*Math.sin(2*Math.PI*880*i/rate);source.getChannelData(1)[i]=-.5*source.getChannelData(0)[i];}
+   const curve=[{x:0,y:.5+shift/4000},{x:1,y:.5+shift/4000}];
+   const exported=await renderOffline({audioBuffer:source,curves:{shift:curve}}),data=await ctx.decodeAudioData(await exported.blob.arrayBuffer());
+   let channelError=0;for(let i=0;i<data.length;i++)channelError=Math.max(channelError,Math.abs(data.getChannelData(1)[i]+data.getChannelData(0)[i]*.5));
+   const measured=[amp(data.getChannelData(0),440+shift),amp(data.getChannelData(0),880+shift)];
+   rows.push({rate,shift,length:data.length,outputRate:data.sampleRate,amplitudes:measured,stereoRatioError:channelError,pass:data.length===48000&&measured.every(a=>Math.abs(a-.2)<.002)&&channelError<2e-7});
+  }
+  const channels=[Float32Array.from({length:48000},(_,i)=>.3*Math.sin(2*Math.PI*440*i/48000))];
+  const context=new OfflineAudioContext(2,48000,48000);await context.audioWorklet.addModule('./browser-worklet.js?v=20260929-transport1');
+  const node=new AudioWorkletNode(context,'test-neutral',{numberOfInputs:0,outputChannelCount:[2],processorOptions:{channels,curve:[{x:0,y:.55},{x:1,y:.55}]}});node.connect(context.destination);
+  const preview=await context.startRendering(),previewAmplitude=amp(preview.getChannelData(0),640);
+  result.textContent=JSON.stringify({rows,actualWorkletShift200AmplitudeAt640:previewAmplitude,pass:rows.every(r=>r.pass)&&Math.abs(previewAmplitude-.3)<.002},null,2);
+ }catch(e){result.textContent=e.stack;}finally{await ctx?.close();button.disabled=false;}
+};
+</script>

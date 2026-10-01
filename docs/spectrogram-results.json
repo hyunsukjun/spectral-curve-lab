@@ -1,0 +1,32 @@
+{
+  "neutralError": 0,
+  "rows": [
+    {
+      "name": "neutral",
+      "expectedHz": 750,
+      "value": -6.020599842071533,
+      "hz": 773.1929474306999
+    },
+    {
+      "name": "shift",
+      "expectedHz": 950,
+      "value": -7.258052349090576,
+      "hz": 969.812621966409
+    },
+    {
+      "name": "stretch",
+      "expectedHz": 562.5,
+      "value": -6.020599842071533,
+      "hz": 577.79484799565
+    },
+    {
+      "name": "blur",
+      "expectedHz": 750,
+      "value": -6.096931457519531,
+      "hz": 773.1929474306999
+    }
+  ],
+  "antiphase": "pass",
+  "fixedDbScale": "pass",
+  "shortSilence": "pass"
+}
