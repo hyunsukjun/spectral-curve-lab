@@ -11,6 +11,7 @@
 | 2026-09-29 | 자연 종료가 마지막 출력 callback에서 발생하고 늦은 위치 메시지가 UI를 되돌리지 않도록 token/메시지 순서를 보완한다. | [안정성 보고서](STABILITY-20260929.md), `tests/transport.mjs` |
 | 2026-09-29 | Audio Curve Lab의 공통 디자인 언어를 Spectral에 적용하되 Cyan `#31B8C6`는 브랜드, 세 효과 색은 의미 색으로 유지한다. DSP·좌표/편집 계약은 바꾸지 않는다. | [디자인 보고서](DESIGN-SYSTEM-V1.md), [디자인 토큰](../CURVE_LAB_DESIGN_SYSTEM.md) |
 | 2026-09-29 | 현재 웹 구현을 스탠드얼론 제품 지식의 참조로 문서화한다. 프레임워크 선정·preset 포맷·DSP 포팅은 아직 결정하지 않는다. | 사용자 제공 master setup; [이관 기록](STANDALONE_MIGRATION.md) |
+| 2026-10-01 | 백색소음만으로는 배음 이동과 어택 변화를 평가하기 어려워, 앱 자체 생성 Harmonic notes를 기본 예제로 두고 기존 Noise intervals를 Demo 선택지로 유지한다. 실제 녹음·청감 승인으로 오인하지 않도록 둘 다 진단 예제로 표시한다. DSP·파라미터 범위는 유지한다. | [음질 검토](QUALITY-REVIEW-20260929.md), [Reference Sound Set](REFERENCE_SOUND_SET.md); 청감 효과 **NEEDS MORE TESTING** |
 
 **보류:** Shift soft guard, Stretch pivot/보간, Blur 시간 상수의 최종 청감 승인; 라이브 입력/plug-in, preset/host automation, 비교 화면의 native UI 형태. 새로운 값으로 바꾸기 전 이전 값과 근거·실제 청감 결과를 [PARAMETER_SPEC.md](PARAMETER_SPEC.md)에 남긴다.
 

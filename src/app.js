@@ -3,8 +3,10 @@ import {stretchFromNorm, stretchToNorm} from "./spectral-stretch.js?v=20260929-t
 import {shiftFromNorm} from "./spectral-shift.js?v=20260929-transport1";
 import { valueAt, addNode, moveNode, eraseNode } from "./curve-editor.js?v=20260929-transport1";
 import { OutputMeterAnalyzer } from "./output-meter.js?v=20261001-playback1";
+import {fillHarmonicDemo, fillNoiseIntervals} from "./demo-sources.js?v=20261001-demo2";
 
 const fileInput = document.getElementById("fileInput");
+const demoSource = document.getElementById("demoSource");
 const fileStatus = document.getElementById("fileStatus");
 const timeStatus = document.getElementById("timeStatus");
 const playButton = document.getElementById("playButton");
@@ -215,6 +217,7 @@ function setTransportBusy(isBusy) {
 
   downloadButton.disabled = isBusy || !buffer;
   fileInput.disabled = isBusy;
+  demoSource.disabled = isBusy;
 }
 
 function setRenderBusy(isBusy) {
@@ -227,6 +230,7 @@ function setRenderBusy(isBusy) {
   playbackScrubber.disabled = isBusy || !buffer;
 
   fileInput.disabled = isBusy;
+  demoSource.disabled = isBusy;
   downloadButton.disabled = !buffer;
 }
 
@@ -331,64 +335,30 @@ function createAudioBuffer(channelCount, length, sampleRate) {
   return new OfflineContext(channelCount, length, sampleRate).createBuffer(channelCount, length, sampleRate);
 }
 
-function createGeneratedExampleBuffer() {
+function createGeneratedExampleBuffer(kind) {
   const sampleRate = 48000;
   const durationSeconds = 8;
   const length = sampleRate * durationSeconds;
   const exampleBuffer = createAudioBuffer(2, length, sampleRate);
   const left = exampleBuffer.getChannelData(0);
   const right = exampleBuffer.getChannelData(1);
-  const noiseBurstSeconds = 0.045833;
-  const gapSeconds = 0.020833;
-  const attackSeconds = 0.003;
-  const decaySeconds = 0.014;
-  const sustainLevel = 0.22;
-  const releaseSeconds = 0.018;
-  const gain = 0.32;
-  const noiseFrames = Math.floor(noiseBurstSeconds * sampleRate);
-  const gapFrames = Math.floor(gapSeconds * sampleRate);
-  const cycleFrames = Math.max(1, noiseFrames + gapFrames);
-  const attackFrames = Math.max(1, Math.floor(attackSeconds * sampleRate));
-  const decayFrames = Math.max(1, Math.floor(decaySeconds * sampleRate));
-  const releaseFrames = Math.max(1, Math.floor(releaseSeconds * sampleRate));
-  let seed = 123456789;
-
-  const nextNoise = () => {
-    seed = (1664525 * seed + 1013904223) >>> 0;
-    return (seed / 4294967295) * 2 - 1;
-  };
-
-  for (let i = 0; i < length; i += 1) {
-    const cyclePosition = i % cycleFrames;
-    if (cyclePosition >= noiseFrames) {
-      continue;
-    }
-
-    let envelope = sustainLevel;
-    if (cyclePosition < attackFrames) {
-      envelope = cyclePosition / attackFrames;
-    } else if (cyclePosition < attackFrames + decayFrames) {
-      const decayPosition = (cyclePosition - attackFrames) / decayFrames;
-      envelope = 1 - ((1 - sustainLevel) * decayPosition);
-    }
-
-    const releasePosition = (noiseFrames - cyclePosition) / releaseFrames;
-    envelope *= Math.max(0, Math.min(1, releasePosition));
-    const sample = nextNoise() * gain * envelope;
-    left[i] = sample;
-    right[i] = sample;
-  }
+  if (kind === "noise") fillNoiseIntervals(left, right, sampleRate);
+  else fillHarmonicDemo(left, right, sampleRate);
 
   return exampleBuffer;
 }
 
-function loadGeneratedExample() {
-  buffer = createGeneratedExampleBuffer();
+function loadGeneratedExample(kind = "harmonic") {
+  if (buffer) forceStopAudio();
+  spectrogram.invalidate(true);
+  buffer = createGeneratedExampleBuffer(kind);
   buildWaveform(buffer);
   workletBufferLoaded = false;
+  sendBufferToWorklet();
   clearDownload();
   downloadReadout.textContent = "ready";
-  fileStatus.textContent = `White noise intervals - ${buffer.duration.toFixed(2)} s`;
+  fileStatus.textContent = `${kind === "noise" ? "White noise intervals" : "Harmonic notes + attacks"} - ${buffer.duration.toFixed(2)} s`;
+  demoSource.value = kind;
   playheadSeconds = 0;
   sourcePlayheadSeconds = 0;
   resetCurrentReadouts();
@@ -737,6 +707,7 @@ async function loadAudioFile(file) {
     const decoded = await decodeAudioFile(data);
     if (decoded.numberOfChannels > 2) throw new Error("Only mono/stereo sources supported");
     buffer = decoded;
+    demoSource.value = "file";
     spectrogram.invalidate(true);
     buildWaveform(buffer);
     workletBufferLoaded = false;
@@ -767,6 +738,8 @@ fileInput.addEventListener("change", async () => {
   await loadAudioFile(fileInput.files?.[0]);
   fileInput.value = "";
 });
+
+demoSource.addEventListener("change", () => loadGeneratedExample(demoSource.value));
 
 playButton.addEventListener("click", playAudio);
 
@@ -1074,7 +1047,7 @@ if ("ResizeObserver" in window) {
 
 window.addEventListener("keydown", (event) => {
   const target = event.target;
-  const isTyping = target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement || target?.isContentEditable;
+  const isTyping = target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement || target instanceof HTMLSelectElement || target?.isContentEditable;
   if (event.code !== "Space" || isTyping || event.repeat || !buffer || playButton.disabled || !resetDialog.hidden) return;
   event.preventDefault();
   event.stopPropagation();
@@ -1086,7 +1059,7 @@ window.addEventListener("keydown", (event) => {
 
 window.addEventListener("keyup", (event) => {
   const target = event.target;
-  const isTyping = target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement || target?.isContentEditable;
+  const isTyping = target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement || target instanceof HTMLSelectElement || target?.isContentEditable;
   if (event.code !== "Space" || isTyping) return;
   event.preventDefault();
   event.stopPropagation();

@@ -24,7 +24,9 @@ Audio Curve Lab의 화면·노드 편집 방식을 바탕으로 만든 독립적
 - Clear Current: 선택한 곡선을 기본값으로 복원. Reset All: Shift 0 Hz, Stretch 1.0, Blur 0% 모두 복원. Reset All은 기존 확인창을 유지합니다.
 - Download WAV: 원본 채널 수를 유지하는 48 kHz / 24-bit PCM WAV. 렌더 중 Cancel 가능.
 
-기본 소스는 Audio Curve Lab과 같은 8초 white-noise intervals입니다. 모든 DSP는 AudioWorklet 또는 Worker에서 실행됩니다. 재생/seek의 STFT 준비 시간은 48 kHz에서 약 18.7ms입니다. 일시정지 후 재개는 위상과 위치를 유지합니다. 디코딩과 렌더 결과는 메모리에 유지하므로 매우 긴 파일은 메모리 제한을 받을 수 있습니다. 출력은 WAV 범위를 넘으면 PCM 인코딩에서 clipping되며 자동 normalization/limiter는 없습니다. 하단 미터는 WAV 렌더 결과를 측정하지 않습니다. [하단 재생 바 적용 기록](docs/PLAYBACK-BAR-20261001.md).
+기본 소스는 8초간 네 개의 배음 음이 이어지는 **Harmonic notes**입니다. 어택과 짧은 쉼을 포함하므로 세 효과의 차이를 듣기 위한 합성 진단 예제입니다. 상단 Demo에서 기존 **Noise intervals**로 전환할 수 있습니다. 두 예제 모두 앱에서 생성하며 청감상 성공한 설정이나 실제 악기 녹음으로 간주하지 않습니다. 실제 악기·음성·타악 음원은 Open Audio로 비교하세요.
+
+모든 DSP는 AudioWorklet 또는 Worker에서 실행됩니다. 재생/seek의 STFT 준비 시간은 48 kHz에서 약 18.7ms입니다. 일시정지 후 재개는 위상과 위치를 유지합니다. 디코딩과 렌더 결과는 메모리에 유지하므로 매우 긴 파일은 메모리 제한을 받을 수 있습니다. 출력은 WAV 범위를 넘으면 PCM 인코딩에서 clipping되며 자동 normalization/limiter는 없습니다. 하단 미터는 WAV 렌더 결과를 측정하지 않습니다. [하단 재생 바 적용 기록](docs/PLAYBACK-BAR-20261001.md).
 
 ## 스펙트로그램
 

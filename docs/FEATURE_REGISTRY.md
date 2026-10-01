@@ -4,7 +4,7 @@
 
 | ID · 분류 · 상태 | 사용자가 하는 일 / 입력→출력 | 데이터·처리 / 웹 구현 | 경계·검증·이관 |
 | --- | --- | --- | --- |
-| `SCL-C01` 소스 로딩 · COMMON · VERIFIED | 기본 8초 noise intervals를 듣거나 mono/stereo 오디오를 연다 → waveform/길이 갱신 | `AudioBuffer` + normalized timeline; `app.js`의 생성/`decodeAudioData` | 2채널 초과 거부, 실패 상태 표시; fixture `cello.wav` 경로와 파일 선택창은 [디자인 검증](DESIGN-SYSTEM-V1.md). native는 디코더 교체 |
+| `SCL-C01` 소스 로딩 · COMMON · VERIFIED | 기본 8초 Harmonic notes를 듣거나 Demo에서 Noise intervals로 전환하거나 mono/stereo 오디오를 연다 → waveform/길이 갱신 | `AudioBuffer` + normalized timeline; `demo-sources.js`의 결정적 생성/`decodeAudioData` | 2채널 초과 거부, 실패 상태 표시; 실제 파일 전환은 기존 곡선을 유지. 두 생성 예제는 음질 승인 자료가 아님. native는 디코더 교체 |
 | `SCL-C02` 커브 편집 · COMMON · VERIFIED | 모드 전환 후 Select/Pen/Eraser로 점 추가·이동·삭제 → 시간별 값 | `curves.shift/stretch/blur`의 `{x,y}`; `curve-editor.js`와 Canvas event | 끝점 보호, 빈 곳 Eraser 무효, 고해상도/resize; `tests/neutral.mjs`, 디자인 검증. native는 gesture 이식 |
 | `SCL-C03` 재생/탐색 · COMMON · VERIFIED | 하단 Play/Pause/Stop, Spacebar, Position 및 double-click seek → playhead 및 오디오 | 소스 프레임 위치와 worklet engine state; `spectral-worklet.js`; 이동 중 시간/슬라이더 표시 | 자연 종료 후 0으로 복귀, pause는 상태 유지; `tests/transport.mjs`, [하단 바 검증](PLAYBACK-BAR-20261001.md). native 오디오 callback 대체 |
 | `SCL-C08` 출력 미터 · COMMON · VERIFIED | Preview의 L/R 레벨·피크 유지·CLIP 표시와 수동 초기화 | stereo Worklet 출력 → unity gain 분기 → channel analyser → destination; DSP·WAV와 분리 | 모노 소스는 L/R 복제; 0.999 peak threshold와 브라우저 CLIP 시험. [하단 바 검증](PLAYBACK-BAR-20261001.md) |

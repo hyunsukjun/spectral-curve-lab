@@ -11,6 +11,7 @@
 | 재생·탐색 / 높음 | Play/Pause/Stop/자연 종료, pause 상태 보존, seek reset, 커브 갱신의 프레임 경계. [상호작용](INTERACTION_SPEC.md) | Web Audio callback/message token→native callback/상태 동기화. 현재 시작 준비 무음과 hard seek click을 우연히 다르게 만들거나 버그까지 무비판적으로 이식하지 말고 의도별 승인 필요 |
 | 하단 위치·미터 / 높음 | 동일 시간축의 Position/플레이헤드, Preview 최종 L/R peak·RMS·hold·CLIP 래치/초기화. [적용 기록](PLAYBACK-BAR-20261001.md) | DOM range·AnalyserNode→native timeline 및 출력 tap. 모노 입력의 현행 스테레오 복제와 WAV 원채널 유지 구분; 미터가 DSP를 바꾸지 않도록 함 |
 | 파일·WAV / 높음 | mono/stereo, 동일 길이, 48 kHz/24-bit export, 무 normalization/limiter, PCM clamp. [DSP](DSP_BEHAVIOR.md) | `decodeAudioData`/`OfflineAudioContext`/Blob→native decode/resample/encode. 브라우저별 resampling·float→PCM 양자화 차이 검증. 큰 파일 스트리밍/메모리 설계 필요 |
+| 진단 예제 / 중간 | 기본 Harmonic notes의 네 음·배음·어택/쉼과 선택 가능한 Noise intervals. 생성 신호이므로 재배포 권리 문제가 없고 비교 재현성이 있다. [Reference Sound Set](REFERENCE_SOUND_SET.md) | `AudioBuffer` 생성 코드는 native 버퍼로 대체. 예제의 존재를 실제 악기 청감 승인으로 오인하지 말고, 실제 소스 A/B 세트를 별도로 구축 |
 | 비교 스펙트로그램 / 중간 | SOURCE/OUTPUT 동일 축, −90…0dBFS, 로그 Hz, 평균 채널 power, 512×192 overview, stale 갱신. [비교 기록](SPECTROGRAM-REPORT.md) | Worker/Canvas→native background analysis/view. Preview를 분석하는 의미를 유지하고 Render exact 분석으로 오표기하지 말 것 |
 | 디자인 시스템 / 중간 | deep navy/charcoal 의미, Cyan 브랜드와 의미 색 분리, 작업 영역 계층, 키보드 초점/모션 정책. [디자인](../CURVE_LAB_DESIGN_SYSTEM.md) | CSS custom properties/DOM→native tokens/controls. 픽셀값보다 대비와 계층을 재현 |
 
