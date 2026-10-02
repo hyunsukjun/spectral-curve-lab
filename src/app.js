@@ -1,9 +1,11 @@
-import {createSpectrogramView} from "./spectrogram-view.js?v=20260929-transport1";
+import {createSpectrogramView} from "./spectrogram-view.js?v=20261003-chain4";
 import {stretchFromNorm, stretchToNorm} from "./spectral-stretch.js?v=20260929-transport1";
 import {shiftFromNorm} from "./spectral-shift.js?v=20260929-transport1";
+import {harmonicityFromNorm} from "./spectral-harmonicity.js?v=20261002-harmonic-freeze1";
 import { valueAt, addNode, moveNode, eraseNode } from "./curve-editor.js?v=20260929-transport1";
 import { OutputMeterAnalyzer } from "./output-meter.js?v=20261001-playback1";
 import {fillHarmonicDemo, fillNoiseIntervals} from "./demo-sources.js?v=20261001-demo2";
+import {moduleOrder,defaultEnabled,effectiveCurves,appendToChain,removeFromChain} from "./module-routing.js?v=20261003-chain4";
 
 const fileInput = document.getElementById("fileInput");
 const demoSource = document.getElementById("demoSource");
@@ -23,6 +25,10 @@ const ctx = canvas.getContext("2d");
 const shiftMode = document.getElementById("shiftMode");
 const blurMode = document.getElementById("blurMode");
 const stretchMode = document.getElementById("stretchMode");
+const harmonicityMode = document.getElementById("harmonicityMode");
+const freezeMode = document.getElementById("freezeMode");
+const moduleButtons = Object.fromEntries(moduleOrder.map(name=>[name,document.getElementById(`${name}Mode`)]));
+const chainDiagram = document.getElementById("chainDiagram");
 const curveLegend = document.getElementById("curveLegend");
 
 const downloadReadout = document.getElementById("downloadReadout");
@@ -46,6 +52,8 @@ const curveColors = {
   shift: "#6de0c0",
   stretch: "#eb6f75",
   blur: "#dab877",
+  harmonicity: "#b595ef",
+  freeze: "#79c9f0",
 
 };
 
@@ -56,7 +64,7 @@ let outputMeter;
 let workletBufferLoaded = false;
 let buffer;
 let waveform = [];
-let activeCurve = "shift";
+let activeCurve = null;
 let selectedTool = "pen";
 let selectedPoint = null;
 let hoverPoint = null;
@@ -81,20 +89,25 @@ const canvasBaseHeight = 620;
 const parameterScaleWidth = 54;
 const plotRightPadding = 8;
 
-const curves = { shift: [{x: 0, y: .5}, {x: 1, y: .5}], blur: [{x:0,y:0},{x:1,y:0}], stretch: [{x:0,y:.5},{x:1,y:.5}] };
+const curves = { shift: [{x: 0, y: .5}, {x: 1, y: .5}], blur: [{x:0,y:0},{x:1,y:0}], stretch: [{x:0,y:.5},{x:1,y:.5}], harmonicity:[{x:0,y:.5},{x:1,y:.5}], freeze:[{x:0,y:0},{x:1,y:0}] };
+const enabled = defaultEnabled();
+let chainOrder = [];
 
-const defaultCurves = { shift: () => [{x: 0, y: .5}, {x: 1, y: .5}], blur: () => [{x:0,y:0},{x:1,y:0}], stretch: () => [{x:0,y:.5},{x:1,y:.5}] };
+const defaultCurves = { shift: () => [{x: 0, y: .5}, {x: 1, y: .5}], blur: () => [{x:0,y:0},{x:1,y:0}], stretch: () => [{x:0,y:.5},{x:1,y:.5}], harmonicity:()=>[{x:0,y:.5},{x:1,y:.5}], freeze:()=>[{x:0,y:0},{x:1,y:0}] };
 
-const editedCurves = { shift: false, stretch: false, blur: false };
+const editedCurves = { shift: false, stretch: false, blur: false, harmonicity:false, freeze:false };
 
 const curveLabels = {
   shift: "Spectral Shift",
   stretch: "Spectral Stretch",
   blur: "Spectral Blur",
+  harmonicity: "Harmonicity",
+  freeze: "Spectral Freeze",
 
 };
+const moduleHints = Object.fromEntries(moduleOrder.map(name=>[name,moduleButtons[name].title]));
 
-const spectrogram = createSpectrogramView({getBuffer:()=>buffer,getCurves:()=>curves,isBusy:()=>isPlaying||!!renderAbortController||playButton.disabled});
+const spectrogram = createSpectrogramView({getBuffer:()=>buffer,getCurves:()=>effectiveCurves(curves,enabled),getOrder:()=>chainOrder,isBusy:()=>isPlaying||!!renderAbortController||playButton.disabled});
 
 function resizeCanvas() {
   const frameRect = canvas.parentElement.getBoundingClientRect();
@@ -173,7 +186,7 @@ function getPlaybackDuration() {
 function resetCurrentReadouts() {}
 
 function formatPointValue(curveName, point) {
-  return curveName === "blur" ? `${Math.round(point.y*100)}%` : curveName === "stretch" ? `${stretchFromNorm(point.y).toFixed(3)}` : `${shiftFromNorm(point.y).toFixed(1)} Hz`;
+  return curveName === "blur" || curveName === "freeze" ? `${Math.round(point.y*100)}%` : curveName === "harmonicity" ? `${Math.round(harmonicityFromNorm(point.y)*100)}%` : curveName === "stretch" ? `${stretchFromNorm(point.y).toFixed(3)}` : `${shiftFromNorm(point.y).toFixed(1)} Hz`;
 }
 
 function sortCurve(curve) {
@@ -182,7 +195,8 @@ function sortCurve(curve) {
 
 function sendCurves() {
   markDownloadStale();
-  node?.port.postMessage({type: "curves", curve: curves.shift, stretchCurve: curves.stretch, blurCurve: curves.blur});
+  const active = effectiveCurves(curves,enabled);
+  node?.port.postMessage({type: "curves", curve: active.shift, stretchCurve: active.stretch, blurCurve: active.blur, harmonicityCurve:active.harmonicity, freezeCurve:active.freeze, order:[...chainOrder]});
 }
 
 function sendSettings() {
@@ -224,7 +238,8 @@ function setRenderBusy(isBusy) {
   if (isBusy) isScrubbing = false;
   if(isBusy)spectrogram.cancel("Analysis cancelled for export · Update to refresh");
   canvas.style.pointerEvents = isBusy ? "none" : "";
-  [selectTool, penTool, eraserTool, resetButton, clearCurveButton, shiftMode, stretchMode, blurMode].forEach(button => { button.disabled = isBusy; });
+  [selectTool, penTool, eraserTool, resetButton, shiftMode, stretchMode, blurMode, harmonicityMode, freezeMode].forEach(button => { button.disabled = isBusy; });
+  clearCurveButton.disabled = isBusy || !activeCurve;
   playButton.disabled = isBusy || !buffer;
   stopButton.disabled = isBusy || !buffer;
   playbackScrubber.disabled = isBusy || !buffer;
@@ -298,7 +313,7 @@ function getSettings() {
 
 async function getOfflineRenderer() {
   if (!renderOffline) {
-    const module = await import("./offline-render.js?v=20260929-transport1");
+    const module = await import("./offline-render.js?v=20261003-chain4");
     renderOffline = module.renderOffline;
   }
   return renderOffline;
@@ -375,6 +390,9 @@ function getPlotBounds() {
 }
 
 function getParameterTicks() {
+  if (!activeCurve) return [];
+  if(activeCurve === "freeze") return [0,.25,.5,.75,1].map(y=>({y,label:`${y*100}%`,emphasis:y===0}));
+  if(activeCurve === "harmonicity") return [0,.25,.5,.75,1].map(y=>({y,label:`${Math.round(harmonicityFromNorm(y)*100)}%`,emphasis:y===.5}));
   if(activeCurve === "blur") return [0,.25,.5,.75,1].map(y=>({y,label:`${y*100}%`,emphasis:y===0}));
   if(activeCurve === "stretch") return [.5,.75,1,1.5,2].map(amount => ({y:stretchToNorm(amount),label:`${amount.toFixed(2)}`,emphasis:amount===1}));
   return [0, .25, .5, .75, 1].map(y => ({y, label: `${shiftFromNorm(y) > 0 ? "+" : ""}${shiftFromNorm(y)}`}));
@@ -445,6 +463,7 @@ function drawCurve(curve, color, width, fillPoints) {
 }
 
 function drawCurves() {
+  if (!activeCurve) return;
   drawCurve(curves[activeCurve], curveColors[activeCurve], 4.8, true);
 }
 
@@ -463,6 +482,7 @@ function roundedRectPath(x, y, width, height, radius) {
 }
 
 function getTooltipPoint() {
+  if (!activeCurve) return null;
   if (dragging && selectedPoint != null) {
     return { curveName: activeCurve, point: curves[activeCurve][selectedPoint] };
   }
@@ -589,9 +609,11 @@ function draw() {
     playbackScrubber.value = duration > 0 ? String(Math.max(0, Math.min(1, playheadSeconds / duration))) : "0";
   }
 
-  modeReadout.textContent = curveLabels[activeCurve];
+  modeReadout.textContent = activeCurve ? (enabled[activeCurve] ? curveLabels[activeCurve] : `${curveLabels[activeCurve]} · Off`) : "Select an effect";
   document.getElementById("blurReadout").textContent = `${Math.round(valueAt(curves.blur,buffer?.duration ? sourcePlayheadSeconds / buffer.duration : 0)*100)}%`;
-  pointsReadout.textContent = String(curves[activeCurve].length);
+  document.getElementById("harmonicityReadout").textContent = `${Math.round(harmonicityFromNorm(valueAt(curves.harmonicity,buffer?.duration ? sourcePlayheadSeconds / buffer.duration : 0))*100)}%`;
+  document.getElementById("freezeReadout").textContent = `${Math.round(valueAt(curves.freeze,buffer?.duration ? sourcePlayheadSeconds / buffer.duration : 0)*100)}%`;
+  pointsReadout.textContent = activeCurve ? String(curves[activeCurve].length) : "—";
   document.getElementById("stretchReadout").textContent = `${stretchFromNorm(valueAt(curves.stretch,buffer?.duration ? sourcePlayheadSeconds / buffer.duration : 0)).toFixed(3)}`;
   document.getElementById("shiftReadout").textContent = `${shiftFromNorm(valueAt(curves.shift, buffer?.duration ? sourcePlayheadSeconds / buffer.duration : 0)).toFixed(1)} Hz`;
 }
@@ -646,7 +668,7 @@ async function setupAudio() {
     throw new Error("AudioWorklet is not available. Use a current Chrome, Edge, or Safari version over HTTPS.");
   }
 
-    await audioContext.audioWorklet.addModule(new URL("./spectral-worklet.js?v=20260929-transport1", import.meta.url));
+    await audioContext.audioWorklet.addModule(new URL("./spectral-worklet.js?v=20261003-chain4", import.meta.url));
     node = new AudioWorkletNode(audioContext, "spectral-neutral-processor", {
       numberOfInputs: 0,
       numberOfOutputs: 1,
@@ -788,7 +810,8 @@ downloadButton.addEventListener("click", async () => {
     const render = await getOfflineRenderer();
     const rendered = await render({
       audioBuffer: buffer,
-      curves,
+      curves: effectiveCurves(curves,enabled),
+      order: [...chainOrder],
       settings: getSettings(),
       signal: renderAbortController.signal,
       onProgress: (progress) => {
@@ -830,10 +853,14 @@ function applyResetAll() {
   curves.shift = defaultCurves.shift();
   curves.stretch = defaultCurves.stretch();
   curves.blur = defaultCurves.blur();
+  curves.harmonicity = defaultCurves.harmonicity();
+  curves.freeze = defaultCurves.freeze();
 
   editedCurves.shift = false;
   editedCurves.stretch = false;
   editedCurves.blur = false;
+  editedCurves.harmonicity = false;
+  editedCurves.freeze = false;
 
   resetCurrentReadouts();
   selectedPoint = null;
@@ -867,6 +894,7 @@ window.addEventListener("keydown", (event) => {
 });
 
 clearCurveButton.addEventListener("click", () => {
+  if (!activeCurve) return;
   forceStopAudio();
   curves[activeCurve] = defaultCurves[activeCurve]();
   editedCurves[activeCurve] = false;
@@ -883,20 +911,85 @@ function setActiveCurve(name) {
   activeCurve = name;
   selectedPoint = null;
   hoverPoint = null;
-  shiftMode.classList.toggle("active", name === "shift");
-  blurMode.classList.toggle("active", name === "blur");
-  stretchMode.classList.toggle("active", name === "stretch");
-  curveLegend.textContent = name === "blur" ? "Time smearing · 0% = original · Frequency positions unchanged" : name === "stretch" ? "Compress ↔ Expand frequency spacing · 1 = original · Duration unchanged" : "Shift −2000…+2000 Hz · 0 Hz = original spectrum";
+  updateModuleUI();
 
   draw();
 }
 
-blurMode.addEventListener("click", () => setActiveCurve("blur"));
-stretchMode.addEventListener("click", () => setActiveCurve("stretch"));
-shiftMode.addEventListener("click", () => {
-  setActiveCurve("shift");
-});
+function updateModeLegend() {
+  const name = activeCurve;
+  if (!name) {
+    curveLegend.textContent = "Choose an effect above to add it to the signal chain";
+    curveLegend.style.color = "var(--cl-text-muted)";
+    return;
+  }
+  const description = name === "freeze" ? "Capture spectral state · 0% = off · 100% = full hold" : name === "harmonicity" ? "Harmonic −100% ↔ Inharmonic +100% · 0% = original" : name === "blur" ? "Time smearing · 0% = original · Frequency positions unchanged" : name === "stretch" ? "Compress ↔ Expand frequency spacing · 1 = original · Duration unchanged" : "Shift −2000…+2000 Hz · 0 Hz = original spectrum";
+  curveLegend.textContent = enabled[name] ? description : `${description} · Bypassed (curve saved)`;
+  curveLegend.style.color = curveColors[name];
+}
 
+function renderChainDiagram() {
+  chainDiagram.replaceChildren();
+  const terminal = label => {
+    const element = document.createElement("span");
+    element.className = "chainTerminal";
+    element.textContent = label;
+    chainDiagram.appendChild(element);
+  };
+  const connector = () => {
+    const element = document.createElement("span");
+    element.className = "chainConnector";
+    element.textContent = "→";
+    element.setAttribute("aria-hidden","true");
+    chainDiagram.appendChild(element);
+  };
+  terminal("Input");
+  for (const name of chainOrder) {
+    connector();
+    const block = document.createElement("button");
+    block.type = "button";
+    block.className = `chainBlock${activeCurve === name ? " editing" : ""}`;
+    block.dataset.module = name;
+    block.textContent = curveLabels[name];
+    block.title = `Edit ${curveLabels[name]} curve`;
+    block.addEventListener("click",() => setActiveCurve(name));
+    chainDiagram.appendChild(block);
+  }
+  connector();
+  terminal("Output");
+}
+
+function updateModuleUI() {
+  clearCurveButton.disabled = !activeCurve;
+  for (const name of moduleOrder) {
+    const button = moduleButtons[name];
+    button.setAttribute("aria-pressed",String(enabled[name]));
+    button.classList.toggle("enabled",enabled[name]);
+    button.classList.toggle("bypassed",!enabled[name]);
+    button.classList.toggle("active",activeCurve === name);
+    const stateHint = enabled[name]
+      ? `${curveLabels[name]} On · click while selected to turn Off`
+      : `${curveLabels[name]} Off · click to turn On and edit`;
+    button.title = moduleHints[name] ? `${stateHint}. ${moduleHints[name]}` : stateHint;
+  }
+  updateModeLegend();
+  renderChainDiagram();
+}
+
+for (const name of moduleOrder) {
+  moduleButtons[name].addEventListener("click",() => {
+    if (activeCurve !== name && enabled[name]) {
+      setActiveCurve(name);
+      return;
+    }
+    enabled[name] = !enabled[name];
+    chainOrder = enabled[name] ? appendToChain(chainOrder,name) : removeFromChain(chainOrder,name);
+    setActiveCurve(name);
+    sendCurves();
+  });
+}
+
+updateModuleUI();
 sendSettings();
 
 function pointerToPoint(event) {
@@ -909,6 +1002,7 @@ function pointerToPoint(event) {
 }
 
 function findPointNearPointer(point) {
+  if (!activeCurve) return -1;
   const curve = curves[activeCurve];
   const xRadius = 10 / getPlotBounds().width;
   const yRadius = 10 / canvasCssHeight;
@@ -933,7 +1027,7 @@ function isErasing(event) {
 function updateToolCursor(event) {
   const erasing = isErasing(event);
   canvas.classList.toggle("eraseMode", erasing);
-  canvas.style.cursor = erasing ? "" : hoverPoint ? "pointer" : selectedTool === "select" ? "default" : "crosshair";
+  canvas.style.cursor = !activeCurve ? "default" : erasing ? "" : hoverPoint ? "pointer" : selectedTool === "select" ? "default" : "crosshair";
 }
 
 function setTool(tool) {
@@ -964,7 +1058,7 @@ penTool.addEventListener("click", () => setTool("pen"));
 eraserTool.addEventListener("click", () => setTool("eraser"));
 
 canvas.addEventListener("pointerdown", (event) => {
-  if (event.button !== 0 || event.detail > 1 || !resetDialog.hidden) return;
+  if (!activeCurve || event.button !== 0 || event.detail > 1 || !resetDialog.hidden) return;
   const p = pointerToPoint(event);
   const curve = curves[activeCurve];
   selectedPoint = findPointNearPointer(p);
@@ -993,6 +1087,7 @@ canvas.addEventListener("pointerdown", (event) => {
 });
 
 canvas.addEventListener("pointermove", (event) => {
+  if (!activeCurve) return;
   const p = pointerToPoint(event);
   if (!dragging || selectedPoint == null) {
     setHoverPoint(findPointNearPointer(p), event);

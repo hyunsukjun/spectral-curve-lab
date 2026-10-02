@@ -11,15 +11,20 @@
 | 경로 | FFT / hop @48kHz | 창 길이 / 새 프레임 간격 | 파라미터 평가·적용 |
 | --- | --- | --- | --- |
 | AudioWorklet Preview | 2048 / 512 samples | 약 42.67ms / 10.67ms | 재생 중 곡선 메시지를 양 채널에 같은 프레임 경계에서 적용. 출력은 128-sample audio callback으로 전달 |
-| Worker WAV Render | 4096 / 1024 samples | 약 85.33ms / 21.33ms | 렌더 시작 시 세 곡선을 복사해 전체 파일을 계산. 실시간 편집 반영 없음 |
+| Worker WAV Render | 4096 / 1024 samples | 약 85.33ms / 21.33ms | 렌더 시작 시 다섯 곡선을 복사해 전체 파일을 계산. 실시간 편집 반영 없음 |
 
 창 길이는 단순한 지연 또는 정확한 사건 분해능이라고 해석하지 않는다. 그러나 빠른 사건과 커브 변화를 분석·합성할 때 영향을 주는 핵심 조건이며, 두 경로의 비중립 결과가 sample-exact하지 않은 이유 중 하나다. 수치와 장치 지연의 구분은 [Phase 5](PHASE-5-REPORT.md) 및 [DSP 계약](DSP_BEHAVIOR.md)을 따른다.
+
+효과 On/Off와 활성 순서의 변경도 Preview에서는 프레임 경계에서 커브와 함께 적용한다. 네 FFT 효과는 새 순서로 호출되지만 각 효과의 내부 시간 상태는 그대로 이어진다. 분석 대상이 바뀐 뒤의 첫 몇 프레임에서 phase/Blur/Freeze 상태가 새 앞단과 어긋날 수 있다. 현재 검사는 finite 출력과 처리 순서까지이며, 라이브 재배치의 click·질감은 청감 미승인이다. Render는 시작 시 곡선과 순서를 함께 복사하므로 렌더 도중 UI 변경이 WAV에 섞이지 않는다.
 
 ## 파라미터별 시간 동작
 
 - **Shift:** 곡선 목표는 출력 샘플마다 읽고 `1−exp(−1/(rate×0.01))`로 약 10ms 평활한다. oscillator 위상은 연속 누적된다. 다만 DC/Nyquist 보호 마스크는 STFT 프레임 중심의 **목표 Shift**로 계산된다. 따라서 급격한 커브에서 마스크의 프레임 단위 변화와 oscillator의 샘플 단위 변화가 동일한 궤적이라고 가정하면 안 된다. 0Hz 복귀의 wet 전환도 10ms다. [spectral-shift.js](../src/spectral-shift.js).
 - **Stretch:** 각 STFT 프레임 중심에서 목표를 읽고 `1−exp(−hop/(rate×0.02))`로 20ms 평활한다. 중립 1 근처에서는 `min(1,|amount−1|/0.02)`로 원 스펙트럼과 처리 스펙트럼을 섞는다. 가까운 점에서 목표가 빠르게 바뀌어도 출력은 프레임별 평가·peak 추적·보간을 통과한다. [spectral-stretch.js](../src/spectral-stretch.js).
 - **Blur:** 프레임 중심 목표를 20ms 평활한 뒤 매 bin의 크기에 `τ=0.5×amount²`초의 시간 평활을 적용한다. 곡선을 급히 0으로 내려도 평활된 amount가 0 근처(`1e−7` 미만)에 도달해야 bypass/reset된다. 파일 끝에서는 남은 성분을 위한 시간을 연장하지 않는다. 지속시간이 긴 번짐은 제스처 종료와 즉시 같은 소리를 뜻하지 않는다. [spectral-blur.js](../src/spectral-blur.js).
+
+- **Harmonicity:** Stretch와 같은 프레임 중심 평가·20ms 제어 평활을 사용한다. 기준음 peak 추정은 프레임별이며 0.2 비율로 갱신한다. 급격한 커브/다성음에서 추정 기준이 흔들릴 수 있으며 청감 결과 UNKNOWN.
+- **Freeze:** 프레임 중심 값이 2%를 넘으면 포착을 시작하고 wet을 20ms 평활한다. 2% 이하 복귀 후 wet이 1e−5보다 작아질 때 상태를 해제한다. 프레임 안의 정확한 순간 포착이 아니며 Preview/Render의 FFT 차이로 포착 소리도 다를 수 있다.
 
 48kHz에서 Stretch/Blur의 프레임별 제어 계수는 Preview 약 **0.413**, Render 약 **0.656**이다. 두 값은 모두 같은 명목상 20ms 상수를 구현하지만 평가 간격이 달라 빠른 궤적의 결과까지 같다고 보장하지 않는다. Shift의 화면 readout은 **곡선 목표값**이고 내부 평활값이 아니다. [Phase 4의 표시 설명](PHASE-4-REPORT.md).
 

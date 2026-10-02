@@ -13,6 +13,8 @@
 | F-07 종료 후 playhead 재이동 | `ended` 뒤 늦은 `position`이 0초로 돌아간 UI를 다시 끝으로 옮길 수 있었음. 마지막 샘플 callback에서 종료·token으로 이전 메시지 무시. | [안정성 보고서](STABILITY-20260929.md)의 128 transport cases. Native에서도 종료 상태 전이가 오래된 위치 알림에 덮이지 않아야 함 |
 | F-08 커브·캔버스 좁은 화면 | 초기 기준 구현의 큰 최소 폭에서 끝점이 사라질 수 있어 Spectral shell의 plot/resize 매핑을 조정. 디자인 적용 때 좌표·노드 계약은 보존. | [Phase 1–3](PHASE-1-3-REPORT.md), [디자인 보고서](DESIGN-SYSTEM-V1.md). Native에서도 창 크기 변경이 `{x,y}`를 바꾸면 안 됨 |
 | F-09 현재 음질 불만 | 사용자가 다른 Lab보다 소리가 싸구려스럽고 매력 부족하다고 평가. 원인별 음원·곡선·Preview/WAV A/B가 없어 개선 채택값은 없음. | [음질 검토](QUALITY-REVIEW-20260929.md), [청취 기록](LISTENING_DECISIONS.md). **미해결 / NEEDS MORE TESTING**. 임의 gain 증폭이나 수치 통과를 해결로 표시하지 않음 |
+| F-10 체인 표시와 DSP 순서 불일치 | 초기 모듈 UI는 다섯 효과를 모두 On으로 시작하고 고정 목록만 표시했다. 사용자가 누른 순서와 실제 DSP 순서가 무관해 체인이 연결된 것처럼 오해될 수 있었다. 모두 Off로 시작하고 네 FFT 효과의 활성 순서를 엔진에 전달하며, Shift의 합성 후 위치는 명시적으로 고정했다. | [체인 검토](CHAIN-ORDER-20261003.md), `tests/chain-order.mjs`, 브라우저 WAV A/B. Native에서도 표시 순서와 실제 신호 경로를 일치시키고 Shift의 위상 연속성을 보존. 청감 개선 승인 아님 |
+| F-11 Shift-last가 순차 연결을 깨뜨림 | Shift를 먼저 켜도 뒤에 켠 효과가 Shift 앞으로 이동했다. 120가지 클릭 순서 테스트는 120가지 실제 DSP 순서를 뜻하지 않았다. Shift 처리 자체를 바꾸지 않고 Shift 출력 뒤에 두 번째 STFT를 연결해 후속 효과를 처리한다. Shift-last는 기존 경로로 남긴다. | [체인 검토](CHAIN-ORDER-20261003.md), `tests/module-routing.mjs`, `tests/chain-order.mjs`. 두 pass의 청감·CPU·실시간 전환 click은 추가 확인 필요 |
 
 ## 알려진 미해결 위험
 

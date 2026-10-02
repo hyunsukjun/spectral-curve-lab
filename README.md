@@ -1,12 +1,18 @@
 # Spectral Curve Lab
 
-Audio Curve Lab의 화면·노드 편집 방식을 바탕으로 만든 독립적인 STFT 기반 도구입니다. 현재 **Spectral Shift, Spectral Stretch, Spectral Blur**를 구현했습니다. SOURCE / OUTPUT 스펙트로그램도 제공합니다. Harmonicity와 Freeze는 아직 없습니다.
+Audio Curve Lab의 화면·노드 편집 방식을 바탕으로 만든 독립적인 STFT 기반 도구입니다. 현재 **Spectral Shift, Spectral Stretch, Spectral Blur, Harmonicity, Spectral Freeze**를 구현했습니다. SOURCE / OUTPUT 스펙트로그램도 제공합니다. Harmonicity와 Freeze의 청감 파인튜닝은 아직 진행 중입니다.
 
 **Spectral Shift: −2000…+2000 Hz, default 0 Hz.** 모든 성분에 같은 Hz를 더합니다. 예를 들어 +200 Hz는 440/880 Hz를 640/1080 Hz로 옮깁니다. 곡선을 위로 그리면 양의 이동, 아래로 그리면 음의 이동입니다. 0 Hz의 일정한 곡선은 원본을 유지합니다.
 
-**Spectral Stretch: 0.5–2.0, default 1.0, pivot 1 kHz.** 1 kHz를 중심으로 성분 간격을 펼치거나 압축합니다. Stretch 2는 500/1000/2000 Hz를 250/1000/4000 Hz로 옮깁니다. 시간 길이는 유지됩니다. 세 곡선은 독립적이며 Stretch → Blur → Shift 순서로 함께 적용됩니다. Stretch 값은 배속이 아니므로 ×를 표시하지 않습니다.
+**Spectral Stretch: 0.5–2.0, default 1.0, pivot 1 kHz.** 1 kHz를 중심으로 성분 간격을 펼치거나 압축합니다. Stretch 2는 500/1000/2000 Hz를 250/1000/4000 Hz로 옮깁니다. 시간 길이는 유지됩니다. Stretch 값은 배속이 아니므로 ×를 표시하지 않습니다.
 
 **Spectral Blur: 0–100%, default 0%.** 주파수 위치를 옮기지 않고 시간에 따른 성분 변화를 완만하게 만듭니다. 100%에서 크기 평활의 시간 상수는 500ms입니다. 파일 길이를 유지하므로 번짐은 파일 끝에서 잘립니다.
+
+**Harmonicity: −100…+100%, default 0%.** 감지한 저역 peak를 기준으로 음성분을 가까운 배음 간격 쪽으로 당기거나(음수), 비화성적으로 펼칩니다(양수). 현재 추정은 단일음에 맞춘 첫 구현이며 복잡한 음악·음성에 대한 유용 범위와 음질은 미승인입니다.
+
+**Spectral Freeze: 0–100%, default 0%.** 0에서 꺼지고, 0보다 높아질 때 현재 스펙트럼 상태를 포착해 유지합니다. 100%는 포착한 상태만 출력하며 중간값은 현재 소리와 섞습니다. 재생 시간과 파일 길이는 계속 진행하며, seek/stop에서 포착 상태가 초기화됩니다.
+
+**Signal Chain:** 시작할 때 다섯 효과가 모두 Off이며 캔버스에는 선택된 커브가 없습니다. 상단에서 효과를 누르면 On으로 켜지고 체인에 연결됩니다. 켜진 다른 효과를 누르면 그 커브를 선택하고, 선택된 버튼을 다시 누르면 Off가 됩니다. 다섯 효과 모두 켠 순서대로 실제 처리합니다. Shift 뒤에 다른 효과가 있으면 Shift 출력을 다시 분석하는 두 번째 STFT 단계를 사용하고, Shift가 마지막이면 기존 단일 단계 경로를 유지합니다. Off 후 다시 On하면 체인 맨 뒤로 이동합니다. 체인 블록 클릭은 편집 선택이며, Off에서도 커브 점은 보존됩니다. Clear Current와 Reset All은 커브만 복원하고 On/Off·순서는 유지합니다. 체인 드래그는 지원하지 않습니다. [체인·DSP 검토](docs/CHAIN-ORDER-20261003.md).
 
 ## 실행
 
@@ -21,10 +27,10 @@ Audio Curve Lab의 화면·노드 편집 방식을 바탕으로 만든 독립적
 - Pen: 노드 추가·이동. Eraser: 내부 노드 하나 삭제. macOS Command-click / 다른 플랫폼 Ctrl-click도 삭제합니다.
 - 양 끝 노드는 삭제할 수 없고 시간 좌표가 0/1에 고정됩니다. Y는 이동 가능합니다.
 - Double-click: 해당 시간으로 seek. 기존 Pen 동작을 계승하여 첫 click이 노드를 추가할 수 있으므로 Select에서 seek하는 것을 권장합니다.
-- Clear Current: 선택한 곡선을 기본값으로 복원. Reset All: Shift 0 Hz, Stretch 1.0, Blur 0% 모두 복원. Reset All은 기존 확인창을 유지합니다.
+- Clear Current: 선택한 곡선을 기본값으로 복원. Reset All: Shift 0 Hz, Stretch 1.0, Blur 0%, Harmonicity 0%, Freeze 0% 모두 복원. Reset All은 기존 확인창을 유지합니다.
 - Download WAV: 원본 채널 수를 유지하는 48 kHz / 24-bit PCM WAV. 렌더 중 Cancel 가능.
 
-기본 소스는 8초간 네 개의 배음 음이 이어지는 **Harmonic notes**입니다. 어택과 짧은 쉼을 포함하므로 세 효과의 차이를 듣기 위한 합성 진단 예제입니다. 상단 Demo에서 기존 **Noise intervals**로 전환할 수 있습니다. 두 예제 모두 앱에서 생성하며 청감상 성공한 설정이나 실제 악기 녹음으로 간주하지 않습니다. 실제 악기·음성·타악 음원은 Open Audio로 비교하세요.
+기본 소스는 8초간 네 개의 배음 음이 이어지는 **Harmonic notes**입니다. 어택과 짧은 쉼을 포함하므로 효과 차이를 듣기 위한 합성 진단 예제입니다. 상단 Demo에서 기존 **Noise intervals**로 전환할 수 있습니다. 두 예제 모두 앱에서 생성하며 청감상 성공한 설정이나 실제 악기 녹음으로 간주하지 않습니다. 실제 악기·음성·타악 음원은 Open Audio로 비교하세요.
 
 모든 DSP는 AudioWorklet 또는 Worker에서 실행됩니다. 재생/seek의 STFT 준비 시간은 48 kHz에서 약 18.7ms입니다. 일시정지 후 재개는 위상과 위치를 유지합니다. 디코딩과 렌더 결과는 메모리에 유지하므로 매우 긴 파일은 메모리 제한을 받을 수 있습니다. 출력은 WAV 범위를 넘으면 PCM 인코딩에서 clipping되며 자동 normalization/limiter는 없습니다. 하단 미터는 WAV 렌더 결과를 측정하지 않습니다. [하단 재생 바 적용 기록](docs/PLAYBACK-BAR-20261001.md).
 
@@ -52,7 +58,7 @@ Audio Curve Lab의 화면·노드 편집 방식을 바탕으로 만든 독립적
 
 `tests/fixture.html` — 같은 앱의 로딩 함수를 호출하는 fixture UI. 파일 chooser 권한 문제를 분리해 테스트합니다. fixture 출처는 `tests/fixtures/README.md` 참조.
 
-상세 내용은 [Spectral Blur 보고서](docs/PHASE-6-REPORT.md)를 참조하세요. [Spectral Shift 보고서](docs/PHASE-4-REPORT.md)는 이전 단계 기록입니다. [초기 neutral 보고서](docs/PHASE-1-3-REPORT.md)는 이전 단계 기록입니다. 현재 상태는 **Shift/Stretch/Blur 구현 및 수치·브라우저 검증 완료, 다양한 실제 음원의 청감 승인 대기**입니다.
+새 기능과 검증 범위는 [Harmonicity/Freeze 보고서](docs/PHASE-7-8-REPORT.md)를 참조하세요. [Spectral Blur 보고서](docs/PHASE-6-REPORT.md), [Spectral Shift 보고서](docs/PHASE-4-REPORT.md), [초기 neutral 보고서](docs/PHASE-1-3-REPORT.md)는 이전 단계 기록입니다. 현재 상태는 **다섯 효과 구현, 기존 세 효과와 새 두 효과의 수치·브라우저 검증 완료, 다양한 실제 음원의 청감 승인 대기**입니다.
 
 경계 근처의 주파수는 100 Hz 폭의 soft guard로 감쇠됩니다. 0 Hz 부근에서는 경계 필터를 부드럽게 섞으므로 완전한 brick-wall 제거는 아닙니다. 곡선은 10ms smoothing을 거치고, 0 Hz로 돌아올 때 잠깐의 전환 구간이 있습니다. 임의 지점의 Stop/seek는 별도 transport fade를 넣지 않아 click이 발생할 수 있습니다.
 

@@ -1,9 +1,9 @@
-export function createSpectrogramView({getBuffer,getCurves,isBusy}){
+export function createSpectrogramView({getBuffer,getCurves,getOrder,isBusy}){
  const toggle=document.getElementById('spectrogramToggle'),panel=document.getElementById('spectrogramPanel'),button=document.getElementById('updateSpectrogram'),status=document.getElementById('spectrogramStatus');
  const canvases=['sourceSpectrogram','outputSpectrogram'].map(id=>document.getElementById(id));
- let worker=null,result=null,images=null,revision=0,stale=true,signature=JSON.stringify(getCurves());
+ let worker=null,result=null,images=null,revision=0,stale=true,signature=JSON.stringify({curves:getCurves(),order:getOrder()});
  function cancel(message='Analysis cancelled · Update to refresh') {revision++;if(worker){worker.terminate();worker=null;status.textContent=message;button.textContent='Update comparison';}}
- function invalidate(sourceChanged=false){const next=JSON.stringify(getCurves());if(!sourceChanged&&next===signature)return;signature=next;revision++;stale=true;cancel();if(sourceChanged){result=null;images=null;}status.textContent=getBuffer()?'Update needed':'Load audio to compare';draw();}
+ function invalidate(sourceChanged=false){const next=JSON.stringify({curves:getCurves(),order:getOrder()});if(!sourceChanged&&next===signature)return;signature=next;revision++;stale=true;cancel();if(sourceChanged){result=null;images=null;}status.textContent=getBuffer()?'Update needed':'Load audio to compare';draw();}
  function image(item){const c=document.createElement('canvas');c.width=item.width;c.height=item.height;const cx=c.getContext('2d'),pixels=cx.createImageData(c.width,c.height);
   for(let i=0;i<item.data.length;i++){const v=(item.data[i]+90)/90,o=i*4;pixels.data[o]=Math.round(12+238*v*v);pixels.data[o+1]=Math.round(19+216*v);pixels.data[o+2]=Math.round(26+130*Math.sin(v*Math.PI));pixels.data[o+3]=255;}cx.putImageData(pixels,0,0);return c;}
  function draw(){
@@ -24,11 +24,11 @@ export function createSpectrogramView({getBuffer,getCurves,isBusy}){
   if(isBusy()){status.textContent='Pause playback or finish export before updating';return;}
   const job=revision;status.textContent='Analysing 0%';button.textContent='Cancel analysis';
   try{
-   worker=new Worker(new URL('./spectrogram-worker.js?v=20260929-transport1',import.meta.url),{type:'module'});
+   worker=new Worker(new URL('./spectrogram-worker.js?v=20261003-chain4',import.meta.url),{type:'module'});
    worker.onmessage=({data})=>{if(job!==revision)return;if(data.progress!=null){status.textContent=`Analysing ${data.progress}%`;return;}cancel();if(data.error){status.textContent=`Analysis failed: ${data.error}`;return;}result=data;images=[image(data.source),image(data.output)];stale=false;status.textContent=`Current curves · ${(data.source.rate/1000).toFixed(1)} kHz preview · ${data.source.fftSize} FFT`;draw();};
    worker.onerror=event=>{if(job!==revision)return;cancel();status.textContent=`Analysis failed: ${event.message}`;};
    const channels=Array.from({length:buffer.numberOfChannels},(_,i)=>new Float32Array(buffer.getChannelData(i)));
-   worker.postMessage({channels,rate:buffer.sampleRate,curves:structuredClone(getCurves())},channels.map(c=>c.buffer));
+   worker.postMessage({channels,rate:buffer.sampleRate,curves:structuredClone(getCurves()),order:[...getOrder()]},channels.map(c=>c.buffer));
   }catch(error){cancel();status.textContent=`Analysis failed: ${error.message}`;}
  }
  toggle.addEventListener('change',()=>{panel.hidden=!toggle.checked;if(panel.hidden)cancel();else {draw();if(!result)update();}});

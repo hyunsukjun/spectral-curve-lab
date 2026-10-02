@@ -1,10 +1,10 @@
-import {SpectralEngine} from './spectral-engine.js?v=20260929-transport1';
+import {SpectralEngine} from './spectral-engine.js?v=20261003-chain4';
 import {neutralStretchCurve} from './spectral-stretch.js?v=20260929-transport1';
 import {neutralShiftCurve} from './spectral-shift.js?v=20260929-transport1';
 import { encodeWav } from './wav.js?v=20260929-transport1';
 self.onmessage = ({data}) => {
   try {
-    const engine = new SpectralEngine(data.channels, 4096, 48000, data.curve || neutralShiftCurve(), data.stretchCurve || neutralStretchCurve(), 0, data.blurCurve);
+    const engine = new SpectralEngine(data.channels, 4096, 48000, data.curve || neutralShiftCurve(), data.stretchCurve || neutralStretchCurve(), 0, data.blurCurve,data.harmonicityCurve,data.freezeCurve,data.order);
     const output = data.channels.map(c => new Float32Array(c.length));
     let last = 0;
     for (let p = 0; p < engine.length; p += engine.hop) {

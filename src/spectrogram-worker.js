@@ -1,10 +1,10 @@
-import {SpectralEngine} from './spectral-engine.js?v=20260929-transport1';
+import {SpectralEngine} from './spectral-engine.js?v=20261003-chain4';
 import {SpectrogramAnalysis} from './spectrogram-core.js?v=20260929-transport1';
 self.onmessage=({data})=>{
  try{
   const {channels,rate,curves}=data,length=channels[0].length;
   const source=new SpectrogramAnalysis(channels.length,length,rate),output=new SpectrogramAnalysis(channels.length,length,rate);
-  const engine=new SpectralEngine(channels,2048,rate,curves.shift,curves.stretch,0,curves.blur);
+  const engine=new SpectralEngine(channels,2048,rate,curves.shift,curves.stretch,0,curves.blur,curves.harmonicity,curves.freeze,data.order);
   let reported=-1;
   for(let p=0;p<length;p+=engine.hop){
     const count=Math.min(engine.hop,length-p);

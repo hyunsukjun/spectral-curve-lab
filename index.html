@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Spectral Curve Lab</title>
-    <link rel="stylesheet" href="src/styles.css?v=20261001-demo2">
+    <link rel="stylesheet" href="src/styles.css?v=20261003-chain2">
   </head>
   <body>
     <main class="app">
@@ -12,7 +12,7 @@
         <div class="brand">
           <svg class="brandMark" viewBox="0 0 48 48" aria-hidden="true"><path d="M5 24h5m28 0h5M10 19v10m5-17v24m6-30v36m6-29v22m6-17v12m5-7v2"/></svg>
           <div class="brandCopy"><h1><span>Spectral </span><span class="brandAccent">Curve Lab</span></h1>
-          <p class="tagline">Draw spectral shift, stretch and blur across time.</p>
+          <p class="tagline">Draw spectral shift, stretch, blur, harmonicity and freeze across time.</p>
           <p class="statusLine"><span id="fileStatus">No audio loaded</span><span class="privacyNote">Local browser processing. No upload.</span></p>
           <p class="formatNote">Recommended: WAV, MP3. Some formats may vary by browser.</p></div>
         </div>
@@ -33,11 +33,13 @@
       </header>
 
       <section class="editor">
-        <div class="legend">
-          <div class="modeButtons">
-            <button id="shiftMode" class="active curveMode" type="button">Spectral Shift</button>
+        <div class="effectBar">
+          <div class="effectChain" aria-label="Spectral effects. Click to select; click the selected effect again to toggle it.">
+            <button id="shiftMode" class="curveMode" type="button">Spectral Shift</button>
             <button id="stretchMode" title="Compress or expand frequency spacing around 1 kHz. Playback speed and duration stay unchanged." class="curveMode" type="button">Spectral Stretch</button>
             <button id="blurMode" class="curveMode" type="button" title="Smooth spectral changes over time. 0% keeps the original. File duration stays unchanged.">Spectral Blur</button>
+            <button id="harmonicityMode" class="curveMode" type="button" title="Shape peak relationships from harmonic to inharmonic. Centre is neutral.">Harmonicity</button>
+            <button id="freezeMode" class="curveMode" type="button" title="Hold a captured spectral state. 0% is off; 100% is fully frozen.">Spectral Freeze</button>
             <div class="toolToggle" role="group" aria-label="Curve editing tool">
               <button id="selectTool" type="button" aria-label="Select" aria-pressed="false" title="Select: move existing points">↖</button>
               <button id="penTool" class="active" type="button" aria-label="Pen" aria-pressed="true" title="Pen: add or move points">
@@ -48,17 +50,19 @@
               </button>
             </div>
           </div>
-          <div class="curveLegend" id="curveLegend">Shift −2000…+2000 Hz · 0 Hz = original spectrum</div>
           <div class="curveActions">
             <button id="clearCurveButton" type="button">Clear Current</button>
             <button id="resetButton" type="button">Reset All</button>
           </div>
         </div>
+        <div class="curveLegend" id="curveLegend">Shift −2000…+2000 Hz · 0 Hz = original spectrum</div>
 
         <div class="panel">
           <div class="readout"><span>Spectral Shift</span><strong id="shiftReadout">0.0 Hz</strong></div>
           <div class="readout"><span>Spectral Stretch</span><strong id="stretchReadout">1.000</strong></div>
           <div class="readout"><span>Spectral Blur</span><strong id="blurReadout">0%</strong></div>
+          <div class="readout"><span>Harmonicity</span><strong id="harmonicityReadout">0%</strong></div>
+          <div class="readout"><span>Spectral Freeze</span><strong id="freezeReadout">0%</strong></div>
           <div class="readout">
             <span>Curve</span>
             <strong id="modeReadout">Spectral Shift</strong>
@@ -79,6 +83,8 @@
         <div class="canvasFrame">
           <canvas id="waveCanvas" width="1400" height="620"></canvas>
         </div>
+        <div class="chainLabel">Signal Chain <span>On order = processing order · Re-On adds last</span></div>
+        <div id="chainDiagram" class="chainDiagram" aria-label="Enabled spectral effects in actual processing order"></div>
       </section>
       <section class="spectrogramSection" aria-label="Spectrogram comparison">
         <label class="spectrogramSwitch"><input id="spectrogramToggle" type="checkbox"> SOURCE / OUTPUT Spectrogram</label>
@@ -117,7 +123,7 @@
     <div id="resetDialog" class="dialogBackdrop" hidden>
       <div class="confirmDialog" role="dialog" aria-modal="true" aria-labelledby="resetDialogTitle" aria-describedby="resetDialogDescription">
         <h2 id="resetDialogTitle">Reset all curves?</h2>
-        <p id="resetDialogDescription">All curve nodes will be removed and the curves will return to their default state. This action cannot be undone.</p>
+        <p id="resetDialogDescription">All five curves will return to their default state. This action cannot be undone.</p>
         <div class="dialogActions">
           <button id="cancelResetButton" type="button">Cancel</button>
           <button id="confirmResetButton" type="button">Reset All</button>
@@ -125,6 +131,6 @@
       </div>
     </div>
 
-    <script src="src/app.js?v=20261001-demo2" type="module"></script>
+    <script src="src/app.js?v=20261003-chain4" type="module"></script>
   </body>
 </html>

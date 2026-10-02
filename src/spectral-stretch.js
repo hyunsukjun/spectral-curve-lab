@@ -12,6 +12,9 @@ const wrap = phase => phase - TAU * Math.round(phase / TAU);
 // Spectra are centered before fractional interpolation to retain lobe coherence.
 // Phase correction is accumulated over frames; file duration never changes.
 export class SpectralStretch {
+  wetForAmount(amount){return Math.min(1,Math.abs(amount-1)/.02);}
+  prepareMapping(peaks,count,magnitude,channel){}
+  mapFrequency(frequency,amount){return stretchFrequency(frequency,amount);}
   constructor(channelCount,size,rate,length,curve=neutralStretchCurve()) {
     this.size=size;this.hop=size/4;this.rate=rate;this.length=length;this.half=size/2;
     this.binHz=rate/size;this.alpha=1-Math.exp(-this.hop/(rate*.02));
@@ -35,7 +38,7 @@ export class SpectralStretch {
   process(re,im,frameStart,channel) {
     const s=this.states[channel],n=this.size,half=this.half;
     s.amount+=(this.amountAt(frameStart+n/2)-s.amount)*this.alpha;
-    const wet=Math.min(1,Math.abs(s.amount-1)/.02);
+    const wet=this.wetForAmount(s.amount);
     if(wet<1e-7){s.hasPrevious=false;s.phaseOffset.fill(0);s.previousDelta.fill(0);return;}
     let maxMagnitude=0;
     for(let k=0;k<=half;k++){
@@ -46,6 +49,7 @@ export class SpectralStretch {
     let count=0;
     for(let k=1;k<half;k++)if(this.magnitude[k]>maxMagnitude*1e-4&&this.magnitude[k]>=this.magnitude[k-1]&&this.magnitude[k]>this.magnitude[k+1])this.peaks[count++]=k;
     if(!count){let strongest=0;for(let k=1;k<=half;k++)if(this.magnitude[k]>this.magnitude[strongest])strongest=k;this.peaks[count++]=strongest;}
+    this.prepareMapping(this.peaks,count,this.magnitude,channel);
     this.outR.fill(0);this.outI.fill(0);
     for(let p=0;p<count;p++){
       const peak=this.peaks[p],begin=p===0?0:Math.floor((this.peaks[p-1]+peak)/2)+1,end=p===count-1?half:Math.floor((peak+this.peaks[p+1])/2);
@@ -59,7 +63,7 @@ export class SpectralStretch {
         const fraction=Math.abs(denominator)>1e-12?Math.max(-.5,Math.min(.5,.5*(a-c)/denominator)):0;
         frequency=(peak+fraction)*this.binHz;
       }
-      const mapped=stretchFrequency(frequency,s.amount),deltaHz=mapped-frequency,shiftBins=deltaHz/this.binHz;
+      const mapped=this.mapFrequency(frequency,s.amount,channel),deltaHz=mapped-frequency,shiftBins=deltaHz/this.binHz;
       const rotation=s.hasPrevious?wrap(s.phaseOffset[peak]+TAU*(s.previousDelta[peak]+deltaHz)*.5*this.hop/this.rate):0;
       const cr=Math.cos(rotation),ci=Math.sin(rotation);
       for(let k=begin;k<=end;k++){

@@ -61,11 +61,14 @@ export class NeutralSTFT {
   // Phase 4 extension point: transform complex bins here, preserving conjugate
   // symmetry and phase continuity. Identity must remain the neutral branch.
   transformSpectrum(re, im, frameStart, channel) {}
+  readWindowedFrame(channel,start) {
+    const source=this.channels[channel];
+    for(let i=0;i<this.size;i++){this.re[i]=(source[start+i]||0)*this.window[i];this.im[i]=0;}
+  }
   // Realtime can prepare one channel per quantum; offline finishes a whole frame.
   accumulateNextChannel() {
     const n=this.size,start=this.nextFrame,offset=start-this.position,c=this.frameChannel;
-    const source=this.channels[c];
-    for(let i=0;i<n;i++){this.re[i]=(source[start+i]||0)*this.window[i];this.im[i]=0;}
+    this.readWindowedFrame(c,start);
     this.fft.transform(this.re,this.im);
     this.transformSpectrum(this.re,this.im,start,c);
     this.fft.transform(this.re,this.im,true);
