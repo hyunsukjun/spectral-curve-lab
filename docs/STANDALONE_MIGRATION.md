@@ -28,3 +28,8 @@
 2. Native 엔진에서 Preview와 offline render를 각각 비교한다. 현재 두 경로 FFT 크기가 다르므로 무조건 sample-exact를 합격 기준으로 삼지 않는다. 주파수·레벨·시간 궤적과 청감 기준을 별도로 세운다.
 3. 실제 음성, 현/관/타악, 환경음, 급격한 곡선, 긴 파일에서 청감/성능을 기록한다. 현재 useful range·sweet spot·모니터 환경·승인 여부는 **UNKNOWN**이다.
 4. 제품 상호작용과 접근성·window resize·Retina·키보드 조작을 native UI에서 재검증한다. Audio Plug-in을 추진할 경우 host time, automation, state 저장, 실시간 할당 제한은 신규 설계가 필요하다.
+
+## Identity asset pilot
+
+STANDALONE ASSET: `assets/identity/spectral-app.svg` 및 symbol/micro와 공통
+색상표. 실제 네이티브 패키징/Dock 검증은 수행하지 않음.

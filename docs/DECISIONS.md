@@ -22,3 +22,9 @@
 **보류:** Shift soft guard, Stretch pivot/보간, Blur 시간 상수의 최종 청감 승인; 라이브 입력/plug-in, preset/host automation, 비교 화면의 native UI 형태. 새로운 값으로 바꾸기 전 이전 값과 근거·실제 청감 결과를 [PARAMETER_SPEC.md](PARAMETER_SPEC.md)에 남긴다.
 
 청취로 아직 승인하지 않은 실험값과 사용자 피드백은 [청취 판단 기록](LISTENING_DECISIONS.md)에, 실패·수정·미해결 문제의 이유는 [실패·수정·보류 이력](FAILURES_AND_FIXES.md)에 보존한다.
+
+## 2026-10-05 — Hub v0.10 identity pilot
+
+PROJECT-SPECIFIC: 기존 Cyan #31B8C6과 공통 파형 마크를 Orange #FF7047과
+Spectral 에너지 아이콘으로 교체. DSP/효과 순서/파라미터 의미 색 유지.
+로컬 검토 완료 후 2026-10-05 사용자 요청으로 커밋/배포 승인. `IDENTITY_PILOT.md` 참고.

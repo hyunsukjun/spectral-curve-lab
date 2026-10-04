@@ -21,3 +21,8 @@
 | `SCL-C07` 비교 관찰 · COMMON · VERIFIED | 스위치 켜고 Update comparison → SOURCE/OUTPUT overview | 원본과 preview engine 샘플의 FFT 분석; `spectrogram-*` | 기본 OFF, stale 수동 갱신, 512열 요약; [비교 보고서](SPECTROGRAM-REPORT.md). 편집기/정밀 WAV 분석기 아님 |
 
 **미구현:** Undo/Redo, preset 저장·불러오기, host automation, Audio Plug-in. 제안/초기 사양에 언급되어도 현재 기능으로 표시하지 않는다. 위 VERIFIED는 기록된 검사 범위에서만 유효하며, 사람 청감 승인·장치 underrun·모든 브라우저/긴 파일 메모리까지 확인했다는 뜻이 아니다.
+
+## Spectral Hub identity pilot
+
+IMPLEMENTED (2026-10-05): Hub v0.10 제목/탭 아이콘과 대표색.
+`IDENTITY_PILOT.md` 참고. 로컬 검토 후 사용자 커밋/배포 승인.

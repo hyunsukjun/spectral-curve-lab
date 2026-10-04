@@ -1,0 +1,18 @@
+{
+  "source": "CURVE LAB HUB for macOS / DesignIdentity / 2026-10-04-v0.10",
+  "status": "Spectral web identity; local review completed, publication authorized 2026-10-05",
+  "colorSpace": "sRGB",
+  "colors": {
+    "audio": "#459BFF",
+    "timbre": "#F4CB38",
+    "space": "#A982FF",
+    "granular": "#EF4FA4",
+    "spectral": "#FF7047",
+    "oscillator": "#28CDB0"
+  },
+  "assets": {
+    "spectral-symbol.svg": "df8527ac46f7d812a37aba549e399b051e5bf51cfb218d00457af46921ef4e14",
+    "spectral-micro.svg": "037f6520fc54ea88a13ab5813a26505e14e9c5976b073c9f07a4df95e5903a9d",
+    "spectral-app.svg": "e2225b96974ddd5a2e3f69a5ba749e164ad74263ca5a60df8e473112644f67ac"
+  }
+}
