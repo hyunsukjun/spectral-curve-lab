@@ -16,7 +16,7 @@
 | 비교 스펙트로그램 / 중간 | SOURCE/OUTPUT 동일 축, −90…0dBFS, 로그 Hz, 평균 채널 power, 512×192 overview, stale 갱신. [비교 기록](SPECTROGRAM-REPORT.md) | Worker/Canvas→native background analysis/view. Preview를 분석하는 의미를 유지하고 Render exact 분석으로 오표기하지 말 것 |
 | 디자인 시스템 / 중간 | deep navy/charcoal 의미, Cyan 브랜드와 의미 색 분리, 작업 영역 계층, 키보드 초점/모션 정책. [디자인](../CURVE_LAB_DESIGN_SYSTEM.md) | CSS custom properties/DOM→native tokens/controls. 픽셀값보다 대비와 계층을 재현 |
 
-모듈 UI의 enabled 상태와 체인 순서는 커브 점과 별도로 보존한다. 기본값은 다섯 개 모두 Off·빈 체인이다. Off는 해당 효과의 중립 커브를 DSP에 전달한다. 다섯 효과는 활성화 순서대로 처리한다. Shift가 중간에 있으면 그 출력을 두 번째 STFT에 전달하되, Shift 자체는 phase-continuous oscillator를 유지한다. Native 모델은 이 pass 경계와 seek 시 두 단계의 상태 초기화를 명시해야 같은 소리가 난다. 현재 Off는 성능 최적화가 아닌 음향 우회다. 저장/preset schema는 아직 없다.
+모듈 UI의 enabled 상태와 체인 순서는 커브 점과 별도로 보존한다. 기본값은 다섯 개 모두 Off·빈 체인이다. Off는 해당 효과의 중립 커브를 DSP에 전달한다. 다섯 효과는 활성화 순서대로 시작하며, 하단 블록 드래그로 이 순서를 바꿀 수 있다. 블록 클릭은 편집 선택으로 순서를 바꾸지 않는다. Shift가 중간에 있으면 그 출력을 두 번째 STFT에 전달하되, Shift 자체는 phase-continuous oscillator를 유지한다. Native 모델은 이 pass 경계와 seek 시 두 단계의 상태 초기화를 명시해야 같은 소리가 난다. 현재 Off는 성능 최적화가 아닌 음향 우회다. 저장/preset schema는 아직 없다.
 
 ## 상태·preset 경계
 
@@ -33,3 +33,5 @@
 
 STANDALONE ASSET: `assets/identity/spectral-app.svg` 및 symbol/micro와 공통
 색상표. 실제 네이티브 패키징/Dock 검증은 수행하지 않음.
+
+OUTPUT TIME 탐색은 원본 채널별 peak 요약을 동일 길이의 출력 시간축에 그리는 UI이다. 렌더 파형이나 실시간 분석기가 아니다. native에서도 커브 시간축과 좌우 경계를 맞추고, 미리 선택한 위치는 오디오 엔진 초기화 후 적용한다. 드래그 중 늦은 위치 보고를 무시하는 계약과 seek token 검증을 유지한다.

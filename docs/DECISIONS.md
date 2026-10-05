@@ -4,6 +4,7 @@
 
 | 날짜 | 결정 · 이유 · 영향 | 근거/상태 |
 | --- | --- | --- |
+| 2026-10-05 | 하단 Signal Chain의 활성 블록을 드래그하여 실제 처리 순서를 바꾼다. 블록 클릭은 편집 선택만 하며 다른 블록에 놓으면 그 앞, Output에 놓으면 맨 뒤로 이동한다. 기존 DSP 라우팅을 재사용하고 순서 변경 시 Preview·비교·WAV의 이전 결과를 무효화한다. | [상호작용](INTERACTION_SPEC.md), `tests/module-routing.mjs`, 데스크톱 브라우저 WAV A/B; touch/keyboard 조작과 청감 평가는 별도 |
 | 2026-09-27 | 초기 제품을 Shift → Stretch → Blur의 단계로 만들고 각 곡선을 독립 보관한다. 기능별 수치와 브라우저 검증을 거쳐 확장한다. | [초기 사양](INITIAL-SPECIFICATION.md), Phase 4–6. 현재 세 기능 IMPLEMENTED/검사 범위 VERIFIED |
 | 2026-09-27 | Stretch는 1 kHz 중심의 **주파수 간격** 변형이며 재생 속도/길이를 바꾸지 않는다. 기본 1, 범위 0.5–2, 축·tooltip에서 `×`를 제거한다. 배속 오해를 없애기 위한 UI·DSP 계약. | [Phase 5](PHASE-5-REPORT.md), [Phase 6](PHASE-6-REPORT.md); 청감 최종 매핑 승인 UNKNOWN |
 | 2026-09-27 | Blur는 별도 0–100% 곡선으로 시간적 성분 변화만 완만하게 한다. Stretch와 다른 목표이며 주파수 축 low-pass가 아니다. 처리 순서를 Stretch → Blur → Shift로 고정한다. | [Phase 6](PHASE-6-REPORT.md), [spectral-engine.js](../src/spectral-engine.js); 청감 sweet spot UNKNOWN |
@@ -28,3 +29,5 @@
 PROJECT-SPECIFIC: 기존 Cyan #31B8C6과 공통 파형 마크를 Orange #FF7047과
 Spectral 에너지 아이콘으로 교체. DSP/효과 순서/파라미터 의미 색 유지.
 로컬 검토 완료 후 2026-10-05 사용자 요청으로 커밋/배포 승인. `IDENTITY_PILOT.md` 참고.
+
+| 2026-10-05 | 커브와 탐색 제스처의 충돌을 줄이기 위해 원본 채널 파형을 OUTPUT TIME으로 분리하고 슬라이더·커브창 double-click seek를 대체한다. 출력 시간축과 원본 시간축 길이는 같다. 첫 재생 전 지정 위치를 초기화된 엔진에 전달한다. | [검증](OUTPUT-TIME-20261005.md); 기존 STFT/seek 상태·token 유지, 렌더 파형과 구별 |

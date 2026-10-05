@@ -10,6 +10,15 @@ export function appendToChain(order,name){
 
 export function removeFromChain(order,name){return order.filter(module=>module!==name);}
 
+// Dropping on a module inserts before it; dropping on Output appends last.
+export function moveInChain(order,name,beforeName=null){
+  if(!order.includes(name)|| (beforeName!==null&&!order.includes(beforeName)))return [...order];
+  if(name===beforeName)return [...order];
+  const next=order.filter(module=>module!==name);
+  next.splice(beforeName===null?next.length:next.indexOf(beforeName),0,name);
+  return next;
+}
+
 const neutral = {
   shift: .5,
   stretch: .5,

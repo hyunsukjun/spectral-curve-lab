@@ -1,3 +1,4 @@
+import {createOutputTime} from "./output-time.js?v=20261005-output-time1";
 import {createSpectrogramView} from "./spectrogram-view.js?v=20261003-chain4";
 import {stretchFromNorm, stretchToNorm} from "./spectral-stretch.js?v=20260929-transport1";
 import {shiftFromNorm} from "./spectral-shift.js?v=20260929-transport1";
@@ -5,7 +6,7 @@ import {harmonicityFromNorm} from "./spectral-harmonicity.js?v=20261002-harmonic
 import { valueAt, addNode, moveNode, eraseNode } from "./curve-editor.js?v=20260929-transport1";
 import { OutputMeterAnalyzer } from "./output-meter.js?v=20261001-playback1";
 import {fillHarmonicDemo, fillNoiseIntervals} from "./demo-sources.js?v=20261001-demo2";
-import {moduleOrder,defaultEnabled,effectiveCurves,appendToChain,removeFromChain} from "./module-routing.js?v=20261003-chain4";
+import {moduleOrder,defaultEnabled,effectiveCurves,appendToChain,removeFromChain,moveInChain} from "./module-routing.js?v=20261005-chain-drag1";
 
 const fileInput = document.getElementById("fileInput");
 const demoSource = document.getElementById("demoSource");
@@ -13,7 +14,7 @@ const fileStatus = document.getElementById("fileStatus");
 const timeStatus = document.getElementById("timeStatus");
 const playButton = document.getElementById("playButton");
 const stopButton = document.getElementById("stopButton");
-const playbackScrubber = document.getElementById("playbackScrubber");
+const outputWaveCanvas = document.getElementById("outputWaveCanvas");
 const meterRows = Array.from(document.querySelectorAll("[data-meter-channel]"));
 const meterClipButton = document.getElementById("meterClipButton");
 
@@ -63,7 +64,7 @@ let node;
 let outputMeter;
 let workletBufferLoaded = false;
 let buffer;
-let waveform = [];
+
 let activeCurve = null;
 let selectedTool = "pen";
 let selectedPoint = null;
@@ -92,6 +93,7 @@ const plotRightPadding = 8;
 const curves = { shift: [{x: 0, y: .5}, {x: 1, y: .5}], blur: [{x:0,y:0},{x:1,y:0}], stretch: [{x:0,y:.5},{x:1,y:.5}], harmonicity:[{x:0,y:.5},{x:1,y:.5}], freeze:[{x:0,y:0},{x:1,y:0}] };
 const enabled = defaultEnabled();
 let chainOrder = [];
+let draggedChainModule = null;
 
 const defaultCurves = { shift: () => [{x: 0, y: .5}, {x: 1, y: .5}], blur: () => [{x:0,y:0},{x:1,y:0}], stretch: () => [{x:0,y:.5},{x:1,y:.5}], harmonicity:()=>[{x:0,y:.5},{x:1,y:.5}], freeze:()=>[{x:0,y:0},{x:1,y:0}] };
 
@@ -106,6 +108,8 @@ const curveLabels = {
 
 };
 const moduleHints = Object.fromEntries(moduleOrder.map(name=>[name,moduleButtons[name].title]));
+
+const outputTime = createOutputTime(outputWaveCanvas, {seek: seekToProgress, scrubbing: value => { isScrubbing = value; }, formatClock});
 
 const spectrogram = createSpectrogramView({getBuffer:()=>buffer,getCurves:()=>effectiveCurves(curves,enabled),getOrder:()=>chainOrder,isBusy:()=>isPlaying||!!renderAbortController||playButton.disabled});
 
@@ -227,7 +231,7 @@ function setTransportBusy(isBusy) {
   if (isBusy) isScrubbing = false;
   playButton.disabled = isBusy || !buffer;
   stopButton.disabled = isBusy || !buffer;
-  playbackScrubber.disabled = isBusy || !buffer;
+  outputTime.setDisabled(isBusy || !buffer);
 
   downloadButton.disabled = isBusy || !buffer;
   fileInput.disabled = isBusy;
@@ -239,10 +243,11 @@ function setRenderBusy(isBusy) {
   if(isBusy)spectrogram.cancel("Analysis cancelled for export · Update to refresh");
   canvas.style.pointerEvents = isBusy ? "none" : "";
   [selectTool, penTool, eraserTool, resetButton, shiftMode, stretchMode, blurMode, harmonicityMode, freezeMode].forEach(button => { button.disabled = isBusy; });
+  chainDiagram.querySelectorAll(".chainBlock").forEach(button => { button.disabled = isBusy; button.draggable = !isBusy; });
   clearCurveButton.disabled = isBusy || !activeCurve;
   playButton.disabled = isBusy || !buffer;
   stopButton.disabled = isBusy || !buffer;
-  playbackScrubber.disabled = isBusy || !buffer;
+  outputTime.setDisabled(isBusy || !buffer);
 
   fileInput.disabled = isBusy;
   demoSource.disabled = isBusy;
@@ -268,8 +273,10 @@ async function playAudio() {
   const requestToken = playbackToken;
   try {
     spectrogram.cancel("Analysis cancelled for playback · Update to refresh");
+    const needsInitialSeek = !node || !workletBufferLoaded;
     await ensureAudio();
     if (isPlaying || requestToken !== playbackToken || !buffer || playButton.disabled) return;
+    if (needsInitialSeek) node.port.postMessage({type: "seek", progress: playheadSeconds / getPlaybackDuration(), token: playbackToken});
     node.port.postMessage({ type: "play", token: nextPlaybackToken() });
     isPlaying = true;
     playButton.textContent = "Pause";
@@ -566,20 +573,6 @@ function draw() {
     ctx.stroke();
   }
 
-  if (waveform.length > 0) {
-    ctx.fillStyle = "rgba(128, 158, 186, 0.48)";
-    const midTop = h * 0.32;
-    const midBottom = h * 0.70;
-    const ampTop = h * 0.24;
-    const ampBottom = h * 0.18;
-    const step = Math.max(1, Math.floor(waveform.length / w));
-    for (let x = 0; x < w; x += 1) {
-      const sample = waveform[Math.min(waveform.length - 1, Math.floor(x / w * waveform.length))] || 0;
-      ctx.fillRect(left + x, midTop - (sample * ampTop), 1, Math.max(1, sample * ampTop * 2));
-      ctx.fillRect(left + x, midBottom - (sample * ampBottom), 1, Math.max(1, sample * ampBottom * 2));
-    }
-  }
-
   drawParameterScale();
   drawCurves();
   if (buffer) {
@@ -604,10 +597,7 @@ function draw() {
   timeStatus.textContent = buffer
     ? `${formatClock(playheadSeconds)} / ${formatClock(getPlaybackDuration())}`
     : "00:00.00 / 00:00.00";
-  if (!isScrubbing) {
-    const duration = getPlaybackDuration();
-    playbackScrubber.value = duration > 0 ? String(Math.max(0, Math.min(1, playheadSeconds / duration))) : "0";
-  }
+  outputTime.update(playheadSeconds);
 
   modeReadout.textContent = activeCurve ? (enabled[activeCurve] ? curveLabels[activeCurve] : `${curveLabels[activeCurve]} · Off`) : "Select an effect";
   document.getElementById("blurReadout").textContent = `${Math.round(valueAt(curves.blur,buffer?.duration ? sourcePlayheadSeconds / buffer.duration : 0)*100)}%`;
@@ -618,21 +608,7 @@ function draw() {
   document.getElementById("shiftReadout").textContent = `${shiftFromNorm(valueAt(curves.shift, buffer?.duration ? sourcePlayheadSeconds / buffer.duration : 0)).toFixed(1)} Hz`;
 }
 
-function buildWaveform(audioBuffer) {
-  const channel = audioBuffer.getChannelData(0);
-  const buckets = 4000;
-  const samplesPerBucket = Math.max(1, Math.floor(channel.length / buckets));
-  waveform = [];
-  for (let i = 0; i < buckets; i += 1) {
-    let peak = 0;
-    const start = Math.floor(i * channel.length / buckets);
-    const end = Math.max(start + 1, Math.floor((i + 1) * channel.length / buckets));
-    for (let j = start; j < end; j += 1) {
-      peak = Math.max(peak, Math.abs(channel[j] || 0));
-    }
-    waveform.push(peak);
-  }
-}
+function buildWaveform(audioBuffer) { outputTime.setBuffer(audioBuffer); }
 
 function decodeAudioFile(arrayBuffer) {
   const data = arrayBuffer.slice(0);
@@ -748,7 +724,7 @@ async function loadAudioFile(file) {
     downloadReadout.textContent = "not ready";
     buffer = null;
     spectrogram.invalidate(true);
-    waveform = [];
+    outputTime.setBuffer(null);
     clearDownload();
     draw();
   } finally {
@@ -767,20 +743,14 @@ playButton.addEventListener("click", playAudio);
 
 stopButton.addEventListener("click", stopAudio);
 
-function seekFromScrubber() {
-  if (!buffer) return;
-  const progress = Math.max(0, Math.min(1, Number(playbackScrubber.value) || 0));
+function seekToProgress(progress) {
+  if (!buffer || outputWaveCanvas.getAttribute("aria-disabled") === "true" || !resetDialog.hidden) return;
+  progress = Math.max(0, Math.min(1, progress));
   playheadSeconds = progress * getPlaybackDuration();
   sourcePlayheadSeconds = playheadSeconds;
   node?.port.postMessage({type: "seek", progress, token: nextPlaybackToken()});
   draw();
 }
-
-playbackScrubber.addEventListener("pointerdown", () => { isScrubbing = true; });
-playbackScrubber.addEventListener("input", seekFromScrubber);
-playbackScrubber.addEventListener("change", () => { seekFromScrubber(); isScrubbing = false; });
-playbackScrubber.addEventListener("pointerup", () => { isScrubbing = false; });
-playbackScrubber.addEventListener("pointercancel", () => { isScrubbing = false; });
 
 meterClipButton.addEventListener("click", () => {
   meterClipLatched = false;
@@ -943,6 +913,28 @@ function renderChainDiagram() {
     element.setAttribute("aria-hidden","true");
     chainDiagram.appendChild(element);
   };
+  const finishDrag = () => {
+    draggedChainModule = null;
+    chainDiagram.querySelectorAll(".dragging, .dragTarget").forEach(element => element.classList.remove("dragging", "dragTarget"));
+  };
+  const acceptDrop = (target, beforeName) => {
+    target.addEventListener("dragover", event => {
+      if (!draggedChainModule || draggedChainModule === beforeName) return;
+      event.preventDefault();
+      event.dataTransfer.dropEffect = "move";
+      target.classList.add("dragTarget");
+    });
+    target.addEventListener("dragleave", () => target.classList.remove("dragTarget"));
+    target.addEventListener("drop", event => {
+      event.preventDefault();
+      const next = moveInChain(chainOrder, draggedChainModule, beforeName);
+      finishDrag();
+      if (next.every((name, index) => name === chainOrder[index])) return;
+      chainOrder = next;
+      sendCurves();
+      renderChainDiagram();
+    });
+  };
   terminal("Input");
   for (const name of chainOrder) {
     connector();
@@ -950,13 +942,24 @@ function renderChainDiagram() {
     block.type = "button";
     block.className = `chainBlock${activeCurve === name ? " editing" : ""}`;
     block.dataset.module = name;
+    block.draggable = true;
     block.textContent = curveLabels[name];
-    block.title = `Edit ${curveLabels[name]} curve`;
+    block.title = `Click to edit ${curveLabels[name]}; drag to change processing order`;
     block.addEventListener("click",() => setActiveCurve(name));
+    block.addEventListener("dragstart", event => {
+      if (renderAbortController) { event.preventDefault(); return; }
+      draggedChainModule = name;
+      block.classList.add("dragging");
+      event.dataTransfer.effectAllowed = "move";
+      event.dataTransfer.setData("text/plain", name);
+    });
+    block.addEventListener("dragend", finishDrag);
+    acceptDrop(block, name);
     chainDiagram.appendChild(block);
   }
   connector();
   terminal("Output");
+  acceptDrop(chainDiagram.lastElementChild, null);
 }
 
 function updateModuleUI() {
@@ -1124,15 +1127,6 @@ canvas.addEventListener("pointerenter", updateToolCursor);
 window.addEventListener("keydown", updateToolCursor);
 window.addEventListener("keyup", updateToolCursor);
 window.addEventListener("blur", () => updateToolCursor());
-
-canvas.addEventListener("dblclick", (event) => {
-  if (!buffer) return;
-  const p = pointerToPoint(event);
-  playheadSeconds = p.x * getPlaybackDuration();
-  sourcePlayheadSeconds = playheadSeconds;
-  node?.port.postMessage({ type: "seek", progress: p.x, token: nextPlaybackToken() });
-  draw();
-});
 
 window.addEventListener("resize", resizeCanvas);
 if ("ResizeObserver" in window) {

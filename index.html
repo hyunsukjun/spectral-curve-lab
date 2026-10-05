@@ -6,7 +6,7 @@
     <title>Spectral Curve Lab</title>
     <link rel="icon" type="image/svg+xml" href="assets/identity/spectral-micro.svg?v=hub-v0.10">
     <link rel="stylesheet" href="assets/identity/tokens.css?v=hub-v0.10">
-    <link rel="stylesheet" href="src/styles.css?v=20261005-identity-pilot">
+    <link rel="stylesheet" href="src/styles.css?v=20261005-output-time1">
   </head>
   <body>
     <main class="app">
@@ -85,8 +85,8 @@
         <div class="canvasFrame">
           <canvas id="waveCanvas" width="1400" height="620"></canvas>
         </div>
-        <div class="chainLabel">Signal Chain <span>On order = processing order · Re-On adds last</span></div>
-        <div id="chainDiagram" class="chainDiagram" aria-label="Enabled spectral effects in actual processing order"></div>
+        <div class="chainLabel">Signal Chain <span>Drag to reorder · drop on Output to place last · Re-On adds last</span></div>
+        <div id="chainDiagram" class="chainDiagram" aria-label="Enabled spectral effects in processing order. Drag a block before another block or onto Output to move it last."></div>
       </section>
       <section class="spectrogramSection" aria-label="Spectrogram comparison">
         <label class="spectrogramSwitch"><input id="spectrogramToggle" type="checkbox"> SOURCE / OUTPUT Spectrogram</label>
@@ -101,16 +101,14 @@
           <p class="spectrogramNote">Overview only: short events may fall between columns. Curve edits need an update. Pause playback to analyse.</p>
         </div>
       </section>
+      <div class="playbackDock">
+        <div class="outputWaveFrame"><canvas id="outputWaveCanvas" height="96" role="slider" tabindex="0" aria-label="Output time. Source channel waveform guide, not processed output. Click or drag to seek. Arrow keys move one second, Shift Arrow one tenth; Home and End jump to boundaries." aria-valuemin="0" aria-valuemax="0" aria-valuenow="0" aria-disabled="true" title="Source waveform on the output timeline, not the rendered WAV. Click or drag to seek."></canvas></div>
       <footer class="playbackBar" aria-label="Playback and output monitoring">
         <div class="bottomTransport" aria-label="Transport controls">
           <button id="playButton" type="button" disabled>Play</button>
           <button id="stopButton" type="button" disabled>Stop</button>
         </div>
         <output id="timeStatus" aria-label="Current playback time and duration">00:00.00 / 00:00.00</output>
-        <label class="scrubberGroup" for="playbackScrubber">
-          <span>Position</span>
-          <input id="playbackScrubber" type="range" min="0" max="1" step="0.0001" value="0" disabled>
-        </label>
         <section class="outputMeter" aria-label="Stereo output level meter">
           <div class="meterTitle">OUT</div>
           <div class="meterChannels">
@@ -120,6 +118,7 @@
           <button id="meterClipButton" class="meterClip" type="button" aria-pressed="false" title="Clip indicator. Click to reset.">CLIP</button>
         </section>
       </footer>
+      </div>
     </main>
 
     <div id="resetDialog" class="dialogBackdrop" hidden>
@@ -133,6 +132,6 @@
       </div>
     </div>
 
-    <script src="src/app.js?v=20261003-chain4" type="module"></script>
+    <script src="src/app.js?v=20261005-output-time1" type="module"></script>
   </body>
 </html>

@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {moduleOrder,defaultEnabled,effectiveCurves,appendToChain,removeFromChain} from '../src/module-routing.js?v=20261003-chain1';
+import {moduleOrder,defaultEnabled,effectiveCurves,appendToChain,removeFromChain,moveInChain} from '../src/module-routing.js?v=20261005-chain-drag1';
 import {SpectralEngine} from '../src/spectral-engine.js?v=20261002-harmonic-freeze1';
 
 const flat=y=>[{x:0,y},{x:1,y}];
@@ -46,6 +46,13 @@ for(const activation of permutations(moduleOrder)){
     const removed=removeFromChain(chain,name);
     const reactivated=appendToChain(removed,name);
     assert.deepEqual(reactivated,[...activation.filter(module=>module!==name),name],'re-enabled module joins after all remaining modules');
+    assert.deepEqual(moveInChain(activation,name,null),[...activation.filter(module=>module!==name),name],'drop on Output moves the module last');
+    for(const target of moduleOrder){
+      const moved=moveInChain(activation,name,target);
+      assert.deepEqual([...moved].sort(),[...activation].sort(),'reorder preserves each enabled module exactly once');
+      if(name!==target)assert.equal(moved.indexOf(name)+1,moved.indexOf(target),'drop on a block inserts immediately before it');
+    }
   }
 }
-console.log('Five initial Off routes preserve curves; all 120 activation orders and re-enable positions match the chain');
+assert.deepEqual(moveInChain(['shift','blur'],'stretch','blur'),['shift','blur'],'a disabled module cannot be inserted by dragging');
+console.log('Five initial Off routes preserve curves; all 120 activation orders, drag destinations, and re-enable positions match the chain');
