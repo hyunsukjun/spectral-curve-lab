@@ -17,7 +17,7 @@
 | 출력 레벨 | L/R 각각 RMS 바·peak 바/hold·dB 표시, 0.999 이상 CLIP 래치. CLIP 버튼은 표시를 초기화한다. | 실제 Preview 출력 뒤의 분석 전용 분기; 모노 원본도 현재 Worklet은 두 채널에 같은 신호 출력. WAV 렌더 레벨을 뜻하지 않음 |
 | 커브창과 탐색 분리 | 커브창의 double-click seek와 하단 Position 슬라이더는 제거한다. 커브 점 편집은 기존 방식이며 탐색창 조작은 점을 바꾸지 않는다. | OUTPUT TIME의 role=slider와 현재 초/전체 길이 접근성 값을 제공한다. hard seek의 기존 준비 무음/click 가능성은 별도 개선 대상 |
 | 파일 열기 | 새 파일을 읽으면 waveform/길이와 재생 위치가 바뀐다. 현재 다섯 커브는 유지된다. | file chooser, `decodeAudioData`; 선택창 검증 기록과 제한은 [디자인 회귀](DESIGN-SYSTEM-V1.md) |
-| Demo 소스 | Harmonic notes와 Noise intervals 사이를 바꾸면 재생을 멈추고 0초로 돌아간다. 커브는 유지되며 waveform과 export 준비 상태를 갱신한다. 파일을 열면 선택창은 Loaded file을 표시한다. | 생성 신호는 앱 내부에서 만들어지며 외부 파일을 가져오거나 업로드하지 않는다. 데모 전환은 새 DSP 파라미터가 아니다 |
+| 기본 소스 | 시작 시 8초 Noise intervals를 불러온다. Demo 선택 메뉴는 없으며 Open Audio로 사용자 파일을 불러온다. | 기존 백색소음 생성 함수를 그대로 사용한다. 새로고침하면 기본 소스로 돌아간다. |
 | Download WAV | 현재 곡선을 전체 파일에 렌더하여 다운로드한다. 진행 중 다시 누르면 취소한다. 편집 시 이전 URL은 폐기되고 새 export가 필요하다. | Worker/Blob/object URL; PCM24, 48 kHz |
 | SOURCE/OUTPUT 비교 | 기본 꺼짐. 켜면 원본과 현재 **Preview 처리 샘플**을 같은 축으로 비교한다. 커브 변경 후 이전 그림은 stale로 표시하고 수동 Update한다. 재생/Export 중 새 분석을 시작하지 않는다. | 별도 Worker; [비교 보고서](SPECTROGRAM-REPORT.md). 소리 편집 표면이 아님 |
 

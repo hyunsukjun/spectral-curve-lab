@@ -5,11 +5,10 @@ import {shiftFromNorm} from "./spectral-shift.js?v=20260929-transport1";
 import {harmonicityFromNorm} from "./spectral-harmonicity.js?v=20261002-harmonic-freeze1";
 import { valueAt, addNode, moveNode, eraseNode } from "./curve-editor.js?v=20260929-transport1";
 import { OutputMeterAnalyzer } from "./output-meter.js?v=20261001-playback1";
-import {fillHarmonicDemo, fillNoiseIntervals} from "./demo-sources.js?v=20261001-demo2";
+import {fillNoiseIntervals} from "./demo-sources.js?v=20261001-demo2";
 import {moduleOrder,defaultEnabled,effectiveCurves,appendToChain,removeFromChain,moveInChain} from "./module-routing.js?v=20261005-chain-drag1";
 
 const fileInput = document.getElementById("fileInput");
-const demoSource = document.getElementById("demoSource");
 const fileStatus = document.getElementById("fileStatus");
 const timeStatus = document.getElementById("timeStatus");
 const playButton = document.getElementById("playButton");
@@ -235,7 +234,6 @@ function setTransportBusy(isBusy) {
 
   downloadButton.disabled = isBusy || !buffer;
   fileInput.disabled = isBusy;
-  demoSource.disabled = isBusy;
 }
 
 function setRenderBusy(isBusy) {
@@ -250,7 +248,6 @@ function setRenderBusy(isBusy) {
   outputTime.setDisabled(isBusy || !buffer);
 
   fileInput.disabled = isBusy;
-  demoSource.disabled = isBusy;
   downloadButton.disabled = !buffer;
 }
 
@@ -357,30 +354,28 @@ function createAudioBuffer(channelCount, length, sampleRate) {
   return new OfflineContext(channelCount, length, sampleRate).createBuffer(channelCount, length, sampleRate);
 }
 
-function createGeneratedExampleBuffer(kind) {
+function createGeneratedExampleBuffer() {
   const sampleRate = 48000;
   const durationSeconds = 8;
   const length = sampleRate * durationSeconds;
   const exampleBuffer = createAudioBuffer(2, length, sampleRate);
   const left = exampleBuffer.getChannelData(0);
   const right = exampleBuffer.getChannelData(1);
-  if (kind === "noise") fillNoiseIntervals(left, right, sampleRate);
-  else fillHarmonicDemo(left, right, sampleRate);
+  fillNoiseIntervals(left, right, sampleRate);
 
   return exampleBuffer;
 }
 
-function loadGeneratedExample(kind = "harmonic") {
+function loadGeneratedExample() {
   if (buffer) forceStopAudio();
   spectrogram.invalidate(true);
-  buffer = createGeneratedExampleBuffer(kind);
+  buffer = createGeneratedExampleBuffer();
   buildWaveform(buffer);
   workletBufferLoaded = false;
   sendBufferToWorklet();
   clearDownload();
   downloadReadout.textContent = "ready";
-  fileStatus.textContent = `${kind === "noise" ? "White noise intervals" : "Harmonic notes + attacks"} - ${buffer.duration.toFixed(2)} s`;
-  demoSource.value = kind;
+  fileStatus.textContent = `White noise intervals - ${buffer.duration.toFixed(2)} s`;
   playheadSeconds = 0;
   sourcePlayheadSeconds = 0;
   resetCurrentReadouts();
@@ -705,7 +700,6 @@ async function loadAudioFile(file) {
     const decoded = await decodeAudioFile(data);
     if (decoded.numberOfChannels > 2) throw new Error("Only mono/stereo sources supported");
     buffer = decoded;
-    demoSource.value = "file";
     spectrogram.invalidate(true);
     buildWaveform(buffer);
     workletBufferLoaded = false;
@@ -737,7 +731,6 @@ fileInput.addEventListener("change", async () => {
   fileInput.value = "";
 });
 
-demoSource.addEventListener("change", () => loadGeneratedExample(demoSource.value));
 
 playButton.addEventListener("click", playAudio);
 
