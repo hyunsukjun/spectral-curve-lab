@@ -21,3 +21,14 @@
 - Stop/seek의 hard boundary click, WAV 인코딩 시 범위 초과 clipping, Blur tail 절단은 [DSP 계약](DSP_BEHAVIOR.md)에 남아 있다. transport fade·limiter·자동 normalization은 현재 없다. 이것은 **수정 완료 사례가 아니다**.
 - Preview FFT2048과 WAV FFT4096의 비중립 소리는 동일하다고 검증되지 않았다. [시간 동작](CURVE_TEMPORAL_BEHAVIOR.md)과 [Reference Sound Set](REFERENCE_SOUND_SET.md)으로 차이를 수치·청감에서 분리할 필요가 있다.
 - 창 focus를 잃을 때 drag 종료 보장은 문서와 코드가 불일치했다. 현재 확인된 코드는 `pointercancel`에서 drag 상태를 지우고 `window blur`에서는 cursor만 갱신한다. 실제 gesture 재현을 하기 전에는 안전 종료를 **검증된 기능으로 기록하지 않는다**. [상호작용](INTERACTION_SPEC.md).
+
+## 2026-10-06 — Render 입력 변환 검증 (로컬, 미배포)
+
+기존 비48 kHz fallback은 현재 in-app browser에서 30 kHz를 -3.12/0 dB로 남겼다. 길이 검사는 통과해도 alias 제거는 실패했다. windowed-sinc 변환으로 수정했다. 일반 앱은 48 kHz로 디코딩하므로 모든 파일 열기에 동일 문제가 있다고 일반화하지 않는다.
+
+## 2026-10-06 — 추가 검증 완료, 미커밋·미배포
+
+- 48 kHz mono/stereo × bypass, 5개 개별 효과, 2개 복합 순서: 총 16개에서 기존 HEAD 렌더와 WAV 바이트가 동일했다. 각 신호는 0.5초이며 긴 효과 체인/청감 검증을 대신하지 않는다.
+- 44.1/48/88.2/96 kHz × 60초 stereo: 모두 48 kHz/24-bit/2,880,000 frames, 재디코딩 60초, 997 Hz 보존. tests/browser-render-minute.html.
+- 실제 앱에 6초 96 kHz WAV를 열어 Play, 자연 종료, 재시작, Pause, Stop을 확인했다. WAV 저장 파일은 stereo/48k/24-bit/288,000 frames였고 앱 재열기에서 6초 확인. console 오류·경고 없음.
+- 기존 11개 변환 경계 검사와 Node converter 검사는 통과. 청감 승인, 장시간/저사양/다중 브라우저 검증은 남아 있다.

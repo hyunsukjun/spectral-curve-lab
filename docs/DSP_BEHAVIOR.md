@@ -11,7 +11,7 @@ UI의 개별 Off는 [module-routing.js](../src/module-routing.js)가 보관된 �
 | 경로 | 엔진/샘플레이트 | 길이·출력 |
 | --- | --- | --- |
 | Preview | `AudioWorkletProcessor`, `SpectralEngine(FFT2048, hop512, AudioContext sampleRate)`; 앱은 48 kHz context를 요청 | 출력은 stereo node. mono 파일은 L/R에 같은 소스를 복사. Worklet 뒤 unity gain에서 실제 출력 신호를 L/R analyser로 분기하되 변환하지 않음. 시작/seek 준비 무음 약 18.7ms @48kHz는 기존 브라우저 측정값, 장치 latency 별도 |
-| Render | `OfflineAudioContext`로 필요 시 48 kHz resampling 후 `render-worker.js`의 `SpectralEngine(FFT4096, hop1024, 48kHz)` | 소스와 같은 채널 수·프레임 길이, 48 kHz 24-bit PCM RIFF WAV. PCM 쓰기에서 `[-1,1)` 범위를 clamp; limiter/normalization 없음 |
+| Render | 96-tap Blackman-windowed sinc로 필요 시 48 kHz resampling 후 `render-worker.js`의 `SpectralEngine(FFT4096, hop1024, 48kHz)` | 소스와 같은 채널 수·프레임 길이, 48 kHz 24-bit PCM RIFF WAV. PCM 쓰기에서 `[-1,1)` 범위를 clamp; limiter/normalization 없음 |
 | 비교 화면 | 원본과 Preview 설정(2048/hop512)의 출력 샘플을 Worker에서 분석 | 512 시간열 × 192 로그 주파수 행, 고정 −90…0 dBFS; WAV의 정확한 스펙트럼이 아님 |
 
 두 오디오 경로는 같은 parameter mapping·processor 구현을 공유하나 FFT size, hop, 경계/분수 bin 근사, sample-rate 변환 때문에 **비중립 파형 동일성은 보장되지 않는다**. 기존 검사에서 neutral과 선택된 tone 사례의 일치/가까움은 확인했으나 모든 음원에서의 청감 parity는 UNKNOWN. Render의 `getSettings()` 객체는 현재 비어 있고 실제 처리에는 사용되지 않는다. WAV encoder는 signed 24-bit interleaved PCM이며 RIFF 크기 한계를 검사한다.

@@ -35,3 +35,7 @@ STANDALONE ASSET: `assets/identity/spectral-app.svg` 및 symbol/micro와 공통
 색상표. 실제 네이티브 패키징/Dock 검증은 수행하지 않음.
 
 OUTPUT TIME 탐색은 원본 채널별 peak 요약을 동일 길이의 출력 시간축에 그리는 UI이다. 렌더 파형이나 실시간 분석기가 아니다. native에서도 커브 시간축과 좌우 경계를 맞추고, 미리 선택한 위치는 오디오 엔진 초기화 후 적용한다. 드래그 중 늦은 위치 보고를 무시하는 계약과 seek token 검증을 유지한다.
+
+## 2026-10-06 — Render 입력 변환 검증 (로컬, 미배포)
+
+변환기 계약: 원본 PCM 채널 수 유지, round(sourceFrames * 48000 / sourceRate), 48k bypass, 입력 배열 보존, 취소 확인. STFT 전에 변환하며 Preview/효과 순서/파라미터는 변경하지 않았다.

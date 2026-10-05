@@ -317,7 +317,7 @@ function getSettings() {
 
 async function getOfflineRenderer() {
   if (!renderOffline) {
-    const module = await import("./offline-render.js?v=20261003-chain4");
+    const module = await import("./offline-render.js?v=20261006-48k-01");
     renderOffline = module.renderOffline;
   }
   return renderOffline;

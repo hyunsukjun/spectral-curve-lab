@@ -26,3 +26,7 @@
 
 IMPLEMENTED (2026-10-05): Hub v0.10 제목/탭 아이콘과 대표색.
 `IDENTITY_PILOT.md` 참고. 로컬 검토 후 사용자 커밋/배포 승인.
+
+## 2026-10-06 — Render 입력 변환 검증 (로컬, 미배포)
+
+WAV는 기존 채널 수, 48 kHz, 24-bit를 유지한다. 비48 kHz 버퍼 입력의 실제 PCM 변환에 alias 제거를 추가했다. 일반 앱 파일 열기는 기존 48 kHz decodeAudioData 경로를 유지한다.

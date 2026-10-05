@@ -33,3 +33,7 @@ Spectral 에너지 아이콘으로 교체. DSP/효과 순서/파라미터 의미
 | 2026-10-05 | 커브와 탐색 제스처의 충돌을 줄이기 위해 원본 채널 파형을 OUTPUT TIME으로 분리하고 슬라이더·커브창 double-click seek를 대체한다. 출력 시간축과 원본 시간축 길이는 같다. 첫 재생 전 지정 위치를 초기화된 엔진에 전달한다. | [검증](OUTPUT-TIME-20261005.md); 기존 STFT/seek 상태·token 유지, 렌더 파형과 구별 |
 
 | 2026-10-05 | 사용자 요청에 따라 기본 소스를 기존 Noise intervals로 고정하고 Demo 선택 메뉴를 제거한다. Open Audio와 백색소음 생성 알고리즘은 유지한다. 이전 Harmonic notes 기본값 결정을 대체한다. | 초기화·재생·사용자 파일 로딩 브라우저 확인 |
+
+## 2026-10-06 — Render 입력 변환 검증 (로컬, 미배포)
+
+비48 kHz Render 입력은 브라우저 AudioBufferSource 변환 대신 96-tap 대역 제한 변환을 사용한다. 48 kHz는 bypass한다. 프레임 수는 ceil에서 round(sourceFrames * 48000 / sourceRate)로 통일해 가장 가까운 출력 프레임으로 정한다. 기존 STFT와 worker는 유지한다.

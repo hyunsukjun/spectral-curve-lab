@@ -1,3 +1,4 @@
+import { prepareWavChannels } from "./render-resampling.js?v=20261006-48k-01";
 export async function renderOffline({audioBuffer, curves, order, signal, onProgress}) {
   if (signal?.aborted) throw new DOMException('Render cancelled', 'AbortError');
   const curve = curves?.shift?.map(point => ({...point}));
@@ -5,14 +6,17 @@ export async function renderOffline({audioBuffer, curves, order, signal, onProgr
   const blurCurve = curves?.blur?.map(point => ({...point}));
   const harmonicityCurve = curves?.harmonicity?.map(point => ({...point}));
   const freezeCurve = curves?.freeze?.map(point => ({...point}));
-  let source = audioBuffer;
-  if (source.sampleRate !== 48000) {
-    const context = new OfflineAudioContext(source.numberOfChannels, Math.ceil(source.duration * 48000), 48000);
-    const node = context.createBufferSource(); node.buffer = source; node.connect(context.destination); node.start();
-    source = await context.startRendering();
+  const channels = [];
+  for (let index = 0; index < audioBuffer.numberOfChannels; index += 2) {
+    const left = audioBuffer.getChannelData(index);
+    const hasRight = index + 1 < audioBuffer.numberOfChannels;
+    const right = hasRight ? audioBuffer.getChannelData(index + 1) : left;
+    const converted = await prepareWavChannels(left, right, audioBuffer.sampleRate, signal);
+    // The worker receives copies; never detach the input AudioBuffer's channels.
+    channels.push(new Float32Array(converted.left));
+    if (hasRight) channels.push(new Float32Array(converted.right));
   }
   if (signal?.aborted) throw new DOMException('Render cancelled', 'AbortError');
-  const channels = Array.from({length: source.numberOfChannels}, (_, i) => new Float32Array(source.getChannelData(i)));
   return new Promise((resolve, reject) => {
     const worker = new Worker(new URL('./render-worker.js?v=20261003-chain4', import.meta.url), {type: 'module'});
     const cleanup = () => { worker.terminate(); signal?.removeEventListener('abort', abort); };

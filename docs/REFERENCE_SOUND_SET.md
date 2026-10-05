@@ -22,3 +22,14 @@
 4. 앞으로 추가할 음원은 출처·사용/재배포 권한·채널/샘플레이트·길이·해시와 고정 커브 데이터를 함께 남긴다. 원본과 승인된 출력의 비교 자료가 쌓이기 전에는 이 표를 최종 golden audio set이라 부르지 않는다.
 
 새 실험의 판정은 [청취 결정 기록](LISTENING_DECISIONS.md)에, DSP 수치 조건은 해당 테스트/Phase 보고서에 남긴다. 현재 확인된 **음악적으로 성공한 설정**은 없다. 수치적 neutral 복원과 특정 tone mapping은 성공했지만 청감 승인과 다르다.
+
+## 2026-10-06 — Render 입력 변환 검증 (로컬, 미배포)
+
+기술 fixture: 44.1/48/88.2/96 kHz 1초 1 kHz sine 및 88.2/96 kHz 30 kHz sine. 실제 worker WAV 검사에서 30 kHz 제거 약 -90.18/-98.52 dB. 음악적 청취 승인은 UNKNOWN. tests/browser-render-resampling.html 및 tests/render-resampling.mjs로 재현한다.
+
+## 2026-10-06 — 추가 검증 완료, 미커밋·미배포
+
+- 48 kHz mono/stereo × bypass, 5개 개별 효과, 2개 복합 순서: 총 16개에서 기존 HEAD 렌더와 WAV 바이트가 동일했다. 각 신호는 0.5초이며 긴 효과 체인/청감 검증을 대신하지 않는다.
+- 44.1/48/88.2/96 kHz × 60초 stereo: 모두 48 kHz/24-bit/2,880,000 frames, 재디코딩 60초, 997 Hz 보존. tests/browser-render-minute.html.
+- 실제 앱에 6초 96 kHz WAV를 열어 Play, 자연 종료, 재시작, Pause, Stop을 확인했다. WAV 저장 파일은 stereo/48k/24-bit/288,000 frames였고 앱 재열기에서 6초 확인. console 오류·경고 없음.
+- 기존 11개 변환 경계 검사와 Node converter 검사는 통과. 청감 승인, 장시간/저사양/다중 브라우저 검증은 남아 있다.
