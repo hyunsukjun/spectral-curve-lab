@@ -6,7 +6,7 @@
     <title>Spectral Curve Lab</title>
     <link rel="icon" type="image/svg+xml" href="assets/identity/spectral-micro.svg?v=hub-v0.10">
     <link rel="stylesheet" href="assets/identity/tokens.css?v=hub-v0.10">
-    <link rel="stylesheet" href="src/styles.css?v=20261005-output-time1">
+    <link rel="stylesheet" href="src/styles.css?v=20261007-clip-report1">
   </head>
   <body>
     <main class="app">
@@ -23,10 +23,12 @@
             Open Audio
             <input id="fileInput" type="file" accept="audio/*">
           </label>
+          <a id="saveWavLink" class="fileButton" download="Spectral-Curve-Lab-export.wav" hidden>Save WAV</a>
           <button id="downloadButton" type="button" disabled>Download WAV</button>
         </div>
       </header>
 
+      <p id="renderNotice" role="status" aria-live="polite" class="renderNotice"></p>
       <section class="editor">
         <div class="effectBar">
           <div class="effectChain" aria-label="Spectral effects. Click to select; click the selected effect again to toggle it.">
@@ -125,6 +127,6 @@
       </div>
     </div>
 
-    <script src="src/app.js?v=20261006-48k-01" type="module"></script>
+    <script src="src/app.js?v=20261007-clip-report1" type="module"></script>
   </body>
 </html>

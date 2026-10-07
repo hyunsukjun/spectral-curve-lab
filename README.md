@@ -75,3 +75,7 @@ Audio Curve Lab 기준의 Curve Lab Design System v1.0을 적용했습니다. Cy
 현재 구현의 제품 동작과 웹 구현을 구분해 기록했습니다. [적용 감사](docs/KNOWLEDGE-SETUP-20260929.md) · [작업 규칙](AGENTS.md) · [개발 지침](DEVELOPMENT_GUIDELINES.md) · [디자인 토큰](CURVE_LAB_DESIGN_SYSTEM.md) · [기능 목록](docs/FEATURE_REGISTRY.md) · [파라미터/청감 검증 상태](docs/PARAMETER_SPEC.md) · [상호작용](docs/INTERACTION_SPEC.md) · [DSP/Preview·Render](docs/DSP_BEHAVIOR.md) · [결정 기록](docs/DECISIONS.md) · [macOS 이관 지도](docs/STANDALONE_MIGRATION.md).
 
 청감·이관 지식은 [Reference Sound Set](docs/REFERENCE_SOUND_SET.md) · [청취 판단 기록](docs/LISTENING_DECISIONS.md) · [커브의 시간 동작](docs/CURVE_TEMPORAL_BEHAVIOR.md) · [실패·수정·보류 이력](docs/FAILURES_AND_FIXES.md)에 축적합니다. 청감 sweet spot과 승인값은 아직 UNKNOWN이며 이후 실제 청취 결과로 채웁니다.
+
+
+### WAV 결과 확인
+렌더 완료 시 PCM 변환 전 sample peak와clipping 여부를 표시합니다. Clipping이 있으면 자동 다운로드 대신 `Save WAV (clipped)`로 결과를 그대로 저장할 수 있습니다. 정상 결과도 `Save WAV` 링크로 다시 저장할 수 있습니다. 자동 normalization/limiter와tail연장은추가하지않았습니다. Preview미터와WAV측정결과는별개입니다.

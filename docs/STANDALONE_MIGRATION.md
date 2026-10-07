@@ -39,3 +39,8 @@ OUTPUT TIME 탐색은 원본 채널별 peak 요약을 동일 길이의 출력 �
 ## 2026-10-06 — Render 입력 변환 검증 (로컬, 미배포)
 
 변환기 계약: 원본 PCM 채널 수 유지, round(sourceFrames * 48000 / sourceRate), 48k bypass, 입력 배열 보존, 취소 확인. STFT 전에 변환하며 Preview/효과 순서/파라미터는 변경하지 않았다.
+
+
+## 2026-10-07 WAV result feedback — PROJECT-SPECIFIC
+
+Carry forward post-render sample-peak/clipped-channel-sample metadata and explicit clipped-result review. The measurement contract is portable; Blob links and worker messages are browser implementation details.

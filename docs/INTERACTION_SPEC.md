@@ -22,3 +22,8 @@
 | SOURCE/OUTPUT 비교 | 기본 꺼짐. 켜면 원본과 현재 **Preview 처리 샘플**을 같은 축으로 비교한다. 커브 변경 후 이전 그림은 stale로 표시하고 수동 Update한다. 재생/Export 중 새 분석을 시작하지 않는다. | 별도 Worker; [비교 보고서](SPECTROGRAM-REPORT.md). 소리 편집 표면이 아님 |
 
 시간축 데이터는 Canvas 크기, browser zoom, devicePixelRatio와 독립이다. Canvas는 왼쪽 파라미터 눈금 영역을 제외한 plot 폭을 `[0,1]` 시간으로 변환하고, 위쪽을 `y=1`, 아래쪽을 `y=0`으로 본다. native mouse/trackpad/touch에서도 이 의미를 유지하되 10px hit-test 같은 웹 구현 치수는 기기별 조절 가능하다. 현재 코드는 `pointercancel`에서 drag 상태를 지우지만, 창 focus 상실(`window blur`)에서는 cursor만 갱신한다. 따라서 focus 상실 시 drag 종료 보장은 **UNKNOWN**이다. 실제 touch 제스처·접근성 전 범위도 **UNKNOWN**이다. 커브의 시간 해상도와 급격한 제스처의 오디오 반영은 [시간 동작 기록](CURVE_TEMPORAL_BEHAVIOR.md)을 따른다.
+
+
+## 2026-10-07 WAV result feedback — PROJECT-SPECIFIC
+
+After render, a live status message reports the WAV result, independently of the Preview CLIP meter. If clipping occurred, automatic download is skipped and Save WAV (clipped) allows keeping the unaltered result deliberately. Editing curves, toggling/reordering effects, replacing the file or starting another render invalidates both saved-result notice and link. The warning recommends reducing source level externally or adjusting effects; no new gain control is implied.

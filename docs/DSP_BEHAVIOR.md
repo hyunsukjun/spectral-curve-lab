@@ -30,3 +30,8 @@ UI의 개별 Off는 [module-routing.js](../src/module-routing.js)가 보관된 �
 ## 검증 근거와 한계
 
 정확한 수치/환경은 [neutral](PHASE-1-3-REPORT.md), [Shift](PHASE-4-REPORT.md), [Stretch](PHASE-5-REPORT.md), [Blur](PHASE-6-REPORT.md), [안정성](STABILITY-20260929.md), [비교](SPECTROGRAM-REPORT.md)를 참조한다. Stop/seek는 별도 transport fade가 없어 click이 가능하다. Stretch 보간 진폭 손실, Shift 경계 성분 손실, Blur 어택 감소·끝 tail 절단이 알려져 있다. 다섯 효과를 합치면 peak가 커질 수 있고 WAV clamp가 clipping을 만들 수 있다. 매우 긴 파일의 디코딩/복사/render 메모리 비용, 장치 underrun, 다양한 실제 음원의 청감 결과는 미확정이다. 버그 수정 시 기존 테스트와 실제 파일 lifecycle을 함께 확인한다.
+
+
+## 2026-10-07 WAV result feedback — PROJECT-SPECIFIC
+
+Encoder metrics are collected in the existing PCM encoding loop; sample arrays, FFT processing, normalization, limiter, tail policy and encoded WAV bytes are unchanged. A sample is counted when Math.round(sample * 8388608) falls outside [-8388608,8388607]. Counts are across all channels, not unique frames or duration. Peak is absolute sample peak before quantization/clamp, not inter-sample true peak. No PCM clipping detected does not certify inaudible distortion or playback-device headroom.

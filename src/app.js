@@ -1,3 +1,4 @@
+import { renderFeedback } from "./render-feedback.js?v=20261007-clip-report1";
 import {createOutputTime} from "./output-time.js?v=20261005-output-time1";
 import {createSpectrogramView} from "./spectrogram-view.js?v=20261003-chain4";
 import {stretchFromNorm, stretchToNorm} from "./spectral-stretch.js?v=20260929-transport1";
@@ -31,6 +32,8 @@ const moduleButtons = Object.fromEntries(moduleOrder.map(name=>[name,document.ge
 const chainDiagram = document.getElementById("chainDiagram");
 const curveLegend = document.getElementById("curveLegend");
 
+const renderNotice = document.getElementById("renderNotice");
+const saveWavLink = document.getElementById("saveWavLink");
 const downloadReadout = document.getElementById("downloadReadout");
 const modeReadout = document.getElementById("modeReadout");
 const pointsReadout = document.getElementById("pointsReadout");
@@ -214,14 +217,16 @@ function sendSettings() {
 function markDownloadStale() {
   spectrogram.invalidate();
   if (!buffer) return;
-  if (downloadUrl) {
-    URL.revokeObjectURL(downloadUrl);
-    downloadUrl = null;
-  }
+  clearDownload();
   downloadReadout.textContent = "needs export";
 }
 
 function clearDownload() {
+  renderNotice.textContent = "";
+  renderNotice.classList.remove("clipping");
+  saveWavLink.hidden = true;
+  saveWavLink.removeAttribute("href");
+  saveWavLink.textContent = "Save WAV";
   if (downloadUrl) URL.revokeObjectURL(downloadUrl);
   downloadUrl = null;
 }
@@ -317,7 +322,7 @@ function getSettings() {
 
 async function getOfflineRenderer() {
   if (!renderOffline) {
-    const module = await import("./offline-render.js?v=20261006-48k-01");
+    const module = await import("./offline-render.js?v=20261007-clip-report1");
     renderOffline = module.renderOffline;
   }
   return renderOffline;
@@ -783,12 +788,14 @@ downloadButton.addEventListener("click", async () => {
     });
 
     downloadUrl = URL.createObjectURL(rendered.blob);
-    const link = document.createElement("a");
-    link.href = downloadUrl;
-    link.download = "Spectral-Curve-Lab-export.wav";
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
+    const feedback = renderFeedback(rendered.metrics);
+    saveWavLink.href = downloadUrl;
+    saveWavLink.hidden = false;
+    saveWavLink.textContent = feedback.clipped ? "Save WAV (clipped)" : "Save WAV";
+    renderNotice.textContent = feedback.message;
+    renderNotice.classList.toggle("clipping", feedback.clipped);
+    // Review clipped output before saving; keep a direct-click retry in every browser.
+    if (!feedback.clipped) saveWavLink.click();
     downloadReadout.textContent = rendered.truncated
       ? `${rendered.duration.toFixed(1)} s, capped`
       : `${rendered.duration.toFixed(1)} s`;

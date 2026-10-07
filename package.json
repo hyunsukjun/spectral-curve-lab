@@ -3,6 +3,6 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "node tests/demo-sources.mjs && node tests/neutral.mjs && node tests/shift.mjs && node tests/stretch.mjs && node tests/blur.mjs && node tests/harmonicity-freeze.mjs && node tests/module-routing.mjs && node tests/chain-order.mjs && node tests/spectrogram.mjs && node tests/transport.mjs"
+    "test": "node tests/demo-sources.mjs && node tests/neutral.mjs && node tests/shift.mjs && node tests/stretch.mjs && node tests/blur.mjs && node tests/harmonicity-freeze.mjs && node tests/module-routing.mjs && node tests/chain-order.mjs && node tests/spectrogram.mjs && node tests/transport.mjs && node tests/wav-metrics.mjs && node tests/render-metrics.mjs"
   }
 }

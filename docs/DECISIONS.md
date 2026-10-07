@@ -37,3 +37,8 @@ Spectral 에너지 아이콘으로 교체. DSP/효과 순서/파라미터 의미
 ## 2026-10-06 — Render 입력 변환 검증 (로컬, 미배포)
 
 비48 kHz Render 입력은 브라우저 AudioBufferSource 변환 대신 96-tap 대역 제한 변환을 사용한다. 48 kHz는 bypass한다. 프레임 수는 ceil에서 round(sourceFrames * 48000 / sourceRate)로 통일해 가장 가까운 출력 프레임으로 정한다. 기존 STFT와 worker는 유지한다.
+
+
+## 2026-10-07 WAV result feedback — PROJECT-SPECIFIC
+
+Separate detection from sound modification. Measured clipping is actionable before saving, but automatic normalization/limiting is deferred to reference listening. Safe results keep the prior download behavior; clipped results require a direct save click. The persistent link also provides browser download retry without rerendering. Actual OS saving is separate from render-ready status.

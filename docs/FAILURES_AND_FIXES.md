@@ -32,3 +32,8 @@
 - 44.1/48/88.2/96 kHz × 60초 stereo: 모두 48 kHz/24-bit/2,880,000 frames, 재디코딩 60초, 997 Hz 보존. tests/browser-render-minute.html.
 - 실제 앱에 6초 96 kHz WAV를 열어 Play, 자연 종료, 재시작, Pause, Stop을 확인했다. WAV 저장 파일은 stereo/48k/24-bit/288,000 frames였고 앱 재열기에서 6초 확인. console 오류·경고 없음.
 - 기존 11개 변환 경계 검사와 Node converter 검사는 통과. 청감 승인, 장시간/저사양/다중 브라우저 검증은 남아 있다.
+
+
+## 2026-10-07 WAV result feedback — PROJECT-SPECIFIC
+
+48-condition high-level probe confirmed existing PCM clamp under five near-full-scale conditions; the same test at roughly -6 dB relative level did not clip. This is not a universal safe input gain. The 2026-10-07 patch exposes clipping and preserves output bytes. Blur tail truncation remains the existing source-duration policy; listening approval UNKNOWN.

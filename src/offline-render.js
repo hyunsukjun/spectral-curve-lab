@@ -18,7 +18,7 @@ export async function renderOffline({audioBuffer, curves, order, signal, onProgr
   }
   if (signal?.aborted) throw new DOMException('Render cancelled', 'AbortError');
   return new Promise((resolve, reject) => {
-    const worker = new Worker(new URL('./render-worker.js?v=20261003-chain4', import.meta.url), {type: 'module'});
+    const worker = new Worker(new URL('./render-worker.js?v=20261007-clip-report1', import.meta.url), {type: 'module'});
     const cleanup = () => { worker.terminate(); signal?.removeEventListener('abort', abort); };
     const abort = () => { cleanup(); reject(new DOMException('Render cancelled', 'AbortError')); };
     signal?.addEventListener('abort', abort, {once: true});
