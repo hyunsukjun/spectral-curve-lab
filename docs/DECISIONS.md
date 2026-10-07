@@ -42,3 +42,7 @@ Spectral 에너지 아이콘으로 교체. DSP/효과 순서/파라미터 의미
 ## 2026-10-07 WAV result feedback — PROJECT-SPECIFIC
 
 Separate detection from sound modification. Measured clipping is actionable before saving, but automatic normalization/limiting is deferred to reference listening. Safe results keep the prior download behavior; clipped results require a direct save click. The persistent link also provides browser download retry without rerendering. Actual OS saving is separate from render-ready status.
+
+## Give editing and dialogs priority over global transport (2026-10-07)
+
+COMMON CANDIDATE: transport shortcuts must respect the same availability as Play and must not consume form editing or modal button activation. Guard the current handlers without changing DSP or curve data. The old modal handling could start background playback (Audio/Space handler path; directly reproduced in Space) or suppress Cancel keyup (directly reproduced in Spectral). Both phases now defer to the open dialog.

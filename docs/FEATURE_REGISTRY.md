@@ -35,3 +35,7 @@ WAV는 기존 채널 수, 48 kHz, 24-bit를 유지한다. 비48 kHz 버퍼 입�
 ## 2026-10-07 WAV result feedback — PROJECT-SPECIFIC
 
 WAV rendering now reports pre-clamp sample peak and the count of channel samples actually saturated by 24-bit PCM quantization. Clipped results wait for an explicit Save WAV (clipped) action. Non-clipped results keep automatic download and retain a direct Save WAV retry link.
+
+## Keyboard transport availability (2026-10-07)
+
+Spacebar dispatches at most one transport action per physical press. Held-key repeats are consumed, and disabled Play or an absent source blocks dispatch. Input, select, textarea and editable-text targets retain native keydown/keyup behavior. Existing Play/Stop or Play/Pause semantics and DSP are unchanged. While Reset All is open, both Space events are left to the dialog buttons: Cancel and confirmation remain keyboard-operable without toggling background transport. See `tests/transport-keyboard.test.mjs` for event-routing regression checks; these isolate command dispatch from DSP.

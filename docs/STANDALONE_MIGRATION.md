@@ -44,3 +44,7 @@ OUTPUT TIME 탐색은 원본 채널별 peak 요약을 동일 길이의 출력 �
 ## 2026-10-07 WAV result feedback — PROJECT-SPECIFIC
 
 Carry forward post-render sample-peak/clipped-channel-sample metadata and explicit clipped-result review. The measurement contract is portable; Blob links and worker messages are browser implementation details.
+
+## Portable keyboard availability contract (2026-10-07)
+
+COMMON CANDIDATE: one physical shortcut press dispatches at most one available transport action. Editing controls and open modal dialogs own their keyboard events. Native focus and key-repeat APIs replace DOM checks; sound and transport semantics remain product-specific.

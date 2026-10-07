@@ -1137,9 +1137,10 @@ if ("ResizeObserver" in window) {
 window.addEventListener("keydown", (event) => {
   const target = event.target;
   const isTyping = target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement || target instanceof HTMLSelectElement || target?.isContentEditable;
-  if (event.code !== "Space" || isTyping || event.repeat || !buffer || playButton.disabled || !resetDialog.hidden) return;
+  if (event.code !== "Space" || isTyping || !resetDialog.hidden) return;
   event.preventDefault();
   event.stopPropagation();
+  if (event.repeat || !buffer || playButton.disabled) return;
   if (document.activeElement instanceof HTMLButtonElement) {
     document.activeElement.blur();
   }
@@ -1149,7 +1150,7 @@ window.addEventListener("keydown", (event) => {
 window.addEventListener("keyup", (event) => {
   const target = event.target;
   const isTyping = target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement || target instanceof HTMLSelectElement || target?.isContentEditable;
-  if (event.code !== "Space" || isTyping) return;
+  if (event.code !== "Space" || isTyping || !resetDialog.hidden) return;
   event.preventDefault();
   event.stopPropagation();
 });

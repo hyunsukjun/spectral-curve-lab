@@ -27,3 +27,7 @@
 ## 2026-10-07 WAV result feedback — PROJECT-SPECIFIC
 
 After render, a live status message reports the WAV result, independently of the Preview CLIP meter. If clipping occurred, automatic download is skipped and Save WAV (clipped) allows keeping the unaltered result deliberately. Editing curves, toggling/reordering effects, replacing the file or starting another render invalidates both saved-result notice and link. The warning recommends reducing source level externally or adjusting effects; no new gain control is implied.
+
+## Spacebar routing (2026-10-07)
+
+Spacebar dispatches at most one transport action per physical press. Held-key repeats are consumed, and disabled Play or an absent source blocks dispatch. Input, select, textarea and editable-text targets retain native keydown/keyup behavior. Existing Play/Stop or Play/Pause semantics and DSP are unchanged. While Reset All is open, both Space events are left to the dialog buttons: Cancel and confirmation remain keyboard-operable without toggling background transport.
