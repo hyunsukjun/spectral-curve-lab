@@ -37,3 +37,10 @@
 ## 2026-10-07 WAV result feedback — PROJECT-SPECIFIC
 
 48-condition high-level probe confirmed existing PCM clamp under five near-full-scale conditions; the same test at roughly -6 dB relative level did not clip. This is not a universal safe input gain. The 2026-10-07 patch exposes clipping and preserves output bytes. Blur tail truncation remains the existing source-duration policy; listening approval UNKNOWN.
+
+
+## 2026-10-08 — Cancel pending first playback
+
+Stop, forced Stop, and actual source replacement now advance the playback token even before the AudioWorklet node exists. Previously optional chaining skipped token advancement while setup was pending; the original Play could run after Stop or after a completed source replacement. Source chooser cancellation still preserves state. An explicit later Play works normally. DSP, curves, output rate and format are unchanged.
+
+Verification: actual-handler deferred-initialization test `tests/initial-play-cancel.mjs` failed before the fix and passes for Stop, forced Stop, and file replacement plus explicit retry. Existing transport, keyboard and suspended-context import checks pass. Safari public baseline first click started playback; no exact cold-start latency or audible onset measurement was made. This fix addresses stale playback requests, not engine startup speed.
