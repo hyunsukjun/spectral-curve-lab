@@ -1,3 +1,4 @@
+import {readAudioFile} from "../src/audio-import.js";
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import vm from 'node:vm';
@@ -7,13 +8,13 @@ let resumes=0,busy=[],rejectDecode=false,decoded=0,options;
 const candidate={numberOfChannels:2,duration:2};
 class AudioContext {constructor(opts){options=opts;this.state='suspended'} resume(){resumes++;return new Promise(()=>{})}}
 const text=()=>({textContent:''});
-const c={window:{AudioContext},audioContext:null,buffer:null,renderAbortController:null,node:null,
+const c={readAudioFile,window:{AudioContext},audioContext:null,buffer:null,renderAbortController:null,node:null,
  spectrogram:{invalidate(){}},outputTime:{setBuffer(){}},fileStatus:text(),downloadReadout:text(),readouts:{download:text()},playButton:text(),isPlaying:false,
  setTransportBusy(x){busy.push(x)},setBusy(x){busy.push(x)},nextPlaybackToken(){return 1},
  decodeAudioFile:async()=>{decoded++;if(rejectDecode)throw new Error('Invalid audio');return candidate},
  buildWaveform(){},sendBufferToWorklet(){},resetSourceWindowToMinimum(){},sendSettings(){},clearDownload(){},largeFileSeconds:300,resetCurrentReadouts(){},draw(){},console:{error(){}}};
 vm.createContext(c);vm.runInContext(pick('ensureAudioContext')+'\n'+pick('loadAudioFile'),c);
-const file={name:'test.wav',arrayBuffer:async()=>new ArrayBuffer(8)};
+const file={name:'test.wav',slice:()=>new Blob([new ArrayBuffer(8)]),arrayBuffer:async()=>new ArrayBuffer(8)};
 let timer;
 try {await Promise.race([c.loadAudioFile(file),new Promise((_,reject)=>{timer=setTimeout(()=>reject(new Error('Import blocked by pending audio resume')),200)})]);} finally {clearTimeout(timer)}
 assert.equal(resumes,0);assert.equal(decoded,1);assert.equal(c.buffer,candidate);assert.deepEqual(busy,[true,false]);assert.match(c.fileStatus.textContent,/2.00 s/);

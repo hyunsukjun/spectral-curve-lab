@@ -1,3 +1,4 @@
+import { readAudioFile } from "./audio-import.js?v=20261011-aiff1";
 import { renderFeedback } from "./render-feedback.js?v=20261007-clip-report1";
 import {createOutputTime} from "./output-time.js?v=20261005-output-time1";
 import {createSpectrogramView} from "./spectrogram-view.js?v=20261003-chain4";
@@ -705,7 +706,7 @@ async function loadAudioFile(file) {
   try {
     // Decoding must not wait for Safari playback permission after the file chooser.
     await ensureAudioContext({ resume: false });
-    const data = await file.arrayBuffer();
+    const data = await readAudioFile(file, audioContext.sampleRate);
     const decoded = await decodeAudioFile(data);
     if (decoded.numberOfChannels > 2) throw new Error("Only mono/stereo sources supported");
     buffer = decoded;
@@ -723,7 +724,7 @@ async function loadAudioFile(file) {
     draw();
   } catch (error) {
     console.error(error);
-    fileStatus.textContent = "Could not load audio. Try mono/stereo WAV, MP3, or M4A.";
+    fileStatus.textContent = error.message?.startsWith("AIFF:") ? error.message : "Could not load audio. Try mono/stereo WAV, MP3, or M4A.";
     downloadReadout.textContent = "not ready";
     buffer = null;
     spectrogram.invalidate(true);

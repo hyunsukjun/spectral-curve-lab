@@ -79,3 +79,10 @@ Audio Curve Lab 기준의 Curve Lab Design System v1.0을 적용했습니다. Cy
 
 ### WAV 결과 확인
 렌더 완료 시 PCM 변환 전 sample peak와clipping 여부를 표시합니다. Clipping이 있으면 자동 다운로드 대신 `Save WAV (clipped)`로 결과를 그대로 저장할 수 있습니다. 정상 결과도 `Save WAV` 링크로 다시 저장할 수 있습니다. 자동 normalization/limiter와tail연장은추가하지않았습니다. Preview미터와WAV측정결과는별개입니다.
+
+
+### Portable AIFF input
+
+AIFF (.aif/.aiff), mono/stereo 16/24-bit PCM, is converted locally on import.
+AIFF-C is not supported by this importer; use PCM WAV instead. Original files
+are unchanged. See [support scope and limits](docs/AIFF_IMPORT.md).

@@ -16,12 +16,12 @@
           <div class="brandCopy"><h1><span>Spectral </span><span class="brandAccent">Curve Lab</span></h1>
           <p class="tagline">Draw spectral shift, stretch, blur, harmonicity and freeze across time.</p>
           <p class="statusLine"><span id="fileStatus">No audio loaded</span><span class="privacyNote">Local browser processing. No upload.</span></p>
-          <p class="formatNote">Recommended: WAV, MP3. Some formats may vary by browser.</p></div>
+          <p class="formatNote">Recommended: WAV, MP3. AIFF: mono/stereo 16/24-bit PCM is converted locally on import. Some formats may vary by browser.</p></div>
         </div>
         <div class="transport">
           <label class="fileButton">
             Open Audio
-            <input id="fileInput" type="file" accept="audio/*">
+            <input id="fileInput" type="file" accept="audio/*,.aif,.aiff,.aifc">
           </label>
           <a id="saveWavLink" class="fileButton" download="Spectral-Curve-Lab-export.wav" hidden>Save WAV</a>
           <button id="downloadButton" type="button" disabled>Download WAV</button>
@@ -127,6 +127,6 @@
       </div>
     </div>
 
-    <script src="src/app.js?v=20261008-initial-stop1" type="module"></script>
+    <script src="src/app.js?v=20261011-aiff1" type="module"></script>
   </body>
 </html>

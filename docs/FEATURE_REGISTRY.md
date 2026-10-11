@@ -51,3 +51,11 @@ File import creates the decoding context without awaiting `AudioContext.resume()
 Stop, forced Stop, and actual source replacement now advance the playback token even before the AudioWorklet node exists. Previously optional chaining skipped token advancement while setup was pending; the original Play could run after Stop or after a completed source replacement. Source chooser cancellation still preserves state. An explicit later Play works normally. DSP, curves, output rate and format are unchanged.
 
 Verification: actual-handler deferred-initialization test `tests/initial-play-cancel.mjs` failed before the fix and passes for Stop, forced Stop, and file replacement plus explicit retry. Existing transport, keyboard and suspended-context import checks pass. Safari public baseline first click started playback; no exact cold-start latency or audible onset measurement was made. This fix addresses stale playback requests, not engine startup speed.
+
+
+## AIFF input compatibility (2026-10-11)
+
+See [AIFF import contract](AIFF_IMPORT.md): local PCM AIFF 16/24-bit mono/stereo
+normalization into PCM WAV before the established decoder. Existing DSP,
+resampling and Lab-specific channel policies are preserved. Browser and memory
+verification limits are recorded there.

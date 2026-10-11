@@ -35,3 +35,11 @@ UI의 개별 Off는 [module-routing.js](../src/module-routing.js)가 보관된 �
 ## 2026-10-07 WAV result feedback — PROJECT-SPECIFIC
 
 Encoder metrics are collected in the existing PCM encoding loop; sample arrays, FFT processing, normalization, limiter, tail policy and encoded WAV bytes are unchanged. A sample is counted when Math.round(sample * 8388608) falls outside [-8388608,8388607]. Counts are across all channels, not unique frames or duration. Peak is absolute sample peak before quantization/clamp, not inter-sample true peak. No PCM clipping detected does not certify inaudible distortion or playback-device headroom.
+
+
+## AIFF input compatibility (2026-10-11)
+
+See [AIFF import contract](AIFF_IMPORT.md): local PCM AIFF 16/24-bit mono/stereo
+normalization into PCM WAV before the established decoder. Existing DSP,
+resampling and Lab-specific channel policies are preserved. Browser and memory
+verification limits are recorded there.
