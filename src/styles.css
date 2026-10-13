@@ -710,10 +710,9 @@ button:disabled {
 #outputWaveCanvas { display: block; width: 100%; height: 96px; cursor: ew-resize; touch-action: none; }
 #outputWaveCanvas[aria-disabled="true"] { cursor: default; }
 #outputWaveCanvas:focus-visible { outline: 2px solid var(--cl-focus); outline-offset: -2px; }
-.playbackDock .playbackBar { position: static; grid-template-columns: auto auto minmax(0,1fr); margin: 0; }
+.playbackDock .playbackBar { position: static; margin: 0; }
 @media(max-width:860px) {
   .app { padding-bottom: calc(250px + env(safe-area-inset-bottom, 0px)); }
-  .playbackDock .playbackBar { grid-template-columns: auto minmax(0,1fr); }
 }
 
 .topbar { padding-top: 10px; padding-bottom: 10px; }

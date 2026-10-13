@@ -60,3 +60,9 @@ Oscillator retains its existing source-duration seek cap for convolution tails.
 Verification covers syntax, keyboard contracts and browser layout; file-based
 Labs also exercised silent-WAV pause/resume. Audible listening, Safari/Windows,
 long-file performance and Oscillator mode-specific listening remain separate QA.
+
+## Transport alignment correction — 2026-10-13
+Removed the legacy dock-specific grid column overrides. The common transport
+stylesheet now owns all column layouts: four columns above 1100px, meter on
+a second row at 601–1100px, and a full-width slider row at 600px or less.
+Dock positioning remains unchanged. No audio or playback logic changes.
