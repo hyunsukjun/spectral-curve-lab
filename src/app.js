@@ -1,3 +1,4 @@
+import {mountTransport} from "./common-transport.js?v=20261013-1";
 import { readAudioFile } from "./audio-import.js?v=20261011-aiff1";
 import { renderFeedback } from "./render-feedback.js?v=20261007-clip-report1";
 import {createOutputTime} from "./output-time.js?v=20261005-output-time1";
@@ -169,9 +170,10 @@ function updateMeterDisplay(now) {
       display.hold = smoothMeterValue(display.hold, measured.peak, elapsedMs, 0, 700);
     }
     if (measured.clipped) meterClipLatched = true;
-    row.querySelector(".meterRms").style.transform = `scaleX(${meterPosition(display.rms)})`;
-    row.querySelector(".meterPeak").style.transform = `scaleX(${meterPosition(display.peak)})`;
+    row.querySelector(".meterRms").style.clipPath = `inset(0 ${(1-meterPosition(display.rms))*100}% 0 0)`;
+    row.querySelector(".meterPeak").style.clipPath = `inset(0 ${(1-meterPosition(display.peak))*100}% 0 0)`;
     row.querySelector(".meterHold").style.left = `${meterPosition(display.hold) * 100}%`;
+    row.querySelector(".meterHold").style.opacity = display.hold > 0.001 ? "1" : "0";
     const peakDb = linearToDb(display.peak);
     row.querySelector(".meterValue").textContent = Number.isFinite(peakDb) ? peakDb.toFixed(1) : "-∞";
   });
@@ -742,9 +744,9 @@ fileInput.addEventListener("change", async () => {
 });
 
 
-playButton.addEventListener("click", playAudio);
+playButton.addEventListener("click", () => {if(!isPlaying)playAudio();});
 
-stopButton.addEventListener("click", stopAudio);
+stopButton.addEventListener("click", () => {if(isPlaying)playAudio();else nextPlaybackToken();});
 
 function seekToProgress(progress) {
   if (!buffer || outputWaveCanvas.getAttribute("aria-disabled") === "true" || !resetDialog.hidden) return;
@@ -1166,3 +1168,5 @@ loadGeneratedExample();
 
 // Test harness uses the same decode/load path as the file chooser.
 export { loadAudioFile };
+
+mountTransport({state:()=>({duration:getPlaybackDuration(),seconds:playheadSeconds,playing:isPlaying,disabled:playButton.disabled}),seek:seekToProgress});

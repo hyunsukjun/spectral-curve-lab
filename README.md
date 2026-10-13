@@ -86,3 +86,9 @@ Audio Curve Lab 기준의 Curve Lab Design System v1.0을 적용했습니다. Cy
 AIFF (.aif/.aiff), mono/stereo 16/24-bit PCM, is converted locally on import.
 AIFF-C is not supported by this importer; use PCM WAV instead. Original files
 are unchanged. See [support scope and limits](docs/AIFF_IMPORT.md).
+
+
+### Current transport
+Bottom controls are Return to start / Play / Pause. Space toggles Play/Pause.
+Pause keeps the current position; Return to start seeks to zero. The thin slider
+navigates output time. Source guides, sound engines and export policies are unchanged.

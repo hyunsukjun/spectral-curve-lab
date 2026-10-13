@@ -7,6 +7,7 @@
     <link rel="icon" type="image/svg+xml" href="assets/identity/spectral-micro.svg?v=hub-v0.10">
     <link rel="stylesheet" href="assets/identity/tokens.css?v=hub-v0.10">
     <link rel="stylesheet" href="src/styles.css?v=20261013-layout1">
+    <link rel="stylesheet" href="src/common-transport.css?v=20261013-1">
   </head>
   <body>
     <main class="app">
@@ -101,12 +102,13 @@
 
       <footer class="playbackBar" aria-label="Playback and output monitoring">
         <div class="bottomTransport" aria-label="Transport controls">
-          <button id="playButton" type="button" disabled>Play</button>
-          <button id="stopButton" type="button" disabled>Stop</button>
+          <button id="rewindButton" type="button" aria-label="Return to start" title="Return to start" disabled></button>
+          <button id="playButton" type="button" aria-label="Play" title="Play · Space" disabled>Play</button>
+          <button id="stopButton" type="button" aria-label="Pause" title="Pause · Space" disabled>Pause</button>
         </div>
+        <input id="playbackScrubber" type="range" min="0" max="1" step="0.0001" value="0" aria-label="Output playback position" disabled>
         <output id="timeStatus" aria-label="Current playback time and duration">00:00.00 / 00:00.00</output>
         <section class="outputMeter" aria-label="Stereo output level meter">
-          <div class="meterTitle">OUT</div>
           <div class="meterChannels">
             <div class="meterRow" data-meter-channel="0"><span class="meterChannelLabel">L</span><div class="meterTrack" aria-hidden="true"><div class="meterRms"></div><div class="meterPeak"></div><div class="meterHold"></div></div><span class="meterValue">-∞</span></div>
             <div class="meterRow" data-meter-channel="1"><span class="meterChannelLabel">R</span><div class="meterTrack" aria-hidden="true"><div class="meterRms"></div><div class="meterPeak"></div><div class="meterHold"></div></div><span class="meterValue">-∞</span></div>
@@ -128,6 +130,6 @@
       </div>
     </div>
 
-    <script src="src/app.js?v=20261011-aiff1" type="module"></script>
+    <script src="src/app.js?v=20261013-transport1" type="module"></script>
   </body>
 </html>
