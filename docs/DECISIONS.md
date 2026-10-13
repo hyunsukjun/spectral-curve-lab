@@ -66,3 +66,12 @@ See [AIFF import contract](AIFF_IMPORT.md): local PCM AIFF 16/24-bit mono/stereo
 normalization into PCM WAV before the established decoder. Existing DSP,
 resampling and Lab-specific channel policies are preserved. Browser and memory
 verification limits are recorded there.
+
+
+## Waveform above curves (2026-10-13)
+
+The existing output-time/source-guide waveform now appears above the curve editing
+canvas, following the shared Curve Lab reading order. Its source-guide meaning,
+click/drag/keyboard seek, parameter IDs, normalized curves and DSP remain unchanged.
+This is a layout change only; Audio's output deletion/fades are not added here.
+Spectral keeps its transport dock; waveform space is no longer reserved inside that dock.

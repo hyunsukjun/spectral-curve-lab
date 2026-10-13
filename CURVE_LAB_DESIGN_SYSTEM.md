@@ -31,3 +31,12 @@ Hover #FF9475, focus #FFB9A5는 웹용 파생색이다. 다운로드 버튼은 �
 `docs/IDENTITY_PILOT.md`에 기록한다. 커밋 전 로컬 적용이다.
 
 OUTPUT TIME은 원본 채널의 탐색용 파형이다. 입력 모노는 한 줄, 스테레오는 L/R 두 줄이며 실제 출력 채널 수를 뜻하지 않는다. 커브와 같은 좌우 plot 여백을 사용한다. 현재 위치는 밝은 1.5px 실선과 위·아래 삼각형, hover는 같은 밝기·굵기의 점선만 표시한다. 드래그·창 이탈 중 hover는 숨기고, hover는 캐시된 탐색창만 다시 그린다.
+
+
+## Waveform above curves (2026-10-13)
+
+The existing output-time/source-guide waveform now appears above the curve editing
+canvas, following the shared Curve Lab reading order. Its source-guide meaning,
+click/drag/keyboard seek, parameter IDs, normalized curves and DSP remain unchanged.
+This is a layout change only; Audio's output deletion/fades are not added here.
+Spectral keeps its transport dock; waveform space is no longer reserved inside that dock.

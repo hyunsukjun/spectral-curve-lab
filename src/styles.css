@@ -701,9 +701,9 @@ button:disabled {
   .meterRow { grid-template-columns: 11px minmax(70px, 1fr); }
 }
 
-/* Output-time navigator and transport share one dock. */
+/* Fixed transport; output-time navigator lives above the curve editor. */
 .app { padding-bottom: calc(210px + env(safe-area-inset-bottom, 0px)); }
-#waveCanvas { height: clamp(240px, calc(100dvh - 540px), 620px) !important; }
+#waveCanvas { height: clamp(180px, calc(100dvh - 605px), 620px) !important; }
 .app:has(#spectrogramPanel:not([hidden])) #waveCanvas { height: clamp(240px, calc(100dvh - 916px), 620px) !important; }
 .playbackDock { position: fixed; z-index: 10; left: 12px; right: 12px; bottom: max(12px, env(safe-area-inset-bottom, 0px)); display: grid; gap: 8px; }
 .outputWaveFrame { border: 1px solid var(--cl-border); border-radius: 6px; overflow: hidden; background: #0c1f31; }
@@ -723,3 +723,7 @@ button:disabled {
 .renderNotice:empty { display: none; }
 .renderNotice.clipping { color: #ffb385; }
 #saveWavLink { text-decoration: none; }
+
+/* Timeline moved into the editor, above curves (2026-10-13). */
+.app { padding-bottom: calc(114px + env(safe-area-inset-bottom, 0px)); }
+@media(max-width:760px){.app { padding-bottom: calc(154px + env(safe-area-inset-bottom, 0px)); }}

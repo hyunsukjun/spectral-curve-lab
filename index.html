@@ -6,7 +6,7 @@
     <title>Spectral Curve Lab</title>
     <link rel="icon" type="image/svg+xml" href="assets/identity/spectral-micro.svg?v=hub-v0.10">
     <link rel="stylesheet" href="assets/identity/tokens.css?v=hub-v0.10">
-    <link rel="stylesheet" href="src/styles.css?v=20261007-clip-report1">
+    <link rel="stylesheet" href="src/styles.css?v=20261013-layout1">
   </head>
   <body>
     <main class="app">
@@ -77,6 +77,7 @@
             <strong id="downloadReadout">not ready</strong>
           </div>
         </div>
+        <div class="outputWaveFrame"><canvas id="outputWaveCanvas" height="96" role="slider" tabindex="0" aria-label="Output time. Source channel waveform guide, not processed output. Click or drag to seek. Arrow keys move one second, Shift Arrow one tenth; Home and End jump to boundaries." aria-valuemin="0" aria-valuemax="0" aria-valuenow="0" aria-disabled="true" title="Source waveform on the output timeline, not the rendered WAV. Click or drag to seek."></canvas></div>
         <div class="canvasFrame">
           <canvas id="waveCanvas" width="1400" height="620"></canvas>
         </div>
@@ -97,7 +98,7 @@
         </div>
       </section>
       <div class="playbackDock">
-        <div class="outputWaveFrame"><canvas id="outputWaveCanvas" height="96" role="slider" tabindex="0" aria-label="Output time. Source channel waveform guide, not processed output. Click or drag to seek. Arrow keys move one second, Shift Arrow one tenth; Home and End jump to boundaries." aria-valuemin="0" aria-valuemax="0" aria-valuenow="0" aria-disabled="true" title="Source waveform on the output timeline, not the rendered WAV. Click or drag to seek."></canvas></div>
+
       <footer class="playbackBar" aria-label="Playback and output monitoring">
         <div class="bottomTransport" aria-label="Transport controls">
           <button id="playButton" type="button" disabled>Play</button>
