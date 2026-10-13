@@ -66,3 +66,7 @@ Removed the legacy dock-specific grid column overrides. The common transport
 stylesheet now owns all column layouts: four columns above 1100px, meter on
 a second row at 601–1100px, and a full-width slider row at 600px or less.
 Dock positioning remains unchanged. No audio or playback logic changes.
+
+
+## 2026-10-14 — Common Clear Current / Reset All appearance
+Both actions follow Audio's neutral navy reference: background #122438, text #aabccc, 6px radius, 13px/620 type, 92px minimum width, 38px height (30px at >=900px viewport width). Clear border #3b5063; Reset border #203a52. Shared hover/pressed/focus/disabled styles live in src/curve-actions.css. Red action emphasis is removed; brand/parameter colors elsewhere stay independent. Existing IDs, handlers, reset scope, confirmation mechanism and keyboard behavior remain unchanged. This is a local visual update, separate from DSP verification.
