@@ -101,3 +101,8 @@ Removed the legacy dock-specific grid column overrides. The common transport
 stylesheet now owns all column layouts: four columns above 1100px, meter on
 a second row at 601–1100px, and a full-width slider row at 600px or less.
 Dock positioning remains unchanged. No audio or playback logic changes.
+
+
+## 2026-10-14 — 편집 UI 간소화
+
+사용자 요청으로 중복된 Select 도구와 미선택 안내, Signal Chain 제목/설명 줄 제거. Pen/Eraser 및 체인 조작은 유지. DSP/효과 순서 규칙 변경 없음.

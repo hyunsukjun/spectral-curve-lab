@@ -7,7 +7,6 @@
 | 효과 선택·On/Off | 시작 시 다섯 버튼 모두 Off, 선택 커브 없음. 다른 켜진 효과를 누르면 그 커브를 선택한다. 선택된 버튼을 다시 누르면 Off, 꺼진 버튼을 누르면 On과 동시에 선택된다. Off인 커브도 편집할 수 있다. | 버튼 색/하단선은 활성·편집 대상을 구별하며 `aria-pressed`는 On/Off를 나타낸다. 선택된 Off는 범례/readout에 표시한다. 선택 전 Clear Current와 캔버스 점 편집은 비활성. |
 | Signal Chain | Input과 Output 사이에 **켜진 효과만** 실제 처리 순서로 표시한다. 블록 클릭은 커브 선택만 한다. 블록을 다른 블록에 놓으면 그 앞에 삽입하고, Output에 놓으면 맨 뒤로 보낸다. Off는 커브 점을 지우지 않고 Preview/Render/비교 화면에 중립값을 전달하며, 다시 On하면 보관한 점을 사용한다. | 다섯 효과 모두 켠 순서대로 추가한다. 드래그로 순서를 바꾸면 Preview와 비교 화면을 갱신 대상으로 표시하고 기존 WAV를 무효화한다. Off 후 다시 On하면 체인 맨 뒤에 재삽입한다. Shift가 중간에 있으면 뒤쪽 효과는 두 번째 STFT 단계에서 처리한다. HTML drag-and-drop은 데스크톱 조작으로 검증했으며 touch/keyboard 재정렬은 아직 미검증이다. |
 | Pen | 기본 도구. 기존 점을 잡아 이동하거나 빈 위치에 중간 점을 추가한다. 드래그는 해당 시간의 궤적을 만든다. | pointer capture; `addNode`/`moveNode`; 정규화 좌표. 기존 점과 충분히 가까우면 새 점을 만들지 않음 |
-| Select | 기존 점만 선택·이동한다. 빈 곳에서는 새 점을 만들지 않는다. | `selectedTool='select'` |
 | Eraser | 기존 **중간 점**을 삭제한다. 빈 곳은 아무것도 만들거나 변경하지 않는다. | 10 CSS px 반경 hit-test; `eraseNode`가 양 끝점 거부. Mac Command-click/그 외 Ctrl-click은 임시 삭제 동작 |
 | 끝점과 순서 | 첫/마지막 점은 삭제 불가이며 시간 좌표 `x=0/1` 유지. 값 `y`는 수정 가능. 중간 점은 이웃 사이에서만 이동. | `moveNode`/`eraseNode`; [커브 테스트](../tests/neutral.mjs) |
 | Clear Current | 활성 곡선 하나를 중립 두 점으로 복원하고 재생을 정지한다. | `defaultCurves[activeCurve]`; 다른 곡선 유지 |
@@ -78,3 +77,10 @@ Removed the legacy dock-specific grid column overrides. The common transport
 stylesheet now owns all column layouts: four columns above 1100px, meter on
 a second row at 601–1100px, and a full-width slider row at 600px or less.
 Dock positioning remains unchanged. No audio or playback logic changes.
+
+
+## 2026-10-14 — 편집 도구·안내 간소화
+
+Select 전용 모드는 제거. Pen으로 점 추가·이동, Eraser 및 Command/Ctrl 보조 삭제와 끝점 보호는 유지한다. 빈 곳 클릭의 점 추가 차단 기능은 더 이상 제공하지 않는다. 커브 double-click seek의 첫 클릭이 점을 추가할 수 있는 기존 특성은 유지하며, 점을 바꾸지 않는 탐색에는 파형/하단 재생바를 사용한다. 미선택 효과 안내와 Signal Chain 제목/조작 설명 줄을 제거하되 체인 블록 및 순서 변경, 접근성 설명은 유지한다. DSP 변경 없음.
+
+검증: JS syntax 및 기존 neutral 72조건/끝점·삭제 회귀, 키보드 5항목 통과. 실제 로컬 브라우저에서 Select/두 안내 줄 제거, 효과 선택 후 Pen 점 추가(2→3), 기존 점 드래그(3 유지), Eraser 삭제(3→2), 체인 표시 확인. 콘솔 오류 없음. 이번 확인은 음질 청취 또는 전체 브라우저 검증이 아니다. 2026-10-14 사용자 승인으로 커밋·배포 진행. 공개 반영 증거는 제품군 검증 기록에 별도 저장.

@@ -23,10 +23,9 @@ Audio Curve Lab의 화면·노드 편집 방식을 바탕으로 만든 독립적
 - Open Audio: 로컬 모노/스테레오 음원. 파일을 업로드하지 않습니다.
 - Play / Pause: 재생·일시정지. Stop: 처음으로 되돌림. Space: 재생·일시정지.
 - 하단 OUTPUT TIME 파형을 클릭하거나 드래그해 파일 위치를 이동합니다. 원본 채널 파형을 탐색 안내로 표시하며 최종 처리 파형은 아닙니다. 좌우 방향키는 1초, Shift+방향키는 0.1초, Home/End는 처음/끝으로 이동합니다. 하단의 L/R 미터는 Preview의 최종 출력 신호를 측정하며 CLIP은 눌러 초기화합니다. 모노 파일도 Preview에서는 L/R에 같은 신호가 나옵니다.
-- Select: 기존 노드 이동. 빈 곳에 새 노드를 만들지 않습니다.
 - Pen: 노드 추가·이동. Eraser: 내부 노드 하나 삭제. macOS Command-click / 다른 플랫폼 Ctrl-click도 삭제합니다.
 - 양 끝 노드는 삭제할 수 없고 시간 좌표가 0/1에 고정됩니다. Y는 이동 가능합니다.
-- Double-click: 해당 시간으로 seek. 기존 Pen 동작을 계승하여 첫 click이 노드를 추가할 수 있으므로 Select에서 seek하는 것을 권장합니다.
+- Double-click: 해당 시간으로 seek. 기존 Pen 동작을 계승하여 첫 click이 노드를 추가할 수 있으므로 파형 또는 하단 재생바에서 seek하는 것을 권장합니다.
 - Clear Current: 선택한 곡선을 기본값으로 복원. Reset All: Shift 0 Hz, Stretch 1.0, Blur 0%, Harmonicity 0%, Freeze 0% 모두 복원. Reset All은 기존 확인창을 유지합니다.
 - Download WAV: 원본 채널 수를 유지하는 48 kHz / 24-bit PCM WAV. 렌더 중 Cancel 가능.
 

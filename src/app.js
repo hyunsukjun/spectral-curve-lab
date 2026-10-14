@@ -39,7 +39,6 @@ const saveWavLink = document.getElementById("saveWavLink");
 const downloadReadout = document.getElementById("downloadReadout");
 const modeReadout = document.getElementById("modeReadout");
 const pointsReadout = document.getElementById("pointsReadout");
-const selectTool = document.getElementById("selectTool");
 const penTool = document.getElementById("penTool");
 const eraserTool = document.getElementById("eraserTool");
 const resetDialog = document.getElementById("resetDialog");
@@ -248,7 +247,7 @@ function setRenderBusy(isBusy) {
   if (isBusy) isScrubbing = false;
   if(isBusy)spectrogram.cancel("Analysis cancelled for export · Update to refresh");
   canvas.style.pointerEvents = isBusy ? "none" : "";
-  [selectTool, penTool, eraserTool, resetButton, shiftMode, stretchMode, blurMode, harmonicityMode, freezeMode].forEach(button => { button.disabled = isBusy; });
+  [penTool, eraserTool, resetButton, shiftMode, stretchMode, blurMode, harmonicityMode, freezeMode].forEach(button => { button.disabled = isBusy; });
   chainDiagram.querySelectorAll(".chainBlock").forEach(button => { button.disabled = isBusy; button.draggable = !isBusy; });
   clearCurveButton.disabled = isBusy || !activeCurve;
   playButton.disabled = isBusy || !buffer;
@@ -896,7 +895,7 @@ function setActiveCurve(name) {
 function updateModeLegend() {
   const name = activeCurve;
   if (!name) {
-    curveLegend.textContent = "Choose an effect above to add it to the signal chain";
+    curveLegend.textContent = "";
     curveLegend.style.color = "var(--cl-text-muted)";
     return;
   }
@@ -1037,14 +1036,12 @@ function isErasing(event) {
 function updateToolCursor(event) {
   const erasing = isErasing(event);
   canvas.classList.toggle("eraseMode", erasing);
-  canvas.style.cursor = !activeCurve ? "default" : erasing ? "" : hoverPoint ? "pointer" : selectedTool === "select" ? "default" : "crosshair";
+  canvas.style.cursor = !activeCurve ? "default" : erasing ? "" : hoverPoint ? "pointer" : "crosshair";
 }
 
 function setTool(tool) {
   dragging = false;
   selectedTool = tool;
-  selectTool.classList.toggle("active", tool === "select");
-  selectTool.setAttribute("aria-pressed", String(tool === "select"));
   penTool.classList.toggle("active", tool === "pen");
   eraserTool.classList.toggle("active", tool === "eraser");
   penTool.setAttribute("aria-pressed", String(tool === "pen"));
@@ -1062,7 +1059,6 @@ function setHoverPoint(pointIndex, event) {
   if (changed) draw();
 }
 
-selectTool.addEventListener("click", () => setTool("select"));
 canvas.addEventListener("pointercancel", () => { dragging = false; selectedPoint = null; hoverPoint = null; draw(); });
 penTool.addEventListener("click", () => setTool("pen"));
 eraserTool.addEventListener("click", () => setTool("eraser"));
@@ -1084,7 +1080,6 @@ canvas.addEventListener("pointerdown", (event) => {
     draw();
     return;
   }
-  if (selectedPoint < 0 && selectedTool === "select") return;
   if (selectedPoint < 0) {
     selectedPoint = addNode(curve, p);
   }

@@ -40,7 +40,6 @@
             <button id="harmonicityMode" class="curveMode" type="button" title="Shape peak relationships from harmonic to inharmonic. Centre is neutral.">Harmonicity</button>
             <button id="freezeMode" class="curveMode" type="button" title="Hold a captured spectral state. 0% is off; 100% is fully frozen.">Spectral Freeze</button>
             <div class="toolToggle" role="group" aria-label="Curve editing tool">
-              <button id="selectTool" type="button" aria-label="Select" aria-pressed="false" title="Select: move existing points">↖</button>
               <button id="penTool" class="active" type="button" aria-label="Pen" aria-pressed="true" title="Pen: add or move points">
                 <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L9 17l-4 1 1-4Z"/></svg>
               </button>
@@ -83,7 +82,6 @@
         <div class="canvasFrame">
           <canvas id="waveCanvas" width="1400" height="620"></canvas>
         </div>
-        <div class="chainLabel">Signal Chain <span>Drag to reorder · drop on Output to place last · Re-On adds last</span></div>
         <div id="chainDiagram" class="chainDiagram" aria-label="Enabled spectral effects in processing order. Drag a block before another block or onto Output to move it last."></div>
       </section>
       <section class="spectrogramSection" aria-label="Spectrogram comparison">
@@ -131,6 +129,6 @@
       </div>
     </div>
 
-    <script src="src/app.js?v=20261013-transport1" type="module"></script>
+    <script src="src/app.js?v=20261014-tools1" type="module"></script>
   </body>
 </html>
