@@ -1,6 +1,6 @@
 # Spectral Curve Lab
 
-Audio Curve Lab의 화면·노드 편집 방식을 바탕으로 만든 독립적인 STFT 기반 도구입니다. 현재 **Spectral Shift, Spectral Stretch, Spectral Blur, Harmonicity, Spectral Freeze**를 구현했습니다. SOURCE / OUTPUT 스펙트로그램도 제공합니다. Harmonicity와 Freeze의 청감 파인튜닝은 아직 진행 중입니다.
+Audio Curve Lab의 화면·노드 편집 방식을 바탕으로 만든 독립적인 STFT 기반 도구입니다. 현재 **Spectral Shift, Spectral Stretch, Spectral Blur, Harmonicity, Spectral Freeze**를 구현했습니다. SOURCE / OUTPUT 스펙트로그램은 웹 UI에서 제거했으며, 관련 연구·검증 자료는 보존합니다. Harmonicity와 Freeze의 청감 파인튜닝은 아직 진행 중입니다.
 
 **Spectral Shift: −2000…+2000 Hz, default 0 Hz.** 모든 성분에 같은 Hz를 더합니다. 예를 들어 +200 Hz는 440/880 Hz를 640/1080 Hz로 옮깁니다. 곡선을 위로 그리면 양의 이동, 아래로 그리면 음의 이동입니다. 0 Hz의 일정한 곡선은 원본을 유지합니다.
 
@@ -21,7 +21,7 @@ Audio Curve Lab의 화면·노드 편집 방식을 바탕으로 만든 독립적
 이 폴더에서 `python3 -m http.server 8769 --bind 127.0.0.1` 실행 후 `http://localhost:8769`를 여세요. 로컬 HTTP 또는 HTTPS가 필요합니다. Chrome 및 Codex 내장 브라우저에서 수치·UI를 검증했으며 다른 브라우저의 청감·성능 검증은 남아 있습니다.
 
 - Open Audio: 로컬 모노/스테레오 음원. 파일을 업로드하지 않습니다.
-- Play / Pause: 재생·일시정지. Stop: 처음으로 되돌림. Space: 재생·일시정지.
+- Play / Pause: 현재 위치에서 재생·일시정지. Return to start: 처음으로 되돌림. Space: 재생·일시정지.
 - 하단 OUTPUT TIME 파형을 클릭하거나 드래그해 파일 위치를 이동합니다. 원본 채널 파형을 탐색 안내로 표시하며 최종 처리 파형은 아닙니다. 좌우 방향키는 1초, Shift+방향키는 0.1초, Home/End는 처음/끝으로 이동합니다. 하단의 L/R 미터는 Preview의 최종 출력 신호를 측정하며 CLIP은 눌러 초기화합니다. 모노 파일도 Preview에서는 L/R에 같은 신호가 나옵니다.
 - Pen: 노드 추가·이동. Eraser: 내부 노드 하나 삭제. macOS Command-click / 다른 플랫폼 Ctrl-click도 삭제합니다.
 - 양 끝 노드는 삭제할 수 없고 시간 좌표가 0/1에 고정됩니다. Y는 이동 가능합니다.
@@ -33,11 +33,9 @@ Audio Curve Lab의 화면·노드 편집 방식을 바탕으로 만든 독립적
 
 모든 DSP는 AudioWorklet 또는 Worker에서 실행됩니다. 재생/seek의 STFT 준비 시간은 48 kHz에서 약 18.7ms입니다. 일시정지 후 재개는 위상과 위치를 유지합니다. 디코딩과 렌더 결과는 메모리에 유지하므로 매우 긴 파일은 메모리 제한을 받을 수 있습니다. 출력은 WAV 범위를 넘으면 PCM 인코딩에서 clipping되며 자동 normalization/limiter는 없습니다. 하단 미터는 WAV 렌더 결과를 측정하지 않습니다. [하단 재생 바 적용 기록](docs/PLAYBACK-BAR-20261001.md).
 
-## 스펙트로그램
+## 스펙트로그램 연구 자료
 
-곡선 아래의 SOURCE / OUTPUT Spectrogram을 켜면 원본과 현재 preview 처리 결과를 비교합니다. 양쪽의 주파수·색상 기준은 같습니다. 곡선을 바꾼 뒤에는 재생을 멈추고 Update comparison을 누르세요. 이 화면은 편집 표면이 아닙니다.
-
-기본 OFF이며 분석은 Worker에서 실행합니다. 512개 시간 열로 요약하므로 긴 파일의 짧은 이벤트를 놓칠 수 있습니다. OUTPUT은 preview 엔진 결과이며 FFT 크기가 다른 WAV의 정확한 분석은 아닙니다. [구현 및 Oscillator 검토 보고서](docs/SPECTROGRAM-REPORT.md) 참조.
+SOURCE / OUTPUT Spectrogram은 현재 웹 앱에서 제공하지 않습니다. 분석 모듈과 테스트·보고서는 연구 자산으로 보존합니다. Standalone 재도입 여부는 추후 검토합니다. [기존 연구 보고서](docs/SPECTROGRAM-REPORT.md)는 현재 웹 UI의 기능 목록이 아닙니다.
 
 ## 검증
 
