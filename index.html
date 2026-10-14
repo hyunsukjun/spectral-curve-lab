@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="src/styles.css?v=20261014-no-spectrogram1">
     <link rel="stylesheet" href="src/common-transport.css?v=20261013-1">
     <link rel="stylesheet" href="src/curve-actions.css?v=20261014-family1">
+    <link rel="stylesheet" href="src/file-help.css?v=20261014-family1">
   </head>
   <body>
     <main class="app">
@@ -18,15 +19,28 @@
           <div class="brandCopy"><h1><span>Spectral </span><span class="brandAccent">Curve Lab</span></h1>
           <p class="tagline">Draw spectral shift, stretch, blur, harmonicity and freeze across time.</p>
           <p class="statusLine"><span id="fileStatus">No audio loaded</span><span class="privacyNote">Local browser processing. No upload.</span></p>
-          <p class="formatNote">Recommended: WAV, MP3. AIFF: mono/stereo 16/24-bit PCM is converted locally on import. Some formats may vary by browser.</p></div>
+          </div>
         </div>
         <div class="transport">
+          <details id="fileHelp" class="fileHelp">
+            <summary aria-label="Audio file and export information" title="Audio file and export information"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="4" r="1" fill="currentColor"/><path d="M6.5 7h1.5v5m-1.5 0h3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
+            <div class="fileHelpPanel">
+              <strong>Files &amp; export</strong>
+              <dl>
+                <dt>Input</dt><dd>WAV, MP3 recommended.</dd>
+                <dt>AIFF</dt><dd>Mono/stereo 16/24-bit PCM (8–192 kHz), converted locally on import. AIFF-C is not supported.</dd>
+                <dt>AIFF limits</dt><dd>128 MiB file / converted WAV; 192 MiB decoded audio. Other formats depend on browser memory.</dd>
+                <dt>Output</dt><dd>Source duration and channel count · 48 kHz / 24-bit WAV.</dd>
+              </dl>
+              <p>Short excerpts recommended. Use one Lab at a time for heavy processing.</p>
+            </div>
+          </details>
           <label class="fileButton">
             Open Audio
             <input id="fileInput" type="file" accept="audio/*,.aif,.aiff,.aifc">
           </label>
           <a id="saveWavLink" class="fileButton" download="Spectral-Curve-Lab-export.wav" hidden>Save WAV</a>
-          <button id="downloadButton" type="button" disabled>Download WAV</button>
+          <button id="downloadButton" type="button" disabled title="Source duration and channel count · 48 kHz / 24-bit WAV.">Download WAV</button>
         </div>
       </header>
 
@@ -116,6 +130,7 @@
       </div>
     </div>
 
+    <script src="src/file-help.js?v=20261014-family1" type="module"></script>
     <script src="src/app.js?v=20261014-no-spectrogram1" type="module"></script>
   </body>
 </html>

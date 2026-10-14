@@ -90,3 +90,10 @@ Select 전용 모드는 제거. Pen으로 점 추가·이동, Eraser 및 Command
 SOURCE / OUTPUT Spectrogram 패널·토글·Update 및 전용 스타일, app의 view import/초기화/취소/무효화 연결을 제거했다. 기존 spectrogram 분석 모듈과 연구용 테스트·보고서는 참고 자산으로 보존하며 웹 앱에서 불러오지 않는다. 실제 spectral DSP의 FFT/STFT, Preview, WAV, 커브와 재생 기능은 유지. Standalone 재도입 여부는 추후 검토하며 현시점 구현 계획으로 확정하지 않는다. 위 문서의 과거 스펙트로그램 구현 설명은 현재 웹 제공 기능을 의미하지 않는다.
 
 검증: JS syntax, pending Play 취소/복귀 3조건 및 키보드 회귀 5항목 통과. 실제 로컬 브라우저 초기화·재생 시간 진행·Pause·Download/Save 확인. 생성 WAV는 stereo/48kHz/24-bit PCM/384000frames(8초). 콘솔 오류 없음. 음향 코어 변경 없으며 청취 승인으로 해석하지 않는다. 2026-10-14 사용자 승인으로 커밋·배포 진행. 공개 반영 증거는 제품군 검증 기록에 저장.
+
+
+## 2026-10-14 — Family file information
+
+Approved circular dotted-i disclosure immediately left of Open Audio. Default format guidance moves into this optional panel; privacy and actual error/status notices remain. Space operates disclosure without audio transport; Escape/outside click dismiss. Output guidance: Source duration and channel count · 48 kHz / 24-bit WAV. Input limits reflect current implementation, not a device-memory guarantee. No DSP, admission, export, IDs or defaults changed.
+
+Family verification: all six information panels passed desktop/narrow bounds and Space/Escape/outside-click checks; shared keyboard regression 27/27 passed. Existing dynamic errors and audio handlers unchanged. User approved commit and publication on 2026-10-14. Release evidence in family FILE_HELP_2026-10-14.md. Earlier Audio-only pilot status is superseded.
