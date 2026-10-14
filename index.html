@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="src/common-transport.css?v=20261013-1">
     <link rel="stylesheet" href="src/curve-actions.css?v=20261014-family1">
     <link rel="stylesheet" href="src/file-help.css?v=20261014-family1">
+    <link rel="stylesheet" href="src/parameter-help.css?v=20261014-family1">
   </head>
   <body>
     <main class="app">
@@ -48,11 +49,11 @@
       <section class="editor">
         <div class="effectBar">
           <div class="effectChain" aria-label="Spectral effects. Click to select; click the selected effect again to toggle it.">
-            <button id="shiftMode" class="curveMode" type="button">Spectral Shift</button>
-            <button id="stretchMode" title="Compress or expand frequency spacing around 1 kHz. Playback speed and duration stay unchanged." class="curveMode" type="button">Spectral Stretch</button>
-            <button id="blurMode" class="curveMode" type="button" title="Smooth spectral changes over time. 0% keeps the original. File duration stays unchanged.">Spectral Blur</button>
-            <button id="harmonicityMode" class="curveMode" type="button" title="Shape peak relationships from harmonic to inharmonic. Centre is neutral.">Harmonicity</button>
-            <button id="freezeMode" class="curveMode" type="button" title="Hold a captured spectral state. 0% is off; 100% is fully frozen.">Spectral Freeze</button>
+            <button id="shiftMode" class="curveMode" type="button" data-parameter-help aria-describedby="shiftModeHelp">Spectral Shift</button>
+            <button id="stretchMode" class="curveMode" type="button" data-parameter-help aria-describedby="stretchModeHelp">Spectral Stretch</button>
+            <button id="blurMode" class="curveMode" type="button" data-parameter-help aria-describedby="blurModeHelp">Spectral Blur</button>
+            <button id="harmonicityMode" class="curveMode" type="button" data-parameter-help aria-describedby="harmonicityModeHelp">Harmonicity</button>
+            <button id="freezeMode" class="curveMode" type="button" data-parameter-help aria-describedby="freezeModeHelp">Spectral Freeze</button>
             <div class="toolToggle" role="group" aria-label="Curve editing tool">
               <button id="penTool" class="active" type="button" aria-label="Pen" aria-pressed="true" title="Pen: add or move points">
                 <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L9 17l-4 1 1-4Z"/></svg>
@@ -131,6 +132,12 @@
     </div>
 
     <script src="src/file-help.js?v=20261014-family1" type="module"></script>
-    <script src="src/app.js?v=20261014-no-spectrogram1" type="module"></script>
-  </body>
+    <script src="src/app.js?v=20261014-paramhelp1" type="module"></script>
+  <div id="shiftModeHelp" class="parameterHelp" role="tooltip" hidden><strong>Spectral Shift · −2000 to +2000 Hz</strong><span>Move spectral frequencies by a fixed Hz offset. 0 Hz preserves their positions.</span><span class="helpState"></span></div>
+<div id="stretchModeHelp" class="parameterHelp" role="tooltip" hidden><strong>Spectral Stretch · 0.5–2</strong><span>Compress or expand frequency spacing around 1 kHz. 1 is neutral. Playback speed and file duration stay unchanged.</span><span class="helpState"></span></div>
+<div id="blurModeHelp" class="parameterHelp" role="tooltip" hidden><strong>Spectral Blur · 0–100%</strong><span>Smooth spectral changes over time. 0% is neutral; frequency positions and file duration stay unchanged.</span><span class="helpState"></span></div>
+<div id="harmonicityModeHelp" class="parameterHelp" role="tooltip" hidden><strong>Harmonicity · −100% to +100%</strong><span>Shape peak relationships: negative toward harmonic, positive toward inharmonic. 0% is neutral.</span><span class="helpState"></span></div>
+<div id="freezeModeHelp" class="parameterHelp" role="tooltip" hidden><strong>Spectral Freeze · 0–100%</strong><span>Hold a captured spectral state. 0% is off; 100% is full hold. This does not extend the file duration.</span><span class="helpState"></span></div>
+<script type="module" src="src/parameter-help.js?v=20261014-family1"></script>
+</body>
 </html>

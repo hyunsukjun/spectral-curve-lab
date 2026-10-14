@@ -109,7 +109,7 @@ const curveLabels = {
   freeze: "Spectral Freeze",
 
 };
-const moduleHints = Object.fromEntries(moduleOrder.map(name=>[name,moduleButtons[name].title]));
+
 
 const outputTime = createOutputTime(outputWaveCanvas, {seek: seekToProgress, scrubbing: value => { isScrubbing = value; }, formatClock});
 
@@ -970,7 +970,7 @@ function updateModuleUI() {
     const stateHint = enabled[name]
       ? `${curveLabels[name]} On · click while selected to turn Off`
       : `${curveLabels[name]} Off · click to turn On and edit`;
-    button.title = moduleHints[name] ? `${stateHint}. ${moduleHints[name]}` : stateHint;
+    button.dataset.helpState = stateHint;
   }
   updateModeLegend();
   renderChainDiagram();
