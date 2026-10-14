@@ -18,7 +18,6 @@
 | 파일 열기 | 새 파일을 읽으면 waveform/길이와 재생 위치가 바뀐다. 현재 다섯 커브는 유지된다. | file chooser, `decodeAudioData`; 선택창 검증 기록과 제한은 [디자인 회귀](DESIGN-SYSTEM-V1.md) |
 | 기본 소스 | 시작 시 8초 Noise intervals를 불러온다. Demo 선택 메뉴는 없으며 Open Audio로 사용자 파일을 불러온다. | 기존 백색소음 생성 함수를 그대로 사용한다. 새로고침하면 기본 소스로 돌아간다. |
 | Download WAV | 현재 곡선을 전체 파일에 렌더하여 다운로드한다. 진행 중 다시 누르면 취소한다. 편집 시 이전 URL은 폐기되고 새 export가 필요하다. | Worker/Blob/object URL; PCM24, 48 kHz |
-| SOURCE/OUTPUT 비교 | 기본 꺼짐. 켜면 원본과 현재 **Preview 처리 샘플**을 같은 축으로 비교한다. 커브 변경 후 이전 그림은 stale로 표시하고 수동 Update한다. 재생/Export 중 새 분석을 시작하지 않는다. | 별도 Worker; [비교 보고서](SPECTROGRAM-REPORT.md). 소리 편집 표면이 아님 |
 
 시간축 데이터는 Canvas 크기, browser zoom, devicePixelRatio와 독립이다. Canvas는 왼쪽 파라미터 눈금 영역을 제외한 plot 폭을 `[0,1]` 시간으로 변환하고, 위쪽을 `y=1`, 아래쪽을 `y=0`으로 본다. native mouse/trackpad/touch에서도 이 의미를 유지하되 10px hit-test 같은 웹 구현 치수는 기기별 조절 가능하다. 현재 코드는 `pointercancel`에서 drag 상태를 지우지만, 창 focus 상실(`window blur`)에서는 cursor만 갱신한다. 따라서 focus 상실 시 drag 종료 보장은 **UNKNOWN**이다. 실제 touch 제스처·접근성 전 범위도 **UNKNOWN**이다. 커브의 시간 해상도와 급격한 제스처의 오디오 반영은 [시간 동작 기록](CURVE_TEMPORAL_BEHAVIOR.md)을 따른다.
 
@@ -84,3 +83,10 @@ Dock positioning remains unchanged. No audio or playback logic changes.
 Select 전용 모드는 제거. Pen으로 점 추가·이동, Eraser 및 Command/Ctrl 보조 삭제와 끝점 보호는 유지한다. 빈 곳 클릭의 점 추가 차단 기능은 더 이상 제공하지 않는다. 커브 double-click seek의 첫 클릭이 점을 추가할 수 있는 기존 특성은 유지하며, 점을 바꾸지 않는 탐색에는 파형/하단 재생바를 사용한다. 미선택 효과 안내와 Signal Chain 제목/조작 설명 줄을 제거하되 체인 블록 및 순서 변경, 접근성 설명은 유지한다. DSP 변경 없음.
 
 검증: JS syntax 및 기존 neutral 72조건/끝점·삭제 회귀, 키보드 5항목 통과. 실제 로컬 브라우저에서 Select/두 안내 줄 제거, 효과 선택 후 Pen 점 추가(2→3), 기존 점 드래그(3 유지), Eraser 삭제(3→2), 체인 표시 확인. 콘솔 오류 없음. 이번 확인은 음질 청취 또는 전체 브라우저 검증이 아니다. 2026-10-14 사용자 승인으로 커밋·배포 진행. 공개 반영 증거는 제품군 검증 기록에 별도 저장.
+
+
+## 2026-10-14 — 웹 비교 스펙트로그램 제거
+
+SOURCE / OUTPUT Spectrogram 패널·토글·Update 및 전용 스타일, app의 view import/초기화/취소/무효화 연결을 제거했다. 기존 spectrogram 분석 모듈과 연구용 테스트·보고서는 참고 자산으로 보존하며 웹 앱에서 불러오지 않는다. 실제 spectral DSP의 FFT/STFT, Preview, WAV, 커브와 재생 기능은 유지. Standalone 재도입 여부는 추후 검토하며 현시점 구현 계획으로 확정하지 않는다. 위 문서의 과거 스펙트로그램 구현 설명은 현재 웹 제공 기능을 의미하지 않는다.
+
+검증: JS syntax, pending Play 취소/복귀 3조건 및 키보드 회귀 5항목 통과. 실제 로컬 브라우저 초기화·재생 시간 진행·Pause·Download/Save 확인. 생성 WAV는 stereo/48kHz/24-bit PCM/384000frames(8초). 콘솔 오류 없음. 음향 코어 변경 없으며 청취 승인으로 해석하지 않는다. 2026-10-14 사용자 승인으로 커밋·배포 진행. 공개 반영 증거는 제품군 검증 기록에 저장.

@@ -18,7 +18,7 @@
 | `SCL-C10` Reorderable chain · CONTROL/DSP · VERIFIED NUMERICALLY | 다섯 효과를 켠 순서대로 연결하고, 하단 블록을 끌어 처리 순서를 변경하며, 다시 켠 효과는 맨 뒤에 둠 | Shift 뒤에 효과가 있으면 analytic Shift 출력에 두 번째 STFT를 적용; Preview/Render/비교에 동일 order 전달 | `tests/module-routing.mjs`, `tests/chain-order.mjs`, 데스크톱 드래그·WAV 순서 A/B 검증; touch/keyboard 재정렬·청감/장치 underrun 승인 UNKNOWN |
 | `SCL-C05` Preview · COMMON · VERIFIED | 현재 곡선을 재생 → 실시간 출력 | 2048/hop512 `SpectralEngine` in AudioWorklet | render와 FFT 크기 차이; 실시간/브라우저 검사 보고서. native callback scheduling 필요 |
 | `SCL-C06` WAV export · COMMON · VERIFIED | Download WAV → 48 kHz/24-bit PCM 파일 | 4096/hop1024 Worker render, `wav.js` | full length, PCM clipping, cancel/error; 각 Phase 브라우저 검사. native encoder 필요 |
-| `SCL-C07` 비교 관찰 · COMMON · VERIFIED | 스위치 켜고 Update comparison → SOURCE/OUTPUT overview | 원본과 preview engine 샘플의 FFT 분석; `spectrogram-*` | 기본 OFF, stale 수동 갱신, 512열 요약; [비교 보고서](SPECTROGRAM-REPORT.md). 편집기/정밀 WAV 분석기 아님 |
+| `SCL-C07` 비교 관찰 · WEB REMOVED | 웹 제품 UI/실행 연결에서 제거 (2026-10-14) | 기존 분석 코드·테스트는 연구 참고용으로 보존 | Standalone 재도입은 미정, 구현 약속 아님 |
 
 **미구현:** Undo/Redo, preset 저장·불러오기, host automation, Audio Plug-in. 제안/초기 사양에 언급되어도 현재 기능으로 표시하지 않는다. 위 VERIFIED는 기록된 검사 범위에서만 유효하며, 사람 청감 승인·장치 underrun·모든 브라우저/긴 파일 메모리까지 확인했다는 뜻이 아니다.
 

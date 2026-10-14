@@ -2,7 +2,6 @@ import {mountTransport} from "./common-transport.js?v=20261013-1";
 import { readAudioFile } from "./audio-import.js?v=20261011-aiff1";
 import { renderFeedback } from "./render-feedback.js?v=20261007-clip-report1";
 import {createOutputTime} from "./output-time.js?v=20261005-output-time1";
-import {createSpectrogramView} from "./spectrogram-view.js?v=20261003-chain4";
 import {stretchFromNorm, stretchToNorm} from "./spectral-stretch.js?v=20260929-transport1";
 import {shiftFromNorm} from "./spectral-shift.js?v=20260929-transport1";
 import {harmonicityFromNorm} from "./spectral-harmonicity.js?v=20261002-harmonic-freeze1";
@@ -114,7 +113,6 @@ const moduleHints = Object.fromEntries(moduleOrder.map(name=>[name,moduleButtons
 
 const outputTime = createOutputTime(outputWaveCanvas, {seek: seekToProgress, scrubbing: value => { isScrubbing = value; }, formatClock});
 
-const spectrogram = createSpectrogramView({getBuffer:()=>buffer,getCurves:()=>effectiveCurves(curves,enabled),getOrder:()=>chainOrder,isBusy:()=>isPlaying||!!renderAbortController||playButton.disabled});
 
 function resizeCanvas() {
   const frameRect = canvas.parentElement.getBoundingClientRect();
@@ -217,7 +215,6 @@ function sendSettings() {
 }
 
 function markDownloadStale() {
-  spectrogram.invalidate();
   if (!buffer) return;
   clearDownload();
   downloadReadout.textContent = "needs export";
@@ -245,7 +242,6 @@ function setTransportBusy(isBusy) {
 
 function setRenderBusy(isBusy) {
   if (isBusy) isScrubbing = false;
-  if(isBusy)spectrogram.cancel("Analysis cancelled for export · Update to refresh");
   canvas.style.pointerEvents = isBusy ? "none" : "";
   [penTool, eraserTool, resetButton, shiftMode, stretchMode, blurMode, harmonicityMode, freezeMode].forEach(button => { button.disabled = isBusy; });
   chainDiagram.querySelectorAll(".chainBlock").forEach(button => { button.disabled = isBusy; button.draggable = !isBusy; });
@@ -276,7 +272,6 @@ async function playAudio() {
   }
   const requestToken = playbackToken;
   try {
-    spectrogram.cancel("Analysis cancelled for playback · Update to refresh");
     const needsInitialSeek = !node || !workletBufferLoaded;
     await ensureAudio();
     if (isPlaying || requestToken !== playbackToken || !buffer || playButton.disabled) return;
@@ -377,7 +372,6 @@ function createGeneratedExampleBuffer() {
 
 function loadGeneratedExample() {
   if (buffer) forceStopAudio();
-  spectrogram.invalidate(true);
   buffer = createGeneratedExampleBuffer();
   buildWaveform(buffer);
   workletBufferLoaded = false;
@@ -696,7 +690,6 @@ async function loadAudioFile(file) {
     renderAbortController.abort();
     renderAbortController = null;
   }
-  spectrogram.invalidate(true);
   setTransportBusy(true);
   fileStatus.textContent = `Loading ${file.name}...`;
   downloadReadout.textContent = "loading";
@@ -711,7 +704,6 @@ async function loadAudioFile(file) {
     const decoded = await decodeAudioFile(data);
     if (decoded.numberOfChannels > 2) throw new Error("Only mono/stereo sources supported");
     buffer = decoded;
-    spectrogram.invalidate(true);
     buildWaveform(buffer);
     workletBufferLoaded = false;
     sendBufferToWorklet();
@@ -728,7 +720,6 @@ async function loadAudioFile(file) {
     fileStatus.textContent = error.message?.startsWith("AIFF:") ? error.message : "Could not load audio. Try mono/stereo WAV, MP3, or M4A.";
     downloadReadout.textContent = "not ready";
     buffer = null;
-    spectrogram.invalidate(true);
     outputTime.setBuffer(null);
     clearDownload();
     draw();

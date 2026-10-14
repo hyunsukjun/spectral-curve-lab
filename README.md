@@ -91,3 +91,8 @@ are unchanged. See [support scope and limits](docs/AIFF_IMPORT.md).
 Bottom controls are Return to start / Play / Pause. Space toggles Play/Pause.
 Pause keeps the current position; Return to start seeks to zero. The thin slider
 navigates output time. Source guides, sound engines and export policies are unchanged.
+
+
+## 2026-10-14 — 웹 비교 스펙트로그램 제거
+
+SOURCE / OUTPUT Spectrogram 패널·토글·Update 및 전용 스타일, app의 view import/초기화/취소/무효화 연결을 제거했다. 기존 spectrogram 분석 모듈과 연구용 테스트·보고서는 참고 자산으로 보존하며 웹 앱에서 불러오지 않는다. 실제 spectral DSP의 FFT/STFT, Preview, WAV, 커브와 재생 기능은 유지. Standalone 재도입 여부는 추후 검토하며 현시점 구현 계획으로 확정하지 않는다. 위 문서의 과거 스펙트로그램 구현 설명은 현재 웹 제공 기능을 의미하지 않는다.

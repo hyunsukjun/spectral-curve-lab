@@ -489,10 +489,7 @@ button:disabled {
   cursor: crosshair;
 }
 
-.app:has(#spectrogramPanel:not([hidden])) #waveCanvas {
-  height: clamp(300px, calc(100vh - 860px), 620px) !important;
-  height: clamp(300px, calc(100dvh - 860px), 620px) !important;
-}
+
 
 #waveCanvas.eraseMode {
   cursor: url("eraser-cursor.svg") 5 25, crosshair;
@@ -612,21 +609,8 @@ button:disabled {
 .fileButton { position: relative; }
 .fileButton input { display: block; position: absolute; width: 1px; height: 1px; opacity: 0; overflow: hidden; }
 .fileButton:has(input:disabled) { opacity: .42; cursor: default; }
-.spectrogramSwitch input { accent-color: var(--cl-accent); }
-.spectrogramSwitch input:focus-visible { outline: 2px solid var(--cl-focus); outline-offset: 3px; }
 @media(max-width:1180px) { .panel { grid-template-columns: repeat(4,minmax(0,1fr)); gap: 10px 0; } .readout:nth-child(4n)::after { display:none; } }
 @media(max-width:540px) { .panel { grid-template-columns:repeat(2,minmax(0,1fr)); } }
-.spectrogramSection { margin: 0 12px 12px; padding: 12px; border: 1px solid var(--cl-border); border-radius: 6px; background:var(--cl-surface); }
-.spectrogramSwitch { display:flex; align-items:center; gap:8px; font-size:13px; cursor:pointer; }
-.spectrogramControls { display:flex; flex-wrap:wrap; align-items:center; gap:12px; margin-top:12px; font-size:12px; }
-.spectrogramNote { color:var(--cl-text-secondary); font-size:11px; margin:9px 0; }
-.spectrogramPair { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; }
-.spectrogramPair figure { margin:0; min-width:0; }
-.spectrogramPair figcaption { font-size:12px; font-weight:600; margin:8px 0; }
-.spectrogramPair canvas { display:block; width:100%; height:230px; border:1px solid var(--cl-border); border-radius:4px; }
-.spectrogramScale { display:flex; justify-content:center; align-items:center; gap:8px; font-size:10px; margin-top:8px; }
-.spectrogramGradient { width:180px; height:8px; background:linear-gradient(90deg,rgb(12,19,26),rgb(27,73,118),rgb(72,127,156),rgb(146,181,118),rgb(250,235,26)); }
-@media(max-width:700px){ .spectrogramPair { grid-template-columns:1fr; } }
 
 .playbackBar {
   position: fixed;
@@ -704,7 +688,6 @@ button:disabled {
 /* Fixed transport; output-time navigator lives above the curve editor. */
 .app { padding-bottom: calc(210px + env(safe-area-inset-bottom, 0px)); }
 #waveCanvas { height: clamp(180px, calc(100dvh - 605px), 620px) !important; }
-.app:has(#spectrogramPanel:not([hidden])) #waveCanvas { height: clamp(240px, calc(100dvh - 916px), 620px) !important; }
 .playbackDock { position: fixed; z-index: 10; left: 12px; right: 12px; bottom: max(12px, env(safe-area-inset-bottom, 0px)); display: grid; gap: 8px; }
 .outputWaveFrame { border: 1px solid var(--cl-border); border-radius: 6px; overflow: hidden; background: #0c1f31; }
 #outputWaveCanvas { display: block; width: 100%; height: 96px; cursor: ew-resize; touch-action: none; }
