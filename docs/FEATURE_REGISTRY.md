@@ -98,3 +98,11 @@ Approved circular dotted-i disclosure immediately left of Open Audio. Default fo
 ## 2026-10-14 — Family parameter help
 
 Static parameter descriptions are available on the relevant buttons using the Audio help design; current values, axes and activation feedback remain visible. See `docs/PARAMETER_HELP.md` (or `PARAMETER_HELP.md` in this directory). No DSP or curve mapping changes.
+
+
+## 2026-10-14 — Chain keyboard access
+Signal Chain block에 포커스한 상태에서 Alt(Option)+좌/우 방향키로 한 칸 이동한다. 양 끝에서는 유지하며 재배치 후 같은 블록에 포커스를 복원한다. 기존 드래그와 동일한 설정 전달/출력 갱신 경로를 사용한다. DSP·커브·효과 On/Off 정책은 변경하지 않는다.
+
+
+## 2026-10-14 — Reset modal focus
+Reset 확인창의 Tab/Shift+Tab은 Cancel과 Reset All 사이에서 순환한다. Escape 취소와 닫은 뒤 Reset All 포커스 복귀는 유지한다. 확인창 뒤의 버튼을 키보드로 우발 작동하지 않도록 보완하며 리셋 대상과 음향 처리는 변경하지 않는다.

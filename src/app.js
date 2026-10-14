@@ -843,6 +843,17 @@ resetButton.addEventListener("click", () => {
   cancelResetButton.focus();
 });
 
+// Keep keyboard navigation inside the modal until it is dismissed.
+window.addEventListener("keydown", (event) => {
+  if (resetDialog.hidden || event.key !== "Tab") return;
+  event.preventDefault();
+  event.stopPropagation();
+  const first = cancelResetButton;
+  const last = confirmResetButton;
+  const current = document.activeElement;
+  (current === first ? last : current === last ? first : event.shiftKey ? last : first).focus();
+}, true);
+
 cancelResetButton.addEventListener("click", closeResetDialog);
 
 confirmResetButton.addEventListener("click", () => {
@@ -941,8 +952,22 @@ function renderChainDiagram() {
     block.dataset.module = name;
     block.draggable = true;
     block.textContent = curveLabels[name];
-    block.title = `Click to edit ${curveLabels[name]}; drag to change processing order`;
+    block.title = `Click to edit ${curveLabels[name]}; drag to change processing order; keyboard: Alt + Left/Right arrow`;
     block.addEventListener("click",() => setActiveCurve(name));
+    block.addEventListener("keydown", (event) => {
+      if (!event.altKey || event.ctrlKey || event.metaKey || !["ArrowLeft", "ArrowRight"].includes(event.key)) return;
+      event.preventDefault();
+      event.stopPropagation();
+      if (renderAbortController) return;
+      const index = chainOrder.indexOf(name);
+      const nextIndex = index + (event.key === "ArrowLeft" ? -1 : 1);
+      if (index < 0 || nextIndex < 0 || nextIndex >= chainOrder.length) return;
+      [chainOrder[index], chainOrder[nextIndex]] = [chainOrder[nextIndex], chainOrder[index]];
+      sendCurves();
+      renderChainDiagram();
+      chainDiagram.querySelector(`[data-module="${name}"]`)?.focus();
+    });
+
     block.addEventListener("dragstart", event => {
       if (renderAbortController) { event.preventDefault(); return; }
       draggedChainModule = name;
