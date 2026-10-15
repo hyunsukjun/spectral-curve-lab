@@ -120,3 +120,5 @@ User requested removal of the newly introduced Details disclosures across the fa
 
 ## Export feedback visibility
 Idle WAV ready/not ready/needs export badges are hidden. The Download control retains its normal state. Progress, cancellation, limits and failure feedback remain visible; status values are not audio-engine inputs.
+
+Expanded-editor layout (2026-10-15): viewport/control resizing changes canvas display dimensions only. Existing canvas sizing observers update backing stores and pointer coordinates; Oscillator additionally observes its main canvas. Curve data and transport state are retained. If controls plus minimum canvas exceed viewport height, use page scrolling rather than covering controls or compressing the editor.
