@@ -1,9 +1,12 @@
-// Source-channel overview on the unchanged output timeline; no DSP or analysis.
+// Display-only source-channel overview on the unchanged output timeline.
+import {analyzeSourceColors} from "./source-colors.js";
+import {summarizeChannels, paintEnvelope, peakOf, paintToneLegend} from "./source-envelope.js";
 export function createOutputTime(canvas, {seek, scrubbing, formatClock}) {
   const ctx = canvas.getContext('2d');
   const base = document.createElement('canvas');
   let peaks = [], duration = 0, seconds = 0, disabled = true, dragging = false, hover = null;
   let width = 1, height = 96, ratio = 1;
+  let sourceColors = null, sourceBuffer = null;
   const left = 54, right = 8;
   const plotWidth = () => Math.max(1, width - left - right);
   function paintBase() {
@@ -15,7 +18,7 @@ export function createOutputTime(canvas, {seek, scrubbing, formatClock}) {
     const hintX = Math.max(left + 100, 10 + c.measureText('Output Time').width + 16);
     const hint = 'Source guide · Click / drag to seek';
     const shortHint = 'Source guide';
-    const available = width - right - hintX;
+    const available = width - right - hintX - (width >= 460 ? 150 : 0);
     if (c.measureText(hint).width <= available) c.fillText(hint,hintX,13);
     else if (c.measureText(shortHint).width <= available) c.fillText(shortHint,hintX,13);
     const divisions=plotWidth()<360?2:plotWidth()<680?4:10;
@@ -26,17 +29,14 @@ export function createOutputTime(canvas, {seek, scrubbing, formatClock}) {
       c.textAlign=i===0?'left':i===divisions?'right':'center';
       c.fillText(formatClock(duration*i/divisions),x,91);
     }
+    const referencePeak = peakOf(peaks);
     peaks.forEach((channel,index)=>{
       const mid=peaks.length===1?49:index===0?35:64;
       const amp=peaks.length===1?25:12;
       c.textAlign='left'; c.fillStyle='#aabccc'; c.fillText(peaks.length===1?'MONO':index===0?'L':'R',10,mid+3);
-      c.fillStyle='rgba(146,171,190,.8)';
-      for(let x=0;x<plotWidth();x++){
-        const value=channel[Math.min(channel.length-1,Math.floor(x/plotWidth()*channel.length))]||0;
-        const a=Math.min(amp,value*45);
-        c.fillRect(left+x,mid-a,1,Math.max(1,a*2));
-      }
+      paintEnvelope(c,channel,sourceColors?.[index],left,plotWidth(),mid,amp,ratio,referencePeak);
     });
+    paintToneLegend(c,width,12);
     canvas.dataset.sourceChannels=String(peaks.length);
   }
   function draw() {
@@ -66,10 +66,15 @@ export function createOutputTime(canvas, {seek, scrubbing, formatClock}) {
     event.preventDefault();hover=null;seek(Math.max(0,Math.min(1,next/duration)));});
   new ResizeObserver(resize).observe(canvas);
   return {
-    setBuffer(buffer){duration=buffer?.duration||0;peaks=[];
-      for(let ch=0;ch<(buffer?.numberOfChannels||0);ch++){const data=buffer.getChannelData(ch),n=Math.min(4000,data.length),bins=new Float32Array(n);
-        for(let i=0;i<n;i++){let peak=0;for(let j=Math.floor(i*data.length/n);j<Math.floor((i+1)*data.length/n);j++)peak=Math.max(peak,Math.abs(data[j]));bins[i]=peak;}peaks.push(bins);}
-      resize();},
+    setBuffer(buffer){
+      sourceBuffer=buffer; duration=buffer?.duration||0; sourceColors=null;
+      peaks=buffer?summarizeChannels(Array.from({length:buffer.numberOfChannels},(_,ch)=>buffer.getChannelData(ch))):[];
+      analyzeSourceColors(buffer,colors=>{
+        if(sourceBuffer!==buffer)return;
+        sourceColors=colors; paintBase(); draw();
+      });
+      resize();
+    },
     setDisabled(value){disabled=value;canvas.setAttribute('aria-disabled',String(value));if(value)clearDrag();},
     update(value){seconds=value;draw();}
   };

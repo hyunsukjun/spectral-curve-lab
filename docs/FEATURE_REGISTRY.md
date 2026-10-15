@@ -106,3 +106,15 @@ Signal Chain block에 포커스한 상태에서 Alt(Option)+좌/우 방향키로
 
 ## 2026-10-14 — Reset modal focus
 Reset 확인창의 Tab/Shift+Tab은 Cancel과 Reset All 사이에서 순환한다. Escape 취소와 닫은 뒤 Reset All 포커스 복귀는 유지한다. 확인창 뒤의 버튼을 키보드로 우발 작동하지 않도록 보완하며 리셋 대상과 음향 처리는 변경하지 않는다.
+
+## 2026-10-15 — Source-tone waveform (local review)
+
+Audio/Timbre/Granular/Space와 동일한 원본 주파수 성격 색상(blue → teal → gold → peach)과 signed min/max 최대 16,000 bucket 표시를 적용했다. 스테레오는 채널 사이 상대 크기를 유지하는 공통 표시 peak를 사용한다. 색은 원본 spectral centroid의 시각적 안내이며 처리 결과·음질·클립 표시가 아니다. 짧은 이벤트는 샘플링에서 빠질 수 있다.
+
+Worker는 채널당 최대 1,024개의 1,024-sample window만 복사·분석한다(2채널 최대 8 MiB). 파일 교체 시 이전 작업을 종료하며 buffer identity로 늦은 결과를 차단한다. 실패 시 단색 파형으로 유지한다. 정적 canvas base는 재사용하고 커서만 갱신한다. 파일 교체/resize/색 결과 수신 시에만 base를 다시 그린다. 표시용 정규화는 실제 샘플을 변경하지 않는다.
+
+기존 Output Time 좌표, 클릭/드래그 seek, 키보드, 선택/체인, 파라미터 및 DSP는 유지했다. source guide와 범례는 좁은 폭에서 공간을 나눠 사용한다.
+
+검증: source-color FFT/peak/input-immutability tests PASS; transport-keyboard 5 checks PASS; JavaScript syntax/diff PASS. 실제 브라우저에서 기본 noise 및 stereo sweep 입력, ArrowRight 1초 이동 2회, Blur 선택, Play/Pause와 진행·미터 갱신 확인. 작은 화면과 Brave 실제 125%/150% 확대에서 시인성 확인. 콘솔 오류 없음. 창 높이가 부족하면 기존 세로 스크롤을 사용한다. DSP 회귀 전체, 청감, Windows, 기본 확인창 키보드 신규 검증은 주장하지 않는다.
+
+커밋·배포 전 사용자 화면 검토 단계. Evidence: shared QA evidence/spectral-source-tone-review.png, spectral-source-tone-150.png.
