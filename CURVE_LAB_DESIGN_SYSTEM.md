@@ -146,3 +146,8 @@ Title/icon, primary controls, values, editor outer edges and transport contents 
 
 ### Spectral reviewed-family surfaces — 2026-10-15 (uncommitted preview)
 Header, current values, chain surround, transport and surrounding page space share #373B43, following Timbre and Granular. Waveform and curve canvas including their gutters share Audio's #191C20; a subtle #46515E line separates waveform and curve. Remove outer chain/transport borders and the Clear Current divider; retain internal controls and meter outlines. Keep 20px content rails (10px narrow), parameter colors, chain ordering, waveform seeking and all DSP unchanged. Supersedes the initial functional-surface pilot's waveform/transport palette. Review before commit/deployment.
+
+### Shared transport alignment — 2026-10-15 (uncommitted review)
+Return / Play / Pause retain their order and behavior. Each occupies a 38 × 32px cell with 4px spacing and a centered 16px icon. Remove the first button's extra 7px offset/divider so visual spacing is uniform. Audio reference palette: surround #292F37, thin border #596472, hover #343A42, playing #5C6978; no per-button accent colors. Override generic button backgrounds only inside transport. Preserve keyboard focus and disabled states.
+
+Release approval (2026-10-15): user approved the reviewed transport/layout changes. All six transport-keyboard suites passed (27 tests total); Oscillator syntax and diff checks passed. Prior browser measurements confirmed equal transport cells, and Oscillator point add/erase, Clear Current, Play/Pause/rewind and narrow layout were checked.
