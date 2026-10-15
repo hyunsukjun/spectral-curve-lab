@@ -134,3 +134,15 @@ See `docs/SHARED_VISUAL_CONTRACT.md` for the accepted shared baseline and resolu
 ## Information-density pilot — local review, 2026-10-15
 
 Selected parameter name/value visible; statistics and full overview in disclosure. Existing curve targets at mapped source playback position; Signal Chain and Off states retained. All original readout IDs and update sources preserved. Details summary Space does not start transport. COMMON CANDIDATE for standalone; not committed/deployed.
+
+## Functional surfaces
+See docs/FUNCTIONAL_SURFACE_PILOT.md. Upper controls share the title background; waveform/analysis area has its own uniform surface. This refines continuous-shell styling without changing button identity or states.
+
+## Readout disclosure rollback — 2026-10-15
+User requested removal of the newly introduced Details disclosures across the family. Original always-visible readout panels restored; Oscillator retains its pre-existing Synthesis detail panel and original contents. Value computation and audio behavior unchanged. Do not add disclosure or restructure information during color/minor-UI work. Audio also removes the border above EDIT AUDIO.
+
+## Shared content rails — 2026-10-15 (local review)
+Title/icon, primary controls, values, editor outer edges and transport contents share 20px side insets; <=600px uses 10px. Dark canvas surfaces stop at this rail with neutral #373B43 outer gutters. Internal axis labels/plot margins remain part of the canvas, not the shell rail. Space retains its two-column spatial view; Oscillator retains Synthesis detail without double insets. Colors of controls/transport and all DSP behavior are preserved. Implementation: src/content-alignment.css. No release authorized for this alignment pass.
+
+### Spectral reviewed-family surfaces — 2026-10-15 (uncommitted preview)
+Header, current values, chain surround, transport and surrounding page space share #373B43, following Timbre and Granular. Waveform and curve canvas including their gutters share Audio's #191C20; a subtle #46515E line separates waveform and curve. Remove outer chain/transport borders and the Clear Current divider; retain internal controls and meter outlines. Keep 20px content rails (10px narrow), parameter colors, chain ordering, waveform seeking and all DSP unchanged. Supersedes the initial functional-surface pilot's waveform/transport palette. Review before commit/deployment.

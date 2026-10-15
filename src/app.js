@@ -1,7 +1,7 @@
 import {mountTransport} from "./common-transport.js?v=20261013-1";
 import { readAudioFile } from "./audio-import.js?v=20261011-aiff1";
 import { renderFeedback } from "./render-feedback.js?v=20261007-clip-report1";
-import {createOutputTime} from "./output-time.js?v=20261015-studio1";
+import {createOutputTime} from "./output-time.js?v=20261015-surfaces2";
 import {stretchFromNorm, stretchToNorm} from "./spectral-stretch.js?v=20260929-transport1";
 import {shiftFromNorm} from "./spectral-shift.js?v=20260929-transport1";
 import {harmonicityFromNorm} from "./spectral-harmonicity.js?v=20261002-harmonic-freeze1";
@@ -217,7 +217,7 @@ function sendSettings() {
 function markDownloadStale() {
   if (!buffer) return;
   clearDownload();
-  downloadReadout.textContent = "needs export";
+  setExportStatus("needs export");
 }
 
 function clearDownload() {
@@ -377,7 +377,7 @@ function loadGeneratedExample() {
   workletBufferLoaded = false;
   sendBufferToWorklet();
   clearDownload();
-  downloadReadout.textContent = "ready";
+  setExportStatus("ready");
   fileStatus.textContent = `White noise intervals - ${buffer.duration.toFixed(2)} s`;
   playheadSeconds = 0;
   sourcePlayheadSeconds = 0;
@@ -604,7 +604,6 @@ function draw() {
   pointsReadout.textContent = activeCurve ? String(curves[activeCurve].length) : "—";
   document.getElementById("stretchReadout").textContent = `${stretchFromNorm(valueAt(curves.stretch,buffer?.duration ? sourcePlayheadSeconds / buffer.duration : 0)).toFixed(3)}`;
   document.getElementById("shiftReadout").textContent = `${shiftFromNorm(valueAt(curves.shift, buffer?.duration ? sourcePlayheadSeconds / buffer.duration : 0)).toFixed(1)} Hz`;
-  document.getElementById("selectedValue").textContent = activeCurve && enabled[activeCurve] ? document.getElementById(`${activeCurve}Readout`).textContent : "—";
 }
 
 function buildWaveform(audioBuffer) { outputTime.setBuffer(audioBuffer); }
@@ -693,7 +692,7 @@ async function loadAudioFile(file) {
   }
   setTransportBusy(true);
   fileStatus.textContent = `Loading ${file.name}...`;
-  downloadReadout.textContent = "loading";
+  setExportStatus("loading");
   playButton.textContent = "Play";
   isPlaying = false;
   const stopToken = nextPlaybackToken();
@@ -711,7 +710,7 @@ async function loadAudioFile(file) {
     const longFileNote = buffer.duration > largeFileSeconds ? " - long file" : "";
     fileStatus.textContent = `${file.name} - ${buffer.duration.toFixed(2)} s${longFileNote}`;
     clearDownload();
-    downloadReadout.textContent = "ready";
+    setExportStatus("ready");
     playheadSeconds = 0;
     sourcePlayheadSeconds = 0;
     resetCurrentReadouts();
@@ -719,7 +718,7 @@ async function loadAudioFile(file) {
   } catch (error) {
     console.error(error);
     fileStatus.textContent = error.message?.startsWith("AIFF:") ? error.message : "Could not load audio. Try mono/stereo WAV, MP3, or M4A.";
-    downloadReadout.textContent = "not ready";
+    setExportStatus("not ready");
     buffer = null;
     outputTime.setBuffer(null);
     clearDownload();
@@ -768,7 +767,7 @@ downloadButton.addEventListener("click", async () => {
 
   renderAbortController = new AbortController();
   setRenderBusy(true);
-  downloadReadout.textContent = "creating 0%";
+  setExportStatus("creating 0%");
   downloadButton.textContent = "Cancel";
   clearDownload();
 
@@ -781,7 +780,7 @@ downloadButton.addEventListener("click", async () => {
       settings: getSettings(),
       signal: renderAbortController.signal,
       onProgress: (progress) => {
-        downloadReadout.textContent = `creating ${Math.round(progress * 100)}%`;
+        setExportStatus(`creating ${Math.round(progress * 100)}%`);
       }
     });
 
@@ -794,15 +793,15 @@ downloadButton.addEventListener("click", async () => {
     renderNotice.classList.toggle("clipping", feedback.clipped);
     // Review clipped output before saving; keep a direct-click retry in every browser.
     if (!feedback.clipped) saveWavLink.click();
-    downloadReadout.textContent = rendered.truncated
+    setExportStatus(rendered.truncated
       ? `${rendered.duration.toFixed(1)} s, capped`
-      : `${rendered.duration.toFixed(1)} s`;
+      : `${rendered.duration.toFixed(1)} s`);
   } catch (error) {
     if (error.name === "AbortError") {
-      downloadReadout.textContent = "cancelled";
+      setExportStatus("cancelled");
     } else {
       console.error(error);
-      downloadReadout.textContent = "export failed";
+      setExportStatus("export failed");
     }
   } finally {
     renderAbortController = null;
@@ -1182,3 +1181,10 @@ loadGeneratedExample();
 export { loadAudioFile };
 
 mountTransport({state:()=>({duration:getPlaybackDuration(),seconds:playheadSeconds,playing:isPlaying,disabled:playButton.disabled}),seek:seekToProgress});
+
+// Idle readiness is conveyed by the Download control; retain actionable feedback.
+function setExportStatus(message) {
+  const output = document.getElementById("downloadReadout");
+  output.textContent = message;
+  output.parentElement.hidden = ["", "ready", "not ready", "needs export"].includes(message);
+}

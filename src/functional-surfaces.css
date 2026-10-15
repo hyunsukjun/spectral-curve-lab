@@ -1,0 +1,19 @@
+/* Functional surfaces: shared upper controls, independent waveform/analysis area. */
+:root { --family-header: #373b43; --family-wave: #191c20; --family-curve: #191c20; --family-transport: #373b43; }
+.topbar,.legend,.effectBar,.parameterBar,.parameterLegend,.controlBand,.sourceBand,.impulseBand,.durationPanel,.roomControls,.valueStrip,.voiceDetails,.modulationInfo { background:var(--family-header); border-color:transparent; }
+.valueDetails .panel,.voiceDetails .panel { background:transparent; }
+.outputWaveFrame,.timelineFrame,.sourceFrame,.frequencyFrame { background:var(--family-wave); }
+.canvasFrame.curveFrame { background:var(--family-curve); }
+.playbackBar,.playbackDock { background:var(--family-transport); }
+
+/* Restore pre-density readouts in the unified upper surface. */
+.currentValues { background:#373b43; border:0; }
+
+.exportStatus[hidden] { display:none; }
+
+/* Reviewed family surface continuity: Timbre / Granular reference. */
+body,.app { background:#373b43; }
+.chainDiagram,.playbackDock,.playbackDock .playbackBar { background:#373b43; border:0; border-radius:0; box-shadow:none; }
+.curveActions { border-left:0; }
+.outputWaveFrame,#outputWaveCanvas,.canvasFrame { background:#191c20; }
+.outputWaveFrame { border-bottom:1px solid #46515e; }
