@@ -948,7 +948,7 @@ function renderChainDiagram() {
     connector();
     const block = document.createElement("button");
     block.type = "button";
-    block.className = `chainBlock${activeCurve === name ? " editing" : ""}`;
+    block.className = `chainBlock enabled${activeCurve === name ? " editing" : ""}`;
     block.dataset.module = name;
     block.draggable = true;
     block.textContent = curveLabels[name];

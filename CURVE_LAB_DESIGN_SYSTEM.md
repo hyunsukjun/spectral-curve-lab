@@ -180,3 +180,6 @@ Supersedes the 300px fixed curve below 900px: at every width calculate space lef
 
 ### COMMON CANDIDATE — compact current-value spacing (2026-10-15, approved)
 Below 900 CSS px, current-value strip vertical padding 8→6px, row gap 12→8px, label/value gap 4→2px. Retain label 11px/14px and value 14px/18px typography, existing column counts, wrapping exceptions and all semantic values. No fields hidden, no Details controls introduced. Desktop spacing unchanged.
+
+### Spectral — enabled signal-chain colors (2026-10-15)
+Every effect present in the signal chain is enabled and retains the same effect-specific background and border as its upper button. Editing selection remains a separate state. Input/Output remain neutral. Shared inactive-button styling must not override connected effects. Class-only correction; no DSP, order, or toggle behavior change. Browser checked five color pairs and selection/reorder/off/on; chain-order regression passed. Approved for release on 2026-10-15.
