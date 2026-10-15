@@ -1,7 +1,7 @@
 import {mountTransport} from "./common-transport.js?v=20261013-1";
 import { readAudioFile } from "./audio-import.js?v=20261011-aiff1";
 import { renderFeedback } from "./render-feedback.js?v=20261007-clip-report1";
-import {createOutputTime} from "./output-time.js?v=20261015-surfaces2";
+import {createOutputTime} from "./output-time.js?v=20261015-type1";
 import {stretchFromNorm, stretchToNorm} from "./spectral-stretch.js?v=20260929-transport1";
 import {shiftFromNorm} from "./spectral-shift.js?v=20260929-transport1";
 import {harmonicityFromNorm} from "./spectral-harmonicity.js?v=20261002-harmonic-freeze1";
@@ -406,7 +406,7 @@ function getParameterTicks() {
 function drawParameterScale() {
   const { left, width, height } = getPlotBounds();
   ctx.save();
-  ctx.font = "600 11px system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
+  ctx.font = "400 11px system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
   ctx.textAlign = "right";
   ctx.fillStyle = "rgba(170, 188, 204, 0.78)";
   ctx.strokeStyle = "rgba(72, 111, 143, 0.28)";
@@ -415,8 +415,8 @@ function drawParameterScale() {
     const y = (1 - tick.y) * height;
     const textY = Math.max(9, Math.min(height - 7, y + 4));
     ctx.font = tick.emphasis
-      ? "750 11px system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
-      : "600 11px system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
+      ? "500 11px system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+      : "400 11px system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
     ctx.fillStyle = tick.emphasis ? "rgba(232, 240, 246, 0.96)" : "rgba(170, 188, 204, 0.78)";
     ctx.strokeStyle = tick.emphasis ? "rgba(95, 141, 177, 0.6)" : "rgba(72, 111, 143, 0.28)";
     ctx.lineWidth = tick.emphasis ? 1.6 : 1;
@@ -507,7 +507,7 @@ function drawPointTooltip(curveName, point) {
   const boxHeight = 26;
 
   ctx.save();
-  ctx.font = "650 13px system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
+  ctx.font = "500 12px system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
   const boxWidth = Math.ceil(ctx.measureText(text).width + (paddingX * 2));
   const boxX = Math.max(left + 8, Math.min(left + w - boxWidth - 8, px - (boxWidth / 2)));
   let boxY = py - 36;

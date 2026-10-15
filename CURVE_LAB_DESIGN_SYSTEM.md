@@ -183,3 +183,10 @@ Below 900 CSS px, current-value strip vertical padding 8→6px, row gap 12→8px
 
 ### Spectral — enabled signal-chain colors (2026-10-15)
 Every effect present in the signal chain is enabled and retains the same effect-specific background and border as its upper button. Editing selection remains a separate state. Input/Output remain neutral. Shared inactive-button styling must not override connected effects. Class-only correction; no DSP, order, or toggle behavior change. Browser checked five color pairs and selection/reorder/off/on; chain-order regression passed. Approved for release on 2026-10-15.
+
+
+## Restrained typography — 2026-10-15 local review
+COMMON CANDIDATE, Audio-approved visual direction. Shared typography.css gives ordinary text controls/readout values400 weight, section labels500,13px/500 transport time,10px/600 CLIP. Readout labels use natural case and zero tracking. Button dimensions and Lab-specific active/enabled colors remain; decorative highlights removed, active lower bevel1px. Duration14/600 remains intentional. Canvas excessive600/650/750 weights reduced; point tooltip13→12px where applicable; waveform headings natural case. No normalized coordinates, DSP, parameter meanings or transport logic changed.
+Commit/deployment withheld for user preview. Native confirmation keyboard and comparative listening remain deferred.
+
+Validation follow-up: default wide layout and narrow354px(Timbre)/390px(other Labs) no horizontal overflow or button clipping; representative active effect/mode colors and400 weight verified, chain enabled colors retained. Basic Play/Pause/rewind confirmed for Timbre/Space/Spectral/Oscillator; Granular no-file disabled state and mode selection checked, no real-file playback repeated. Console errors none; app syntax/diff checks passed. Native zoom not repeated for these five changes. Evidence: shared QA type-family-audit.json and type-family-*-390.png.
