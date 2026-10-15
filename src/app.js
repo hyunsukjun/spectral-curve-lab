@@ -132,10 +132,10 @@ function resizeCanvas() {
 }
 
 function formatClock(seconds) {
-  const safeSeconds = Math.max(0, seconds || 0);
-  const minutes = Math.floor(safeSeconds / 60);
-  const remaining = safeSeconds - (minutes * 60);
-  return `${String(minutes).padStart(2, "0")}:${remaining.toFixed(2).padStart(5, "0")}`;
+  const hundredths = Math.round(Math.max(0, Number.isFinite(seconds) ? seconds : 0) * 100);
+  const minutes = Math.floor(hundredths / 6000);
+  const rest = (hundredths % 6000) / 100;
+  return `${String(minutes).padStart(2, "0")}:${rest.toFixed(2).padStart(5, "0")}`;
 }
 
 function linearToDb(value) {
@@ -192,7 +192,7 @@ function getPlaybackDuration() {
 function resetCurrentReadouts() {}
 
 function formatPointValue(curveName, point) {
-  return curveName === "blur" || curveName === "freeze" ? `${Math.round(point.y*100)}%` : curveName === "harmonicity" ? `${Math.round(harmonicityFromNorm(point.y)*100)}%` : curveName === "stretch" ? `${stretchFromNorm(point.y).toFixed(3)}` : `${shiftFromNorm(point.y).toFixed(1)} Hz`;
+  return curveName === "blur" || curveName === "freeze" ? `${Math.round(point.y*100)}%` : curveName === "harmonicity" ? `${Math.round(harmonicityFromNorm(point.y)*100)}%` : curveName === "stretch" ? `${stretchFromNorm(point.y).toFixed(3)} x` : `${shiftFromNorm(point.y).toFixed(1)} Hz`;
 }
 
 function sortCurve(curve) {
@@ -602,7 +602,7 @@ function draw() {
   document.getElementById("harmonicityReadout").textContent = `${Math.round(harmonicityFromNorm(valueAt(curves.harmonicity,buffer?.duration ? sourcePlayheadSeconds / buffer.duration : 0))*100)}%`;
   document.getElementById("freezeReadout").textContent = `${Math.round(valueAt(curves.freeze,buffer?.duration ? sourcePlayheadSeconds / buffer.duration : 0)*100)}%`;
   pointsReadout.textContent = activeCurve ? String(curves[activeCurve].length) : "—";
-  document.getElementById("stretchReadout").textContent = `${stretchFromNorm(valueAt(curves.stretch,buffer?.duration ? sourcePlayheadSeconds / buffer.duration : 0)).toFixed(3)}`;
+  document.getElementById("stretchReadout").textContent = `${stretchFromNorm(valueAt(curves.stretch,buffer?.duration ? sourcePlayheadSeconds / buffer.duration : 0)).toFixed(3)} x`;
   document.getElementById("shiftReadout").textContent = `${shiftFromNorm(valueAt(curves.shift, buffer?.duration ? sourcePlayheadSeconds / buffer.duration : 0)).toFixed(1)} Hz`;
 }
 
