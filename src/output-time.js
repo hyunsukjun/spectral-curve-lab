@@ -9,12 +9,12 @@ export function createOutputTime(canvas, {seek, scrubbing, formatClock}) {
   function paintBase() {
     const c = base.getContext('2d');
     c.setTransform(ratio,0,0,ratio,0,0);
-    c.fillStyle='#0c1f31'; c.fillRect(0,0,width,height);
+    c.fillStyle='#191c20'; c.fillRect(0,0,width,height);
     c.font='10px system-ui'; c.fillStyle='#aabccc'; c.textAlign='left';
     c.fillText('OUTPUT TIME',10,13);
     if(width>480)c.fillText('SOURCE GUIDE · CLICK / DRAG TO SEEK',left+100,13);
     const divisions=plotWidth()<360?2:plotWidth()<680?4:10;
-    c.strokeStyle='rgba(79,121,155,.28)'; c.lineWidth=1;
+    c.strokeStyle='rgba(139,149,162,.18)'; c.lineWidth=1;
     for(let i=0;i<=divisions;i++){
       const x=left+plotWidth()*i/divisions;
       c.beginPath(); c.moveTo(x,21); c.lineTo(x,77); c.stroke();

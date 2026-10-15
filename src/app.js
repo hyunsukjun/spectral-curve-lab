@@ -1,7 +1,7 @@
 import {mountTransport} from "./common-transport.js?v=20261013-1";
 import { readAudioFile } from "./audio-import.js?v=20261011-aiff1";
 import { renderFeedback } from "./render-feedback.js?v=20261007-clip-report1";
-import {createOutputTime} from "./output-time.js?v=20261005-output-time1";
+import {createOutputTime} from "./output-time.js?v=20261015-studio1";
 import {stretchFromNorm, stretchToNorm} from "./spectral-stretch.js?v=20260929-transport1";
 import {shiftFromNorm} from "./spectral-shift.js?v=20260929-transport1";
 import {harmonicityFromNorm} from "./spectral-harmonicity.js?v=20261002-harmonic-freeze1";
@@ -532,10 +532,10 @@ function draw() {
   const { left, width: w, height: h } = getPlotBounds();
   ctx.setTransform(scale, 0, 0, scale, 0, 0);
   ctx.clearRect(0, 0, canvasWidth, h);
-  ctx.fillStyle = "#0c1f31";
+  ctx.fillStyle = "#191c20";
   ctx.fillRect(0, 0, canvasWidth, h);
 
-  ctx.strokeStyle = "rgba(63, 101, 132, 0.12)";
+  ctx.strokeStyle = "rgba(139, 149, 162, 0.08)";
   ctx.lineWidth = 1;
   for (let i = 0; i <= 40; i += 1) {
     if (i % 4 === 0) continue;
@@ -554,7 +554,7 @@ function draw() {
     ctx.stroke();
   }
 
-  ctx.strokeStyle = "rgba(79, 121, 155, 0.28)";
+  ctx.strokeStyle = "rgba(139, 149, 162, 0.18)";
   ctx.lineWidth = 1;
   for (let i = 0; i <= 10; i += 1) {
     const x = left + ((i / 10) * w);
