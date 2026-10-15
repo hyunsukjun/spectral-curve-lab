@@ -134,3 +134,9 @@ Commit/deployment withheld for user preview. Native confirmation keyboard and co
 - Approved typography refinement verified in Brave actual 125% (1189×609 CSS px, DPR 2.5) and 150% (990×508 CSS px, DPR 3). No document horizontal overflow or clipped button labels; transport remains reachable by vertical scrolling.
 - Existing narrow-screen and representative parameter/playback checks retained. Granular additionally imported recovery-8s-test.wav via the native file picker: playback/meter activity, pause, resume from position, and rewind verified.
 - Scope is presentation only. Native confirmation keyboard behavior and comparative listening remain deferred; this does not claim new DSP/export or cross-device certification.
+
+## 2026-10-15 — Spectral source overview label refinement (local review)
+Canvas heading, hint and ticks use regular11px. Replace uppercase instruction with Source guide · Click / drag to seek; measured available width selects full hint, Source guide, or no inline hint. Persistent accessible seek instruction remains. Timeline and seek mappings unchanged.
+Interface-only; no audio processing, routing, timing, parameters or normalized curves changed. Syntax/diff checks passed; browser visual review and horizontal-overflow checks passed across observed wide/narrow viewports. Space2/4/8ch displays checked; Spectral keyboard seek1second and rewind checked. No playback/listening or new WAV verification claimed. No commit or deployment; user preview pending. Evidence: shared QA evidence/labels-review-audit.json and labels screenshots.
+
+Release approval: user approved the labels preview for commit and deployment. Final diff remains presentation-only; syntax/diff checks passed. Prior browser visual/seek evidence retained; no DSP or listening claim.

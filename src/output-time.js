@@ -10,9 +10,14 @@ export function createOutputTime(canvas, {seek, scrubbing, formatClock}) {
     const c = base.getContext('2d');
     c.setTransform(ratio,0,0,ratio,0,0);
     c.fillStyle='#191c20'; c.fillRect(0,0,width,height);
-    c.font='10px system-ui'; c.fillStyle='#aabccc'; c.textAlign='left';
+    c.font='400 11px system-ui'; c.fillStyle='#aabccc'; c.textAlign='left';
     c.fillText('Output Time',10,13);
-    if(width>480)c.fillText('SOURCE GUIDE · CLICK / DRAG TO SEEK',left+100,13);
+    const hintX = Math.max(left + 100, 10 + c.measureText('Output Time').width + 16);
+    const hint = 'Source guide · Click / drag to seek';
+    const shortHint = 'Source guide';
+    const available = width - right - hintX;
+    if (c.measureText(hint).width <= available) c.fillText(hint,hintX,13);
+    else if (c.measureText(shortHint).width <= available) c.fillText(shortHint,hintX,13);
     const divisions=plotWidth()<360?2:plotWidth()<680?4:10;
     c.strokeStyle='rgba(139,149,162,.18)'; c.lineWidth=1;
     for(let i=0;i<=divisions;i++){
