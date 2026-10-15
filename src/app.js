@@ -604,6 +604,7 @@ function draw() {
   pointsReadout.textContent = activeCurve ? String(curves[activeCurve].length) : "—";
   document.getElementById("stretchReadout").textContent = `${stretchFromNorm(valueAt(curves.stretch,buffer?.duration ? sourcePlayheadSeconds / buffer.duration : 0)).toFixed(3)}`;
   document.getElementById("shiftReadout").textContent = `${shiftFromNorm(valueAt(curves.shift, buffer?.duration ? sourcePlayheadSeconds / buffer.duration : 0)).toFixed(1)} Hz`;
+  document.getElementById("selectedValue").textContent = activeCurve && enabled[activeCurve] ? document.getElementById(`${activeCurve}Readout`).textContent : "—";
 }
 
 function buildWaveform(audioBuffer) { outputTime.setBuffer(audioBuffer); }

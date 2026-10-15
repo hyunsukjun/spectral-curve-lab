@@ -110,3 +110,7 @@ Signal Chain block에 포커스한 상태에서 Alt(Option)+좌/우 방향키로
 
 ## 2026-10-14 — Reset modal focus
 Reset 확인창의 Tab/Shift+Tab은 Cancel과 Reset All 사이에서 순환한다. Escape 취소와 닫은 뒤 Reset All 포커스 복귀는 유지한다. 확인창 뒤의 버튼을 키보드로 우발 작동하지 않도록 보완하며 리셋 대상과 음향 처리는 변경하지 않는다.
+
+## Information-density pilot — local review, 2026-10-15
+
+Selected parameter name/value visible; statistics and full overview in disclosure. Existing curve targets at mapped source playback position; Signal Chain and Off states retained. All original readout IDs and update sources preserved. Details summary Space does not start transport. COMMON CANDIDATE for standalone; not committed/deployed.

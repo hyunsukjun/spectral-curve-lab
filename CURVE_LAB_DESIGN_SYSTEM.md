@@ -130,3 +130,7 @@ Available off/bypassed: Audio reference gradient #363F4B → #2D3540, text #F0F3
 
 ## Current precedence
 See `docs/SHARED_VISUAL_CONTRACT.md` for the accepted shared baseline and resolution of older pilot conflicts. Newer role/state rules supersede old underline and 30px compact-button guidance.
+
+## Information-density pilot — local review, 2026-10-15
+
+Selected parameter name/value visible; statistics and full overview in disclosure. Existing curve targets at mapped source playback position; Signal Chain and Off states retained. All original readout IDs and update sources preserved. Details summary Space does not start transport. COMMON CANDIDATE for standalone; not committed/deployed.

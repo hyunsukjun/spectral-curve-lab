@@ -13,7 +13,8 @@
     <link rel="stylesheet" href="src/parameter-help.css?v=20261014-family1">
     <link rel="stylesheet" href="src/studio-theme.css?v=20261015-family1">
     <link rel="stylesheet" href="src/button-states.css?v=20261015-2">
-  </head>
+  <link rel="stylesheet" href="src/value-strip.css?v=20261015-1">
+</head>
   <body>
     <main class="app">
       <header class="topbar">
@@ -43,7 +44,8 @@
             <input id="fileInput" type="file" accept="audio/*,.aif,.aiff,.aifc">
           </label>
           <a id="saveWavLink" class="fileButton" download="Spectral-Curve-Lab-export.wav" hidden>Save WAV</a>
-          <button id="downloadButton" type="button" disabled title="Source duration and channel count · 48 kHz / 24-bit WAV.">Download WAV</button>
+          <span class="exportStatus" role="status" aria-label="WAV export status">WAV <strong id="downloadReadout">not ready</strong></span>
+<button id="downloadButton" type="button" disabled title="Source duration and channel count · 48 kHz / 24-bit WAV.">Download WAV</button>
         </div>
       </header>
 
@@ -72,16 +74,13 @@
         </div>
         <div class="curveLegend" id="curveLegend">Shift −2000…+2000 Hz · 0 Hz = original spectrum</div>
 
-        <div class="panel">
+        <section class="valueStrip" aria-label="Current parameter values"><span class="valueBasis" title="Curve targets at the mapped source playback position, not measured spectral output.">At source position</span><span class="compactValue"><strong id="modeReadout">Spectral Shift</strong> <strong id="selectedValue">—</strong></span><details class="valueDetails"><summary>Details</summary><div class="panel">
           <div class="readout"><span>Spectral Shift</span><strong id="shiftReadout">0.0 Hz</strong></div>
           <div class="readout"><span>Spectral Stretch</span><strong id="stretchReadout">1.000</strong></div>
           <div class="readout"><span>Spectral Blur</span><strong id="blurReadout">0%</strong></div>
           <div class="readout"><span>Harmonicity</span><strong id="harmonicityReadout">0%</strong></div>
           <div class="readout"><span>Spectral Freeze</span><strong id="freezeReadout">0%</strong></div>
-          <div class="readout">
-            <span>Curve</span>
-            <strong id="modeReadout">Spectral Shift</strong>
-          </div>
+
           <div class="readout">
             <span>Points</span>
             <strong id="pointsReadout">2</strong>
@@ -90,11 +89,8 @@
             <span>Engine</span>
             <strong>Spectral STFT</strong>
           </div>
-          <div class="readout">
-            <span>WAV · 48 kHz / 24-bit</span>
-            <strong id="downloadReadout">not ready</strong>
-          </div>
-        </div>
+
+        </div></details></section>
         <div class="outputWaveFrame"><canvas id="outputWaveCanvas" height="96" role="slider" tabindex="0" aria-label="Output time. Source channel waveform guide, not processed output. Click or drag to seek. Arrow keys move one second, Shift Arrow one tenth; Home and End jump to boundaries." aria-valuemin="0" aria-valuemax="0" aria-valuenow="0" aria-disabled="true" title="Source waveform on the output timeline, not the rendered WAV. Click or drag to seek."></canvas></div>
         <div class="canvasFrame">
           <canvas id="waveCanvas" width="1400" height="620"></canvas>
@@ -134,12 +130,13 @@
     </div>
 
     <script src="src/file-help.js?v=20261014-family1" type="module"></script>
-    <script src="src/app.js?v=20261015-studio2" type="module"></script>
+    <script src="src/app.js?v=20261015-density2" type="module"></script>
   <div id="shiftModeHelp" class="parameterHelp" role="tooltip" hidden><strong>Spectral Shift · −2000 to +2000 Hz</strong><span>Move spectral frequencies by a fixed Hz offset. 0 Hz preserves their positions.</span><span class="helpState"></span></div>
 <div id="stretchModeHelp" class="parameterHelp" role="tooltip" hidden><strong>Spectral Stretch · 0.5–2</strong><span>Compress or expand frequency spacing around 1 kHz. 1 is neutral. Playback speed and file duration stay unchanged.</span><span class="helpState"></span></div>
 <div id="blurModeHelp" class="parameterHelp" role="tooltip" hidden><strong>Spectral Blur · 0–100%</strong><span>Smooth spectral changes over time. 0% is neutral; frequency positions and file duration stay unchanged.</span><span class="helpState"></span></div>
 <div id="harmonicityModeHelp" class="parameterHelp" role="tooltip" hidden><strong>Harmonicity · −100% to +100%</strong><span>Shape peak relationships: negative toward harmonic, positive toward inharmonic. 0% is neutral.</span><span class="helpState"></span></div>
 <div id="freezeModeHelp" class="parameterHelp" role="tooltip" hidden><strong>Spectral Freeze · 0–100%</strong><span>Hold a captured spectral state. 0% is off; 100% is full hold. This does not extend the file duration.</span><span class="helpState"></span></div>
 <script type="module" src="src/parameter-help.js?v=20261014-family1"></script>
+<script src="src/value-details.js?v=20261015-1" type="module"></script>
 </body>
 </html>
