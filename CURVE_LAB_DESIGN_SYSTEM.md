@@ -206,3 +206,14 @@ Worker는 채널당 최대 1,024개의 1,024-sample window만 복사·분석한�
 검증: source-color FFT/peak/input-immutability tests PASS; transport-keyboard 5 checks PASS; JavaScript syntax/diff PASS. 실제 브라우저에서 기본 noise 및 stereo sweep 입력, ArrowRight 1초 이동 2회, Blur 선택, Play/Pause와 진행·미터 갱신 확인. 작은 화면과 Brave 실제 125%/150% 확대에서 시인성 확인. 콘솔 오류 없음. 창 높이가 부족하면 기존 세로 스크롤을 사용한다. DSP 회귀 전체, 청감, Windows, 기본 확인창 키보드 신규 검증은 주장하지 않는다.
 
 커밋·배포 전 사용자 화면 검토 단계. Evidence: shared QA evidence/spectral-source-tone-review.png, spectral-source-tone-150.png.
+
+## Canvas grid contract — 2026-10-18 (local review)
+- General decorative grid: 32 CSS px minor, 128 CSS px major, 1 px strokes; density independent of canvas aspect ratio. No snap or change to normalized musical coordinates.
+- Semantic value ticks remain parameter-specific; frequency axes preserve existing logarithmic mapping, use shared 1/2/5-per-decade candidates plus endpoints, Hz/kHz units and 24 px minimum label separation.
+- Source envelope waits for asynchronous source-color data; no initial legacy blue waveform. On worker failure, neutral gray source shape remains available. No audio samples or processing modified.
+- Oscillator partial monitor is retained in source but hidden in the web UI; curve editor reuses freed height.
+- Browser verification pending; no commit/deployment or listening approval implied.
+- Tick text: 11 px regular, emphasized ticks 11 px medium; point/hover text: 12 px medium. Absolute frequency axes share labels; frequency offsets (e.g. Spectral Shift) retain their signed linear meaning.
+- Verified locally: grid/log-label/worker-error tests, source-color tests, keyboard tests, JS syntax; browser initial load and Play/Pause (Granular with 8-second WAV). Independent app tabs reported no console errors. 600 px iframe inspection: all six document widths match their viewport (583 px after scrollbar), minimum curve height about 220 px and transport retained through vertical scrolling. This is not a new native browser zoom or listening certification.
+
+- Release check 2026-10-18: native Brave 125% and 150% reviewed across the family; curve point add/move/Command-delete verified in every Lab. Small viewport checks retained separately. Canvas-grid, source-colors, transport-keyboard and syntax checks passed. Listening/DSP and native confirmation-dialog checks remain separate.

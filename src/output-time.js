@@ -21,7 +21,9 @@ export function createOutputTime(canvas, {seek, scrubbing, formatClock}) {
     const available = width - right - hintX - (width >= 460 ? 150 : 0);
     if (c.measureText(hint).width <= available) c.fillText(hint,hintX,13);
     else if (c.measureText(shortHint).width <= available) c.fillText(shortHint,hintX,13);
-    const divisions=plotWidth()<360?2:plotWidth()<680?4:10;
+    const labelWidth=Math.max(c.measureText(formatClock(0)).width,c.measureText(formatClock(duration)).width);
+    // Endpoint labels are left/right aligned; reserve 1.5 labels plus a gap.
+    const divisions=[10,8,6,4,2,1].find(n=>plotWidth()/n>=labelWidth*1.5+16)||1;
     c.strokeStyle='rgba(139,149,162,.18)'; c.lineWidth=1;
     for(let i=0;i<=divisions;i++){
       const x=left+plotWidth()*i/divisions;

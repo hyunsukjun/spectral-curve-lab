@@ -1,3 +1,4 @@
+import {drawEditorGrid, frequencyTicks, frequencyLabel, spacedMarks, canvasLabelFont} from "./canvas-grid.js";
 import {mountTransport} from "./common-transport.js?v=20261013-1";
 import { readAudioFile } from "./audio-import.js?v=20261011-aiff1";
 import { renderFeedback } from "./render-feedback.js?v=20261007-clip-report1";
@@ -423,7 +424,7 @@ function drawParameterScale() {
     ctx.fillText(tick.label, left - 9, textY);
     ctx.beginPath();
     ctx.moveTo(left - 5, y);
-    ctx.lineTo(left + width, y);
+    ctx.lineTo(tick.emphasis ? left + width : left, y);
     ctx.stroke();
   }
   ctx.strokeStyle = "rgba(104, 145, 178, 0.62)";
@@ -535,47 +536,13 @@ function draw() {
   ctx.fillStyle = "#191c20";
   ctx.fillRect(0, 0, canvasWidth, h);
 
-  ctx.strokeStyle = "rgba(139, 149, 162, 0.08)";
-  ctx.lineWidth = 1;
-  for (let i = 0; i <= 40; i += 1) {
-    if (i % 4 === 0) continue;
-    const x = left + ((i / 40) * w);
-    ctx.beginPath();
-    ctx.moveTo(x, 0);
-    ctx.lineTo(x, h);
-    ctx.stroke();
-  }
-  for (let i = 1; i < 8; i += 1) {
-    if (i % 2 === 0) continue;
-    const y = (i / 8) * h;
-    ctx.beginPath();
-    ctx.moveTo(left, y);
-    ctx.lineTo(left + w, y);
-    ctx.stroke();
-  }
-
-  ctx.strokeStyle = "rgba(139, 149, 162, 0.18)";
-  ctx.lineWidth = 1;
-  for (let i = 0; i <= 10; i += 1) {
-    const x = left + ((i / 10) * w);
-    ctx.beginPath();
-    ctx.moveTo(x, 0);
-    ctx.lineTo(x, h);
-    ctx.stroke();
-  }
-  for (let i = 1; i < 4; i += 1) {
-    const y = (i / 4) * h;
-    ctx.beginPath();
-    ctx.moveTo(left, y);
-    ctx.lineTo(left + w, y);
-    ctx.stroke();
-  }
+  drawEditorGrid(ctx, left, 0, w, h);
 
   drawParameterScale();
   drawCurves();
   if (buffer) {
     ctx.fillStyle = "#aabccc"; ctx.font = "11px system-ui"; ctx.textAlign = "center";
-    for (let i = 1; i < 10; i++) ctx.fillText(`${(buffer.duration * i / 10).toFixed(1)} s`, left + w * i / 10, h - 9);
+    for (let x = 128; x < w - 30; x += 128) ctx.fillText(`${(buffer.duration * x / w).toFixed(1)} s`, left + x, h - 9);
   }
 
   if (buffer) {
