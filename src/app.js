@@ -881,11 +881,12 @@ function renderChainDiagram() {
     element.textContent = label;
     chainDiagram.appendChild(element);
   };
-  const connector = () => {
+  const connector = (beforeName = null) => {
     const element = document.createElement("span");
     element.className = "chainConnector";
     element.textContent = "→";
     element.setAttribute("aria-hidden","true");
+    acceptDrop(element, beforeName);
     chainDiagram.appendChild(element);
   };
   const finishDrag = () => {
@@ -912,7 +913,7 @@ function renderChainDiagram() {
   };
   terminal("Input");
   for (const name of chainOrder) {
-    connector();
+    connector(name);
     const block = document.createElement("button");
     block.type = "button";
     block.className = `chainBlock enabled${activeCurve === name ? " editing" : ""}`;
@@ -943,12 +944,12 @@ function renderChainDiagram() {
       event.dataTransfer.setData("text/plain", name);
     });
     block.addEventListener("dragend", finishDrag);
-    acceptDrop(block, name);
+
     chainDiagram.appendChild(block);
   }
   connector();
   terminal("Output");
-  acceptDrop(chainDiagram.lastElementChild, null);
+
 }
 
 function updateModuleUI() {

@@ -222,3 +222,8 @@ Worker는 채널당 최대 1,024개의 1,024-sample window만 복사·분석한�
 - Curve and source waveform plot starts use canvasAxisWidth = 64 CSS px. Audio fade handle/navigator and source pointer conversion share the same gutter. Normalized curve points, timing and DSP remain unchanged. Absolute frequency axes retain their logarithmic scale.
 
 Verification: 600px layout and actual Brave 125%/150% checked. Pointer add/move/modifier-delete checked across all six labs; Audio source edit lifecycle passed. Oscillator imported 8-second WAV overview aligns with the curve axis. This is UI evidence, not DSP/listening certification.
+
+## Chain insertion gaps — 2026-10-18
+Input-after, between-effect and Output-before connector gaps are insertion targets. A contiguous 28px connector hit area covers the whole inter-block gap without uncovered flex gaps or negative margins; a 2px focus-color vertical line indicates insertion. Existing effect colors and keyboard ordering remain unchanged.
+
+Only connector gaps accept insertion. Input/Output terminals and effect blocks do not accept drops; block clicks still select the edited effect.

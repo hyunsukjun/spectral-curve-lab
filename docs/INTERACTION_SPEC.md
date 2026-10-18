@@ -122,3 +122,8 @@ User requested removal of the newly introduced Details disclosures across the fa
 Idle WAV ready/not ready/needs export badges are hidden. The Download control retains its normal state. Progress, cancellation, limits and failure feedback remain visible; status values are not audio-engine inputs.
 
 Expanded-editor layout (2026-10-15): viewport/control resizing changes canvas display dimensions only. Existing canvas sizing observers update backing stores and pointer coordinates; Oscillator additionally observes its main canvas. Curve data and transport state are retained. If controls plus minimum canvas exceed viewport height, use page scrolling rather than covering controls or compressing the editor.
+
+## Chain insertion gaps — 2026-10-18
+Drag effects into the gap after Input, between effects, or before Output. Only connector gaps accept drops; Input, Output and effect blocks do not. A vertical insertion line identifies the destination. Alt+Left/Right ordering, parameter curves and effect values are preserved.
+
+The original 20px target with negative margins left uncovered flex-gap strips. The corrected contiguous 28px target fills the entire gap and row height. User verified Timbre end insertion and insertion-line visibility, then confirmed Spectral gap-only ordering and terminal non-drop behavior in the actual browser. Automated actual-renderer tests pass for first/middle/last/self insertion, order dispatch and absence of terminal/block drop handlers. Existing transport keyboard tests pass. DSP unchanged.
