@@ -1,8 +1,8 @@
-import {drawEditorGrid, frequencyTicks, frequencyLabel, spacedMarks, canvasLabelFont} from "./canvas-grid.js";
+import {canvasAxisWidth, drawEditorGrid, frequencyTicks, frequencyLabel, spacedMarks, canvasLabelFont} from "./canvas-grid.js";
 import {mountTransport} from "./common-transport.js?v=20261013-1";
 import { readAudioFile } from "./audio-import.js?v=20261011-aiff1";
 import { renderFeedback } from "./render-feedback.js?v=20261007-clip-report1";
-import {createOutputTime} from "./output-time.js?v=20261015-source-tone1";
+import {createOutputTime} from "./output-time.js?v=20261018-axis64";
 import {stretchFromNorm, stretchToNorm} from "./spectral-stretch.js?v=20260929-transport1";
 import {shiftFromNorm} from "./spectral-shift.js?v=20260929-transport1";
 import {harmonicityFromNorm} from "./spectral-harmonicity.js?v=20261002-harmonic-freeze1";
@@ -90,7 +90,7 @@ let canvasCssHeight = 1;
 let canvasBaseWidth = 0;
 const canvasMinimumWidth = 320;
 const canvasBaseHeight = 620;
-const parameterScaleWidth = 54;
+const parameterScaleWidth = canvasAxisWidth;
 const plotRightPadding = 8;
 
 const curves = { shift: [{x: 0, y: .5}, {x: 1, y: .5}], blur: [{x:0,y:0},{x:1,y:0}], stretch: [{x:0,y:.5},{x:1,y:.5}], harmonicity:[{x:0,y:.5},{x:1,y:.5}], freeze:[{x:0,y:0},{x:1,y:0}] };

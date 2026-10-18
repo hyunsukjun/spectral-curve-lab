@@ -1,3 +1,4 @@
+import {canvasAxisWidth} from './canvas-grid.js';
 // Display-only source-channel overview on the unchanged output timeline.
 import {analyzeSourceColors} from "./source-colors.js";
 import {summarizeChannels, paintEnvelope, peakOf, paintToneLegend} from "./source-envelope.js";
@@ -7,7 +8,7 @@ export function createOutputTime(canvas, {seek, scrubbing, formatClock}) {
   let peaks = [], duration = 0, seconds = 0, disabled = true, dragging = false, hover = null;
   let width = 1, height = 96, ratio = 1;
   let sourceColors = null, sourceBuffer = null;
-  const left = 54, right = 8;
+  const left = canvasAxisWidth, right = 8;
   const plotWidth = () => Math.max(1, width - left - right);
   function paintBase() {
     const c = base.getContext('2d');
