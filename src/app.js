@@ -536,7 +536,11 @@ function draw() {
   ctx.fillStyle = "#191c20";
   ctx.fillRect(0, 0, canvasWidth, h);
 
+  // Quiet background grid; retain scales, points and curve contrast.
+  ctx.save();
+  ctx.globalAlpha *= 0.65;
   drawEditorGrid(ctx, left, 0, w, h);
+  ctx.restore();
 
   drawParameterScale();
   drawCurves();
