@@ -127,3 +127,8 @@ Expanded-editor layout (2026-10-15): viewport/control resizing changes canvas di
 Drag effects into the gap after Input, between effects, or before Output. Only connector gaps accept drops; Input, Output and effect blocks do not. A vertical insertion line identifies the destination. Alt+Left/Right ordering, parameter curves and effect values are preserved.
 
 The original 20px target with negative margins left uncovered flex-gap strips. The corrected contiguous 28px target fills the entire gap and row height. User verified Timbre end insertion and insertion-line visibility, then confirmed Spectral gap-only ordering and terminal non-drop behavior in the actual browser. Automated actual-renderer tests pass for first/middle/last/self insertion, order dispatch and absence of terminal/block drop handlers. Existing transport keyboard tests pass. DSP unchanged.
+
+
+## 10 ms playback boundary candidate — 2026-10-25
+
+The current local candidate supersedes earlier automatic transport-boundary durations with the [10 ms playback/WAV contract](PLAYBACK_BOUNDARY.md). Source/effect envelopes are separate. See that contract for pause-state retention, existing tail-length limits and verification status. Uncommitted; listening acceptance pending.

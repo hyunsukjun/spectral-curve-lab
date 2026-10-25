@@ -1,3 +1,4 @@
+import { PlaybackBoundary } from "./playback-boundary.js";
 import {neutralBlurCurve} from './spectral-blur.js?v=20260929-transport1';
 import {SpectralEngine} from './spectral-engine.js?v=20261003-chain4';
 import {neutralStretchCurve} from './spectral-stretch.js?v=20260929-transport1';
@@ -6,8 +7,9 @@ import {neutralHarmonicityCurve} from './spectral-harmonicity.js?v=20261002-harm
 import {neutralFreezeCurve} from './spectral-freeze.js?v=20261002-harmonic-freeze1';
 export class SpectralNeutralProcessor extends AudioWorkletProcessor {
   constructor() {
-    super(); this.blurCurve=neutralBlurCurve(); this.curve = neutralShiftCurve(); this.stretchCurve = neutralStretchCurve(); this.harmonicityCurve=neutralHarmonicityCurve();this.freezeCurve=neutralFreezeCurve();this.order=[]; this.playing = false; this.position = 0; this.token = 0; this.ticks = 0;
+    super(); this.boundary = new PlaybackBoundary(sampleRate); this.pendingPause = false; this.blurCurve=neutralBlurCurve(); this.curve = neutralShiftCurve(); this.stretchCurve = neutralStretchCurve(); this.harmonicityCurve=neutralHarmonicityCurve();this.freezeCurve=neutralFreezeCurve();this.order=[]; this.playing = false; this.position = 0; this.token = 0; this.ticks = 0;
     this.port.onmessage = ({data: d}) => {
+      if (['play','stop','seek','buffer'].includes(d.type)) { this.pendingPause = false; this.boundary.start(); }
       if (d.token != null) this.token = d.token;
       if (d.type === 'buffer') {
         this.playing = false;
@@ -18,7 +20,7 @@ export class SpectralNeutralProcessor extends AudioWorkletProcessor {
         else this.pendingCurves={...this.pendingCurves,...d};
       }
       else if (d.type === 'play' && this.engine) this.playing = true;
-      else if (d.type === 'pause') { this.playing = false; this.report(); }
+      else if (d.type === 'pause') { if (this.playing) { this.pendingPause = true; this.boundary.release(); } else this.report(); }
       else if (d.type === 'stop') {
         this.playing = false; this.seek(0);
         this.port.postMessage({type: 'stopped', token: this.token});
@@ -53,8 +55,10 @@ export class SpectralNeutralProcessor extends AudioWorkletProcessor {
     if(this.priming)return true;
     for (let i = 0; i < out[0].length && this.position < this.engine.length; i++) {
       if (this.cursor >= this.engine.hop) { this.block = this.engine.nextHop(); this.cursor = 0; }
-      for (let c = 0; c < out.length; c++) out[c][i] = this.block[c][this.cursor];
+      const gain = this.boundary.next(this.engine.length - this.position);
+      for (let c = 0; c < out.length; c++) out[c][i] = this.block[c][this.cursor] * gain;
       this.cursor++; this.position++;
+      if (this.pendingPause && this.boundary.done) { this.pendingPause = false; this.playing = false; this.report(); return true; }
     }
     // End is terminal for this playback token: never post a later position.
     if (this.position >= this.engine.length) {

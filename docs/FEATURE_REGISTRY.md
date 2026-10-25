@@ -118,3 +118,8 @@ Worker는 채널당 최대 1,024개의 1,024-sample window만 복사·분석한�
 검증: source-color FFT/peak/input-immutability tests PASS; transport-keyboard 5 checks PASS; JavaScript syntax/diff PASS. 실제 브라우저에서 기본 noise 및 stereo sweep 입력, ArrowRight 1초 이동 2회, Blur 선택, Play/Pause와 진행·미터 갱신 확인. 작은 화면과 Brave 실제 125%/150% 확대에서 시인성 확인. 콘솔 오류 없음. 창 높이가 부족하면 기존 세로 스크롤을 사용한다. DSP 회귀 전체, 청감, Windows, 기본 확인창 키보드 신규 검증은 주장하지 않는다.
 
 커밋·배포 전 사용자 화면 검토 단계. Evidence: shared QA evidence/spectral-source-tone-review.png, spectral-source-tone-150.png.
+
+
+## 10 ms playback boundary candidate — 2026-10-25
+
+The current local candidate supersedes earlier automatic transport-boundary durations with the [10 ms playback/WAV contract](PLAYBACK_BOUNDARY.md). Source/effect envelopes are separate. See that contract for pause-state retention, existing tail-length limits and verification status. Uncommitted; listening acceptance pending.

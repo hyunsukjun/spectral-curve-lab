@@ -1,3 +1,4 @@
+import { fadeOutput } from "./playback-boundary.js";
 import {SpectralEngine} from './spectral-engine.js?v=20261003-chain4';
 import {neutralStretchCurve} from './spectral-stretch.js?v=20260929-transport1';
 import {neutralShiftCurve} from './spectral-shift.js?v=20260929-transport1';
@@ -12,6 +13,7 @@ self.onmessage = ({data}) => {
       output.forEach((c, i) => c.set(block[i].subarray(0, count), p));
       if (p / engine.length - last > .02) { last = p / engine.length; self.postMessage({progress: last}); }
     }
+    fadeOutput(output, 48000);
     const metrics = {};
     const blob = encodeWav(output, 48000, metrics);
     self.postMessage({blob, metrics, duration: engine.length / 48000, truncated: false});

@@ -322,7 +322,7 @@ function getSettings() {
 
 async function getOfflineRenderer() {
   if (!renderOffline) {
-    const module = await import("./offline-render.js?v=20261007-clip-report1");
+    const module = await import("./offline-render.js?v=20261025-fade10");
     renderOffline = module.renderOffline;
   }
   return renderOffline;
@@ -613,7 +613,7 @@ async function setupAudio() {
     throw new Error("AudioWorklet is not available. Use a current Chrome, Edge, or Safari version over HTTPS.");
   }
 
-    await audioContext.audioWorklet.addModule(new URL("./spectral-worklet.js?v=20261003-chain4", import.meta.url));
+    await audioContext.audioWorklet.addModule(new URL("./spectral-worklet.js?v=20261025-fade10", import.meta.url));
     node = new AudioWorkletNode(audioContext, "spectral-neutral-processor", {
       numberOfInputs: 0,
       numberOfOutputs: 1,
