@@ -123,3 +123,7 @@ Worker는 채널당 최대 1,024개의 1,024-sample window만 복사·분석한�
 ## 10 ms playback boundary candidate — 2026-10-25
 
 The current local candidate supersedes earlier automatic transport-boundary durations with the [10 ms playback/WAV contract](PLAYBACK_BOUNDARY.md). Source/effect envelopes are separate. See that contract for pause-state retention, existing tail-length limits and verification status. Uncommitted; listening acceptance pending.
+
+## Readout context family release — 2026-10-27
+
+Existing current-value captions now identify their basis. Compact Shift/Stretch/Blur/Harmonicity/Freeze captions identify source-playhead curve values, including Off effects; not rendered measurements. See `READOUT_CONTEXT_CONTRACT.md` for basis, source-range rules, verification boundary and portability.
