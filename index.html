@@ -70,10 +70,10 @@
             <button id="harmonicityMode" class="curveMode" type="button" data-parameter-help aria-describedby="harmonicityModeHelp">Harmonicity</button>
             <button id="freezeMode" class="curveMode" type="button" data-parameter-help aria-describedby="freezeModeHelp">Spectral Freeze</button>
             <div class="toolToggle" role="group" aria-label="Curve editing tool">
-              <button id="penTool" class="active" type="button" aria-label="Pen" aria-pressed="true" title="Pen: add or move points">
+              <button id="penTool" class="active" type="button" aria-label="Pen" aria-pressed="true" title="Pen: add or move points. Shift-drag a point and following points vertically; X stays fixed. Esc cancels the group drag.">
                 <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L9 17l-4 1 1-4Z"/></svg>
               </button>
-              <button id="eraserTool" type="button" aria-label="Eraser" aria-pressed="false" title="Eraser: click a point to delete. Mac: Command-click; PC: Ctrl-click">
+              <button id="eraserTool" type="button" aria-label="Eraser" aria-pressed="false" title="Eraser: click a point to delete. Mac: Option-click; PC: Ctrl-click">
                 <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 21-4-4a2 2 0 0 1 0-3L13 4a2 2 0 0 1 3 0l6 6a2 2 0 0 1 0 3l-8 8"/><path d="M22 21H7"/><path d="m5 11 9 9"/></svg>
               </button>
             </div>
@@ -106,7 +106,7 @@
         </div>
         <div class="outputWaveFrame"><canvas id="outputWaveCanvas" height="96" role="slider" tabindex="0" aria-label="Output time. Source channel waveform guide, not processed output. Click or drag to seek. Arrow keys move one second, Shift Arrow one tenth; Home and End jump to boundaries." aria-valuemin="0" aria-valuemax="0" aria-valuenow="0" aria-disabled="true" title="Source waveform on the output timeline, not the rendered WAV. Click or drag to seek."></canvas></div>
         <div class="canvasFrame">
-          <canvas id="waveCanvas" width="1400" height="620"></canvas>
+          <canvas id="waveCanvas" width="1400" height="620" aria-label="Curve editor. Click to add or drag to move. Shift-drag a point and following points vertically with X fixed. Esc cancels. Mac Option-click deletes; PC Ctrl-click."></canvas>
         </div>
         <div id="chainDiagram" class="chainDiagram" aria-label="Enabled spectral effects in processing order. Drag a block into the gap after Input, between effects, or before Output."></div>
       </section>
@@ -143,7 +143,7 @@
     </div>
 
     <script src="src/file-help.js?v=20261014-family1" type="module"></script>
-    <script src="src/app.js?v=20261027-context1" type="module"></script>
+    <script src="src/app.js?v=20261027-shift1" type="module"></script>
   <div id="shiftModeHelp" class="parameterHelp" role="tooltip" hidden><strong>Spectral Shift · −2000 to +2000 Hz</strong><span>Move spectral frequencies by a fixed Hz offset. 0 Hz preserves their positions.</span><span class="helpState"></span></div>
 <div id="stretchModeHelp" class="parameterHelp" role="tooltip" hidden><strong>Spectral Stretch · 0.5–2</strong><span>Compress or expand frequency spacing around 1 kHz. 1 is neutral. Playback speed and file duration stay unchanged.</span><span class="helpState"></span></div>
 <div id="blurModeHelp" class="parameterHelp" role="tooltip" hidden><strong>Spectral Blur · 0–100%</strong><span>Smooth spectral changes over time. 0% is neutral; frequency positions and file duration stay unchanged.</span><span class="helpState"></span></div>

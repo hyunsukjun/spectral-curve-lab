@@ -241,3 +241,7 @@ COMMON CANDIDATE / STANDALONE ASSET. The user approved the six-Lab visual refine
 ## Readout context family release — 2026-10-27
 
 Reuse existing Graphite colors/type and controls. Compact Shift/Stretch/Blur/Harmonicity/Freeze captions identify source-playhead curve values, including Off effects; not rendered measurements. No hidden readouts or Details disclosure, and no hit-target change. Metadata can wrap without clipping on narrow screens. See `docs/READOUT_CONTEXT_CONTRACT.md` for basis, source-range rules, verification boundary and portability.
+
+## Shift group / Option erase — 2026-10-27
+
+APPROVED INTERACTION / UI-only addition. Preserve existing point and hit geometry. A thin ring and count communicate the temporary Shift group; vertical cursor communicates the constrained action. Keep axes/focus/data colors and surrounding layout. Option temporary erase supersedes Mac Command erase. Touch is not assigned a desktop modifier gesture. See [gesture contract](docs/CURVE_GESTURE_CONTRACT.md).

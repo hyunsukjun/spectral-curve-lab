@@ -7,7 +7,7 @@
 | 효과 선택·On/Off | 시작 시 다섯 버튼 모두 Off, 선택 커브 없음. 다른 켜진 효과를 누르면 그 커브를 선택한다. 선택된 버튼을 다시 누르면 Off, 꺼진 버튼을 누르면 On과 동시에 선택된다. Off인 커브도 편집할 수 있다. | 버튼 색/하단선은 활성·편집 대상을 구별하며 `aria-pressed`는 On/Off를 나타낸다. 선택된 Off는 범례/readout에 표시한다. 선택 전 Clear Current와 캔버스 점 편집은 비활성. |
 | Signal Chain | Input과 Output 사이에 **켜진 효과만** 실제 처리 순서로 표시한다. 블록 클릭은 커브 선택만 한다. 블록을 다른 블록에 놓으면 그 앞에 삽입하고, Output에 놓으면 맨 뒤로 보낸다. Off는 커브 점을 지우지 않고 Preview/Render/비교 화면에 중립값을 전달하며, 다시 On하면 보관한 점을 사용한다. | 다섯 효과 모두 켠 순서대로 추가한다. 드래그로 순서를 바꾸면 Preview와 비교 화면을 갱신 대상으로 표시하고 기존 WAV를 무효화한다. Off 후 다시 On하면 체인 맨 뒤에 재삽입한다. Shift가 중간에 있으면 뒤쪽 효과는 두 번째 STFT 단계에서 처리한다. HTML drag-and-drop은 데스크톱 조작으로 검증했으며 touch/keyboard 재정렬은 아직 미검증이다. |
 | Pen | 기본 도구. 기존 점을 잡아 이동하거나 빈 위치에 중간 점을 추가한다. 드래그는 해당 시간의 궤적을 만든다. | pointer capture; `addNode`/`moveNode`; 정규화 좌표. 기존 점과 충분히 가까우면 새 점을 만들지 않음 |
-| Eraser | 기존 **중간 점**을 삭제한다. 빈 곳은 아무것도 만들거나 변경하지 않는다. | 10 CSS px 반경 hit-test; `eraseNode`가 양 끝점 거부. Mac Command-click/그 외 Ctrl-click은 임시 삭제 동작 |
+| Eraser | 기존 **중간 점**을 삭제한다. 빈 곳은 아무것도 만들거나 변경하지 않는다. | 10 CSS px 반경 hit-test; `eraseNode`가 양 끝점 거부. Mac Option-click/그 외 Ctrl-click은 임시 삭제 동작 |
 | 끝점과 순서 | 첫/마지막 점은 삭제 불가이며 시간 좌표 `x=0/1` 유지. 값 `y`는 수정 가능. 중간 점은 이웃 사이에서만 이동. | `moveNode`/`eraseNode`; [커브 테스트](../tests/neutral.mjs) |
 | Clear Current | 활성 곡선 하나를 중립 두 점으로 복원하고 재생을 정지한다. | `defaultCurves[activeCurve]`; 다른 곡선 유지 |
 | Reset All | 확인 후 다섯 곡선을 중립 두 점으로 복원하고 재생 정지. On/Off 상태는 유지한다. 취소/Escape/대화상자 바깥 클릭은 변경하지 않는다. | modal dialog; Undo 없음 |
@@ -136,3 +136,7 @@ The current local candidate supersedes earlier automatic transport-boundary dura
 ## Readout context family release — 2026-10-27
 
 Compact Shift/Stretch/Blur/Harmonicity/Freeze captions identify source-playhead curve values, including Off effects; not rendered measurements. No new gesture, seeking, point selection, transport command or audio mutation is introduced by displaying these values. See `READOUT_CONTEXT_CONTRACT.md` for basis, source-range rules, verification boundary and portability.
+
+## Shift group / Option erase — 2026-10-27
+
+Current gesture contract supersedes earlier Mac Command erase statements only. Shift captures the clicked point and ordered suffix in the active curve, fixes all X and applies one normalized Y delta with common bounds. Option-click temporarily erases on Mac, Ctrl-click on PC. Esc/cancellation restores the pending group. Existing normal editing and source/transport semantics remain. See [gesture contract](CURVE_GESTURE_CONTRACT.md).

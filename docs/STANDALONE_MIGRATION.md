@@ -107,3 +107,7 @@ STANDALONE ASSET. Preserve the role hierarchy and state distinctions in [INTERFA
 ## Readout context family release — 2026-10-27
 
 STANDALONE ASSET. Preserve editing-target, point-value, playhead/Preview-value, source-range and audition/output distinctions. Adopt native typography/accessibility/input conventions; web pixels are not native point specifications. No native implementation or listening acceptance implied. See `READOUT_CONTEXT_CONTRACT.md` for basis, source-range rules, verification boundary and portability.
+
+## Shift group / Option erase — 2026-10-27
+
+STANDALONE ASSET / approved web gesture. Retain active-curve ordered suffix, fixed-time X, common normalized delta/clamp and cancellable gesture transaction, separate from selection, audition position and output freshness. Use native modifiers and access semantics; do not transfer web pixels as native metrics. See [gesture contract](CURVE_GESTURE_CONTRACT.md).
