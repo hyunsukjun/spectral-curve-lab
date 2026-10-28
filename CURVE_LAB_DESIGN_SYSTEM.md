@@ -250,3 +250,7 @@ APPROVED INTERACTION / UI-only addition. Preserve existing point and hit geometr
 ## Readout groups and shortcut guide — 2026-10-28
 
 APPROVED WEB UI / STANDALONE ASSET. Apply Audio-approved role order/proximity with this Lab's own field count, units and colors. Keep edit context first, related musical values together and reference state last. Two semantic dividers on wide views; whitespace on narrow views. Reuse existing typography, Graphite, focus and file-help panel; all fields stay visible. Shortcuts follows the editing tools; Space/Granular retain the channel selector immediately before Pen/Eraser. Native dimensions/layout need independent validation.
+
+## Toolbar roles and processor information — 2026-10-28
+
+APPROVED WEB UI / STANDALONE ASSET. Move the fixed Spectral STFT name into Files information. Keep seven current-value fields and the existing source-playhead basis, units and Off semantics. Reuse existing controls, disclosure, typography and focus roles. Fixed implementation names may move to on-demand information; actionable routing, limits and safety remain visible. This supersedes only the prior Engine placement and stated toolbar positions, not musical readout formatting.

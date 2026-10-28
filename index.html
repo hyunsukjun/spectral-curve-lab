@@ -19,7 +19,7 @@
   <link rel="stylesheet" href="src/transport-polish.css?v=20261015-2">
   <link rel="stylesheet" href="src/transport-surface.css?v=20261015-2">
   <link rel="stylesheet" href="src/brand-layout.css?v=20261015-1">
-    <link rel="stylesheet" href="src/readout-layout.css?v=20261028-family-guide1">
+    <link rel="stylesheet" href="src/readout-layout.css?v=20261028-toolbar-engine1">
     <link rel="stylesheet" href="src/header-rhythm.css?v=20261015-1">
     <link rel="stylesheet" href="src/expanded-editor.css?v=20261015-1">
     <link rel="stylesheet" href="src/typography.css?v=20261015-family1">
@@ -46,6 +46,7 @@
                 <dt>AIFF</dt><dd>Mono/stereo 16/24-bit PCM (8–192 kHz), converted locally on import. AIFF-C is not supported.</dd>
                 <dt>AIFF limits</dt><dd>128 MiB file / converted WAV; 192 MiB decoded audio. Other formats depend on browser memory.</dd>
                 <dt>Output</dt><dd>Source duration and channel count · 48 kHz / 24-bit WAV.</dd>
+                <dt>Processing</dt><dd>Spectral STFT</dd>
               </dl>
               <p>Short excerpts recommended. Use one Lab at a time for heavy processing.</p>
             </div>
@@ -102,11 +103,7 @@
           <div class="readout"><span title="Curve target at the source playhead, even when this effect is Off. Not the selected point or rendered measurement.">Stretch · source</span><strong id="stretchReadout">1.000</strong></div>
           <div class="readout"><span title="Curve target at the source playhead, even when this effect is Off. Not the selected point or rendered measurement.">Blur · source</span><strong id="blurReadout">0%</strong></div>
           <div class="readout"><span title="Curve target at the source playhead, even when this effect is Off. Not the selected point or rendered measurement.">Harmonicity · source</span><strong id="harmonicityReadout">0%</strong></div>
-          <div class="readout playbackGroupEnd"><span title="Curve target at the source playhead, even when this effect is Off. Not the selected point or rendered measurement.">Freeze · source</span><strong id="freezeReadout">0%</strong></div>
-          <div class="readout referenceReadout">
-            <span>Engine</span>
-            <strong>Spectral STFT</strong>
-          </div>
+          <div class="readout"><span title="Curve target at the source playhead, even when this effect is Off. Not the selected point or rendered measurement.">Freeze · source</span><strong id="freezeReadout">0%</strong></div>
         </div>
         <div class="outputWaveFrame"><canvas id="outputWaveCanvas" height="96" role="slider" tabindex="0" aria-label="Output time. Source channel waveform guide, not processed output. Click or drag to seek. Arrow keys move one second, Shift Arrow one tenth; Home and End jump to boundaries." aria-valuemin="0" aria-valuemax="0" aria-valuenow="0" aria-disabled="true" title="Source waveform on the output timeline, not the rendered WAV. Click or drag to seek."></canvas></div>
         <div class="canvasFrame">

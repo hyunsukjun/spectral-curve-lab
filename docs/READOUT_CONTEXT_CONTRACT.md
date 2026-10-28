@@ -37,3 +37,7 @@ Standalone should preserve these semantic distinctions and read-only observation
 ## Spectral readout order — approved web UI — 2026-10-28
 
 Retained direct readout identifiers in order: modeReadout → pointsReadout → shiftReadout → stretchReadout → blurReadout → harmonicityReadout → freezeReadout → Engine. Values are source-playhead curve targets, including Off effects. The waveform guide is not the rendered output. Keep 11px captions/14px values. Wrap long retained values without ellipsis; adapt column counts to available width, never hide a field or relabel its origin. Implementation is scoped to this Lab; native/family acceptance remains separate.
+
+## Current-value visibility follow-up — 2026-10-28
+
+Move the fixed Spectral STFT name into Files information. Keep seven current-value fields and the existing source-playhead basis, units and Off semantics. This explicitly approved visibility change supersedes the earlier requirement to show the fixed Engine field in the strip. Retained musical/readout IDs, text, units, precision, selected-point/playhead/Preview distinction and calculations remain unchanged. Fixed processor identity is still available in Files information.

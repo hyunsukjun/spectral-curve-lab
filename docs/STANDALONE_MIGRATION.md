@@ -116,3 +116,7 @@ STANDALONE ASSET / approved web gesture. Retain active-curve ordered suffix, fix
 ## Readout hierarchy and key context — 2026-10-28
 
 STANDALONE ASSET / approved web UI. Preserve edit target, selected-point values, playhead/Preview values, input/output/IR time and engine/safety distinctions. Use role order/proximity and an optional context-specific shortcut reference. Values are source-playhead curve targets, including Off effects. The waveform guide is not the rendered output. Native menus/tooltips/key conventions may replace web details/popover mechanics; web pixels/breakpoints are not native specifications. No native implementation or listening approval implied.
+
+## Toolbar hierarchy and technical metadata — 2026-10-28
+
+STANDALONE ASSET / approved web UI. Move the fixed Spectral STFT name into Files information. Keep seven current-value fields and the existing source-playhead basis, units and Off semantics. Group editing help with editing tools and reset utilities with upper file/task actions. Separate fixed implementation identity from actionable state. Native layout, focus conventions and dimensions require independent validation; no native implementation or listening acceptance implied.

@@ -136,3 +136,7 @@ IMPLEMENTED / UI checks verified as stated in the contract. Add Shift suffix Y-o
 ## Readout hierarchy and shortcut reference — 2026-10-28
 
 IMPLEMENTED / USER-APPROVED WEB UI. Existing fields/IDs/labels/units/value origins retained; edit target and point count lead musical values, followed by input/engine/safety references. All values stay visible. An optional Shortcuts guide exposes only current per-Lab bindings; no source-volume/Undo feature is copied from Audio. Values are source-playhead curve targets, including Off effects. The waveform guide is not the rendered output.
+
+## Toolbar and information visibility — 2026-10-28
+
+IMPLEMENTED / USER-APPROVED WEB UI. Move the fixed Spectral STFT name into Files information. Keep seven current-value fields and the existing source-playhead basis, units and Off semantics. No new controls, shortcuts, processing or value model. The user approved commit/deployment after visual review on 2026-10-28; publication success is verified separately.

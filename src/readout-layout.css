@@ -36,13 +36,13 @@
 }
 
 /* Audio-approved readout roles, adapted only to this Lab's retained fields. */
-.panel.currentValues.contextReadouts { grid-template-columns:132px 72px 104px 112px 96px 128px 104px minmax(132px,1fr); column-gap:12px; }
+.panel.currentValues.contextReadouts { grid-template-columns:132px 72px 104px 112px 96px 128px minmax(104px,1fr); column-gap:12px; }
 .panel.currentValues.contextReadouts > .readout { padding-inline:0; grid-template-rows:14px minmax(18px,auto); }
 .panel.currentValues.contextReadouts > .readout > strong { white-space:normal; overflow:visible; text-overflow:clip; overflow-wrap:anywhere; }
 .panel.currentValues.contextReadouts > .readout::after { display:none; }
 @media(min-width:1100px) {
  .panel.currentValues.contextReadouts > :is(.editContextEnd,.playbackGroupEnd)::after { display:block; right:4px; }
- .panel.currentValues.contextReadouts > .readout:last-child { justify-self:end; }
+ .panel.currentValues.contextReadouts > .referenceReadout { justify-self:end; }
 }
 @media(min-width:640px) and (max-width:1099px) { .panel.currentValues.contextReadouts { grid-template-columns:repeat(4,minmax(0,1fr)); } }
 @media(min-width:440px) and (max-width:639px) { .panel.currentValues.contextReadouts { grid-template-columns:repeat(3,minmax(0,1fr)); } }
