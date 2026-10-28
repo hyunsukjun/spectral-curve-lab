@@ -1,3 +1,4 @@
+import {createSourceLoadGate, fetchDefaultSource} from "./default-source.js?v=20261029-bach1";
 import {beginVerticalGroup, moveVerticalGroup, restoreVerticalGroup, verticalGroupSuffix, drawVerticalGroupRing} from "./curve-group-edit.js?v=20261027-shift1";
 import {canvasAxisWidth, drawEditorGrid, frequencyTicks, frequencyLabel, spacedMarks, canvasLabelFont} from "./canvas-grid.js?v=20261026-graphite1";
 import {mountTransport} from "./common-transport.js?v=20261013-1";
@@ -11,6 +12,8 @@ import { valueAt, addNode, moveNode, eraseNode } from "./curve-editor.js?v=20260
 import { OutputMeterAnalyzer } from "./output-meter.js?v=20261001-playback1";
 import {fillNoiseIntervals} from "./demo-sources.js?v=20261001-demo2";
 import {moduleOrder,defaultEnabled,effectiveCurves,appendToChain,removeFromChain,moveInChain} from "./module-routing.js?v=20261005-chain-drag1";
+
+const sourceLoadGate = createSourceLoadGate();
 
 const fileInput = document.getElementById("fileInput");
 const fileStatus = document.getElementById("fileStatus");
@@ -661,8 +664,10 @@ async function setupAudio() {
     sendCurves();
 }
 
-async function loadAudioFile(file) {
+async function loadAudioFile(file, { request = null } = {}) {
   if (!file) return;
+  const sourceRequest = request || sourceLoadGate.begin();
+  if (!sourceRequest.current()) return;
   if (renderAbortController) {
     renderAbortController.abort();
     renderAbortController = null;
@@ -679,6 +684,7 @@ async function loadAudioFile(file) {
     await ensureAudioContext({ resume: false });
     const data = await readAudioFile(file, audioContext.sampleRate);
     const decoded = await decodeAudioFile(data);
+    if (!sourceRequest.current()) return;
     if (decoded.numberOfChannels > 2) throw new Error("Only mono/stereo sources supported");
     buffer = decoded;
     buildWaveform(buffer);
@@ -693,6 +699,7 @@ async function loadAudioFile(file) {
     resetCurrentReadouts();
     draw();
   } catch (error) {
+    if (!sourceRequest.current()) return;
     console.error(error);
     fileStatus.textContent = error.message?.startsWith("AIFF:") ? error.message : "Could not load audio. Try mono/stereo WAV, MP3, or M4A.";
     setExportStatus("not ready");
@@ -701,7 +708,7 @@ async function loadAudioFile(file) {
     clearDownload();
     draw();
   } finally {
-    setTransportBusy(false);
+    if (sourceRequest.current()) setTransportBusy(false);
   }
 }
 
@@ -1258,7 +1265,7 @@ window.addEventListener("keyup", (event) => {
 
 resizeCanvas();
 
-loadGeneratedExample();
+loadDefaultSource();
 
 // Test harness uses the same decode/load path as the file chooser.
 export { loadAudioFile };
@@ -1270,4 +1277,19 @@ function setExportStatus(message) {
   const output = document.getElementById("downloadReadout");
   output.textContent = message;
   output.parentElement.hidden = ["", "ready", "not ready", "needs export"].includes(message);
+}
+
+async function loadDefaultSource() {
+  const request = sourceLoadGate.begin();
+  fileStatus.textContent = "Loading default sample…";
+  setTransportBusy(false);
+  try {
+    const file = await fetchDefaultSource(request.signal);
+    if (request.current()) await loadAudioFile(file, { request });
+  } catch (error) {
+    if (!request.current()) return;
+    fileStatus.textContent = "Default sample unavailable. Open an audio file to begin.";
+    setExportStatus("not ready");
+    setTransportBusy(false);
+  }
 }

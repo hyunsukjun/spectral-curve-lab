@@ -185,3 +185,8 @@ Scoped UI evidence: 30 focused command checks, 15 same-size before/after pairs, 
 User requested consistent Timbre Shortcuts placement and higher Oscillator clear/reset utilities, then chose: fixed processor names in information; useful dynamic status retained. Move the fixed Spectral STFT name into Files information. Keep seven current-value fields and the existing source-playhead basis, units and Off semantics. Preserve musical behavior and use web review before any new publication.
 
 The user confirmed both position changes and authorized commit/deployment on 2026-10-28, including the already-approved processor information scope. UI evidence does not certify new listening, native confirmation keyboard or Windows behavior.
+
+
+## 2026-10-29 — Shared musical default source
+
+User approved the72BPM weak-room MP3 as the shared default/example asset and authorized all six commits/deployments. Preserve each Lab's source handling and keep an example recording distinct from an IR. See [default source](DEFAULT_SOURCE.md).

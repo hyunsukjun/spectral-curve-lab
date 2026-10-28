@@ -1,5 +1,7 @@
 # Spectral Curve Lab
 
+Current default/example: [Bach Prelude No.1 · mallet ·72BPM ·15s MP3](docs/DEFAULT_SOURCE.md). Prepared automatically without autoplay; Open Audio replaces it.
+
 Audio Curve Lab의 화면·노드 편집 방식을 바탕으로 만든 독립적인 STFT 기반 도구입니다. 현재 **Spectral Shift, Spectral Stretch, Spectral Blur, Harmonicity, Spectral Freeze**를 구현했습니다. SOURCE / OUTPUT 스펙트로그램은 웹 UI에서 제거했으며, 관련 연구·검증 자료는 보존합니다. Harmonicity와 Freeze의 청감 파인튜닝은 아직 진행 중입니다.
 
 **Spectral Shift: −2000…+2000 Hz, default 0 Hz.** 모든 성분에 같은 Hz를 더합니다. 예를 들어 +200 Hz는 440/880 Hz를 640/1080 Hz로 옮깁니다. 곡선을 위로 그리면 양의 이동, 아래로 그리면 음의 이동입니다. 0 Hz의 일정한 곡선은 원본을 유지합니다.
