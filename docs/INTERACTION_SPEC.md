@@ -145,3 +145,7 @@ Current gesture contract supersedes earlier Mac Command erase statements only. S
 ## Contextual shortcut guide — 2026-10-28
 
 APPROVED WEB UI. The native Shortcuts disclosure reuses file-information behavior and Graphite roles. Click/Enter/Space opens it without changing transport. Escape closes it before background gesture cancellation and returns summary focus; outside press, Tab leaving, outer scroll/resize dismiss; internal scrolling stays usable. Shortcuts follows the editing tools; Space/Granular retain the channel selector immediately before Pen/Eraser. No assignment, point/mapping, select/Space routing, chain keyboard logic or Preview/Render behavior changed.
+
+## Failed input retains the valid source (2026-10-29)
+
+Supersedes earlier failed-decode behavior that cleared a source. File attempts still stop playback; rejected candidates do not reset source edits/window/curves or replace waveform/IR/analysis. Show the error and prior-source availability; do not autoplay. Completed old WAV availability follows unchanged source/settings; invalidate it on successful replacement. See [input contract](INPUT_VALIDATION.md).

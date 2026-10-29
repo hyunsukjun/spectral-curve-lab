@@ -2,7 +2,7 @@ import {createSourceLoadGate, fetchDefaultSource} from "./default-source.js?v=20
 import {beginVerticalGroup, moveVerticalGroup, restoreVerticalGroup, verticalGroupSuffix, drawVerticalGroupRing} from "./curve-group-edit.js?v=20261027-shift1";
 import {canvasAxisWidth, drawEditorGrid, frequencyTicks, frequencyLabel, spacedMarks, canvasLabelFont} from "./canvas-grid.js?v=20261026-graphite1";
 import {mountTransport} from "./common-transport.js?v=20261013-1";
-import { readAudioFile } from "./audio-import.js?v=20261011-aiff1";
+import { readAudioFile, validateAudioBuffer } from "./audio-import.js?v=20261029-input-validation1";
 import { renderFeedback } from "./render-feedback.js?v=20261007-clip-report1";
 import {createOutputTime} from "./output-time.js?v=20261018-axis64";
 import {stretchFromNorm, stretchToNorm} from "./spectral-stretch.js?v=20260929-transport1";
@@ -71,6 +71,7 @@ let node;
 let outputMeter;
 let workletBufferLoaded = false;
 let buffer;
+let sourceFileLabel = "";
 
 let activeCurve = null;
 let selectedTool = "pen";
@@ -668,6 +669,7 @@ async function loadAudioFile(file, { request = null } = {}) {
   if (!file) return;
   const sourceRequest = request || sourceLoadGate.begin();
   if (!sourceRequest.current()) return;
+  const previousDownloadStatus = downloadReadout.textContent;
   if (renderAbortController) {
     renderAbortController.abort();
     renderAbortController = null;
@@ -684,6 +686,7 @@ async function loadAudioFile(file, { request = null } = {}) {
     await ensureAudioContext({ resume: false });
     const data = await readAudioFile(file, audioContext.sampleRate);
     const decoded = await decodeAudioFile(data);
+    await validateAudioBuffer(decoded, { signal: sourceRequest.signal, isCurrent: sourceRequest.current });
     if (!sourceRequest.current()) return;
     if (decoded.numberOfChannels > 2) throw new Error("Only mono/stereo sources supported");
     buffer = decoded;
@@ -692,6 +695,7 @@ async function loadAudioFile(file, { request = null } = {}) {
     sendBufferToWorklet();
     const longFileNote = buffer.duration > largeFileSeconds ? " - long file" : "";
     fileStatus.textContent = `${file.name} - ${buffer.duration.toFixed(2)} s${longFileNote}`;
+    sourceFileLabel = fileStatus.textContent;
     clearDownload();
     setExportStatus("ready");
     playheadSeconds = 0;
@@ -701,11 +705,9 @@ async function loadAudioFile(file, { request = null } = {}) {
   } catch (error) {
     if (!sourceRequest.current()) return;
     console.error(error);
-    fileStatus.textContent = error.message?.startsWith("AIFF:") ? error.message : "Could not load audio. Try mono/stereo WAV, MP3, or M4A.";
-    setExportStatus("not ready");
-    buffer = null;
-    outputTime.setBuffer(null);
-    clearDownload();
+    const message = /^(AIFF:|Audio input:)/.test(error.message || "") ? error.message : "Could not load audio. Try mono/stereo WAV, MP3, or M4A.";
+    fileStatus.textContent = `${message}${buffer ? ` Previous audio remains available: ${sourceFileLabel}` : ""}`;
+    setExportStatus(buffer ? previousDownloadStatus : "not ready");
     draw();
   } finally {
     if (sourceRequest.current()) setTransportBusy(false);

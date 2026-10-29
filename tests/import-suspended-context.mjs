@@ -1,15 +1,15 @@
 import {createSourceLoadGate} from "../src/default-source.js";
-import {readAudioFile} from "../src/audio-import.js";
+import {readAudioFile,validateAudioBuffer} from "../src/audio-import.js";
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import vm from 'node:vm';
 const source=readFileSync(new URL('../src/app.js',import.meta.url),'utf8');
 const pick=name=>{const i=source.indexOf(`async function ${name}(`);assert.ok(i>=0);return source.slice(i,source.indexOf('\n}',i)+2)};
 let resumes=0,busy=[],rejectDecode=false,decoded=0,options;
-const candidate={numberOfChannels:2,duration:2};
+const candidate={numberOfChannels:2,duration:2,length:96000,sampleRate:48000,getChannelData:()=>new Float32Array(96000),copyFromChannel:out=>out.fill(0)};
 class AudioContext {constructor(opts){options=opts;this.state='suspended'} resume(){resumes++;return new Promise(()=>{})}}
 const text=()=>({textContent:''});
-const c={readAudioFile,window:{AudioContext},audioContext:null,buffer:null,renderAbortController:null,node:null,
+const c={validateAudioBuffer,sourceFileLabel:"",readAudioFile,window:{AudioContext},audioContext:null,buffer:null,renderAbortController:null,node:null,
  spectrogram:{invalidate(){}},outputTime:{setBuffer(){}},fileStatus:text(),downloadReadout:text(),readouts:{download:text()},playButton:text(),isPlaying:false,
  setTransportBusy(x){busy.push(x)},setBusy(x){busy.push(x)},nextPlaybackToken(){return 1},
  decodeAudioFile:async()=>{decoded++;if(rejectDecode)throw new Error('Invalid audio');return candidate},
@@ -21,10 +21,10 @@ const file={name:'test.wav',slice:()=>new Blob([new ArrayBuffer(8)]),arrayBuffer
 let timer;
 try {await Promise.race([c.loadAudioFile(file),new Promise((_,reject)=>{timer=setTimeout(()=>reject(new Error('Import blocked by pending audio resume')),200)})]);} finally {clearTimeout(timer)}
 assert.equal(resumes,0);assert.equal(decoded,1);assert.equal(c.buffer,candidate);assert.deepEqual(busy,[true,false]);assert.match(c.fileStatus.textContent,/2.00 s/);
-rejectDecode=true;busy=[];await c.loadAudioFile(file);assert.equal(c.buffer,null);assert.deepEqual(busy,[true,false]);assert.match(c.fileStatus.textContent,/Could not load/);
+rejectDecode=true;busy=[];await c.loadAudioFile(file);assert.equal(c.buffer,candidate);assert.deepEqual(busy,[true,false]);assert.match(c.fileStatus.textContent,/Could not load/);
 rejectDecode=false;busy=[];await c.loadAudioFile(file);assert.equal(c.buffer,candidate);assert.deepEqual(busy,[true,false]);
 if(source.includes('Only mono/stereo sources supported')){
- assert.equal(options.sampleRate,48000);candidate.numberOfChannels=4;await c.loadAudioFile(file);assert.equal(c.buffer,null);
+ assert.equal(options.sampleRate,48000);candidate.numberOfChannels=4;await c.loadAudioFile(file);assert.equal(c.buffer,candidate);
 }
 void c.ensureAudioContext();assert.equal(resumes,1);
 console.log('PASS: suspended-context import, failure recovery/retry, playback activation, channel/rate contract');

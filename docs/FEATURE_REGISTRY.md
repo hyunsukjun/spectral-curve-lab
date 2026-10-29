@@ -145,3 +145,7 @@ IMPLEMENTED / USER-APPROVED WEB UI. Move the fixed Spectral STFT name into Files
 ## 2026-10-29 — Shared musical default source
 
 Use the approved shared Bach mallet MP3 in the role documented in [default source](DEFAULT_SOURCE.md). Stereo input and existing initial module state are retained. DSP and musical mappings are unchanged.
+
+## Safe decoded input admission (2026-10-29)
+
+IMPLEMENTED, USER-AUTHORIZED RELEASE. Reject empty/invalid decoded audio and nonfinite PCM before source adoption. A failed import retains the previous valid source and its editing/IR/analysis state; a later valid file recovers. Finite PCM and existing DSP/limits remain unchanged. See [input contract](INPUT_VALIDATION.md).
