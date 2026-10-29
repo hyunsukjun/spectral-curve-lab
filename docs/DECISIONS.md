@@ -194,3 +194,13 @@ User approved the72BPM weak-room MP3 as the shared default/example asset and aut
 ## Read-only admission before source replacement (2026-10-29)
 
 USER-APPROVED SCOPE, IMPLEMENTED; release authorized2026-10-29. Extend the already shared audio-import module instead of creating another decoder or DSP sanitizer. Scan all decoded channels before adoption; reject nonfinite data rather than silently replacing samples. Preserve a previous valid input on failure. Bounded copy reads avoid mutating view readback in the observed Brave environment. Normal hot/clipped/DC/silent audio keeps its existing processing meaning. Verification/release/listening are separate. See [input contract](INPUT_VALIDATION.md).
+
+
+## Output sample-peak guard — 2026-10-30 (local review)
+
+Supersedes historical no-output-protection statements only. Linked0.98 Preview sample ceiling,instant attack/60ms recovery,no new latency; below-ceiling unity history stays unchanged. Nonfinite processed output stops/reports with explicit retry recovery. Spectral WAV uses one global down-only output gain; clip status reports its applied attenuation. Raw FFT/phase/mapping/channel/duration are unchanged. See [policy,evidence and unverified listening limits](OUTPUT_PEAK_PROTECTION_2026-10-30.md). Not committed/deployed; no Native implementation.
+
+
+## Output protection release authorization — 2026-10-30
+
+The user approved verification, commit and public deployment of the reviewed output-protection candidate. Source processing, parameter mappings, spatial/channel rules and time axes remain unchanged. Protection may alter dynamics when engaged; this is not listening, physical-device or full-product acceptance. Publication proof is tracked separately in Interface QA `space-spectral-output-release-20261030`.

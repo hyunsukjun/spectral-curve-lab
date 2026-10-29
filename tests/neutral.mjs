@@ -49,8 +49,13 @@ await import('../src/spectral-worklet.js?v=20260929-transport1');
 const p=new Processor(), left=Float32Array.from({length:5003},(_,i)=>.3*Math.sin(i*.1)), right=Float32Array.from(left,v=>-v);
 const send=d=>p.port.onmessage({data:d});send({type:'buffer',left,right});send({type:'play',token:1});
 const captured=[];while(p.playing){const out=[new Float32Array(128),new Float32Array(128)];p.process([], [out]);if(!p.priming)captured.push(...out[0]);}
-assert.ok(p.messages.some(m=>m.type==='ended'));left.forEach((v,i)=>assert.ok(Math.abs(v-captured[i])<1e-6));
-send({type:'seek',progress:.4});send({type:'play',token:2});p.process([],[[new Float32Array(128),new Float32Array(128)]]);send({type:'pause',token:3});assert.equal(p.playing,false);send({type:'stop',token:4});assert.equal(p.position,0);
+assert.ok(p.messages.some(m=>m.type==='ended'));
+// The raw neutral STFT stays exact; the shipped transport separately applies10ms edges.
+left.forEach((v,i)=>{const envelope=Math.max(0,Math.min(1,i/480,(left.length-1-i)/480));assert.ok(Math.abs(v*envelope-captured[i])<1e-6);});
+send({type:'seek',progress:.4});send({type:'play',token:2});
+// Complete the existing asynchronous STFT preparation before measuring audible Pause frames.
+const seekStart=p.position;let primingCalls=0;while(p.playing&&p.position===seekStart&&primingCalls++<1000)p.process([],[[new Float32Array(128),new Float32Array(128)]]);assert(primingCalls<1000);
+send({type:'pause',token:3});const pauseAt=p.position;let releases=0;while(p.playing&&releases++<8)p.process([],[[new Float32Array(128),new Float32Array(128)]]);assert.equal(p.playing,false);assert(p.position>=pauseAt&&p.position<=Math.min(left.length,pauseAt+481));send({type:'stop',token:4});assert.equal(p.position,0);
 writeFileSync(new URL('../docs/numerical-results.json',import.meta.url),JSON.stringify({results,longResult,worklet:'128-frame output, stereo, seek, pause, stop and natural end passed',wav:'24-bit / 48kHz mono odd-byte padding passed'},null,2));
 console.log(JSON.stringify({cases:results.length,maxError:Math.max(...results.map(r=>r.peakError)),longResult,worklet:'pass',wav:'pass'}));
 const {addNode,moveNode,eraseNode}=await import('../src/curve-editor.js?v=20260929-transport1');

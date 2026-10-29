@@ -129,3 +129,8 @@ STANDALONE ASSET: approved source identity, user-file precedence and source-vs-I
 ## Input admission transaction — STANDALONE ASSET (2026-10-29)
 
 Preserve candidate validation before ownership swap, full-channel/tail finite checks, bounded read-only access, stale-job cancellation, previous valid source/dependent state on failure, and explicit retry. Decode independently of device activation. Native adapter/batch sizes need separate measurements; do not copy browser getter quirks into the DSP model. Web implementation and silent evidence are not native integration or listening acceptance. See [input contract](INPUT_VALIDATION.md).
+
+
+## Output sample-peak guard — 2026-10-30 (local review)
+
+Supersedes historical no-output-protection statements only. Linked0.98 Preview sample ceiling,instant attack/60ms recovery,no new latency; below-ceiling unity history stays unchanged. Nonfinite processed output stops/reports with explicit retry recovery. Spectral WAV uses one global down-only output gain; clip status reports its applied attenuation. Raw FFT/phase/mapping/channel/duration are unchanged. See [policy,evidence and unverified listening limits](OUTPUT_PEAK_PROTECTION_2026-10-30.md). Not committed/deployed; no Native implementation.

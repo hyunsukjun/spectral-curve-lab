@@ -3,7 +3,7 @@ import {beginVerticalGroup, moveVerticalGroup, restoreVerticalGroup, verticalGro
 import {canvasAxisWidth, drawEditorGrid, frequencyTicks, frequencyLabel, spacedMarks, canvasLabelFont} from "./canvas-grid.js?v=20261026-graphite1";
 import {mountTransport} from "./common-transport.js?v=20261013-1";
 import { readAudioFile, validateAudioBuffer } from "./audio-import.js?v=20261029-input-validation1";
-import { renderFeedback } from "./render-feedback.js?v=20261007-clip-report1";
+import { renderFeedback } from "./render-feedback.js?v=20261030-peak1";
 import {createOutputTime} from "./output-time.js?v=20261018-axis64";
 import {stretchFromNorm, stretchToNorm} from "./spectral-stretch.js?v=20260929-transport1";
 import {shiftFromNorm} from "./spectral-shift.js?v=20260929-transport1";
@@ -14,6 +14,8 @@ import {fillNoiseIntervals} from "./demo-sources.js?v=20261001-demo2";
 import {moduleOrder,defaultEnabled,effectiveCurves,appendToChain,removeFromChain,moveInChain} from "./module-routing.js?v=20261005-chain-drag1";
 
 const sourceLoadGate = createSourceLoadGate();
+const OUTPUT_PEAK_ERROR = "Playback output was invalid. Playback stopped; open another file or retry.";
+let previousPeakErrorLabel = null;
 
 const fileInput = document.getElementById("fileInput");
 const fileStatus = document.getElementById("fileStatus");
@@ -287,6 +289,8 @@ async function playAudio() {
     if (needsInitialSeek) node.port.postMessage({type: "seek", progress: playheadSeconds / getPlaybackDuration(), token: playbackToken});
     node.port.postMessage({ type: "play", token: nextPlaybackToken() });
     isPlaying = true;
+    if (fileStatus.textContent === OUTPUT_PEAK_ERROR && previousPeakErrorLabel != null) fileStatus.textContent = previousPeakErrorLabel;
+    previousPeakErrorLabel = null;
     playButton.textContent = "Pause";
   } catch (error) {
     console.error(error);
@@ -330,7 +334,7 @@ function getSettings() {
 
 async function getOfflineRenderer() {
   if (!renderOffline) {
-    const module = await import("./offline-render.js?v=20261025-fade10");
+    const module = await import("./offline-render.js?v=20261030-peak1");
     renderOffline = module.renderOffline;
   }
   return renderOffline;
@@ -623,7 +627,7 @@ async function setupAudio() {
     throw new Error("AudioWorklet is not available. Use a current Chrome, Edge, or Safari version over HTTPS.");
   }
 
-    await audioContext.audioWorklet.addModule(new URL("./spectral-worklet.js?v=20261025-fade10", import.meta.url));
+    await audioContext.audioWorklet.addModule(new URL("./spectral-worklet.js?v=20261030-peak1", import.meta.url));
     node = new AudioWorkletNode(audioContext, "spectral-neutral-processor", {
       numberOfInputs: 0,
       numberOfOutputs: 1,
@@ -636,7 +640,11 @@ async function setupAudio() {
     node.onprocessorerror = () => { stopAudio(); fileStatus.textContent = "Audio engine error. Reload to retry."; };
     node.port.onmessage = (event) => {
       if (!isCurrentPlaybackMessage(event.data)) return;
-      if (event.data.type === "position") {
+      if (event.data.type === "invalid-output") {
+        stopAudio();
+        previousPeakErrorLabel = fileStatus.textContent;
+        fileStatus.textContent = OUTPUT_PEAK_ERROR;
+      } else if (event.data.type === "position") {
         if (isScrubbing) return;
         playheadSeconds = event.data.seconds;
         sourcePlayheadSeconds = event.data.sourceSeconds ?? event.data.seconds;

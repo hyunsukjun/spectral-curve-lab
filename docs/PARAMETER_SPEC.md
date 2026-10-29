@@ -47,3 +47,8 @@
 사용자는 현재 Spectral Curve Lab의 소리가 다른 Curve Lab보다 “너무 싸구려스럽고”, 음향적 매력을 찾기 어렵다고 평가했다. **입력 음원·세 곡선의 값/조합·Preview/WAV 중 어느 경로·청취 환경은 아직 UNKNOWN**이다. 따라서 세 파라미터 각각의 불합격 판정이나 새로운 sweet spot으로 일반화하지 않는다. 제품 수준의 청감 품질 문제로 기록하고, 중립 출력 → 세 효과 단독 → 조합, 기본 백색소음 예제 → 실제 악기/음성/타악, Preview → Render 순서의 A/B로 원인을 분리한다. 상태: **NEEDS MORE TESTING**. 분석과 개선 가설은 [음질 검토](QUALITY-REVIEW-20260929.md).
 
 실제 청취에서 채택·기각한 값은 [청취 판단 기록](LISTENING_DECISIONS.md)에 근거와 함께 남긴다. 급격한 곡선의 프레임 평가·평활과 Preview/Render 시간 차이는 [커브의 시간 동작](CURVE_TEMPORAL_BEHAVIOR.md)에 기록한다.
+
+
+## Output sample-peak guard — 2026-10-30 (local review)
+
+Supersedes historical no-output-protection statements only. Linked0.98 Preview sample ceiling,instant attack/60ms recovery,no new latency; below-ceiling unity history stays unchanged. Nonfinite processed output stops/reports with explicit retry recovery. Spectral WAV uses one global down-only output gain; clip status reports its applied attenuation. Raw FFT/phase/mapping/channel/duration are unchanged. See [policy,evidence and unverified listening limits](OUTPUT_PEAK_PROTECTION_2026-10-30.md). Not committed/deployed; no Native implementation.

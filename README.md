@@ -100,3 +100,8 @@ SOURCE / OUTPUT Spectrogram 패널·토글·Update 및 전용 스타일, app의 
 ## Shift group / Option erase — 2026-10-27
 
 Shift-drag a point and following points vertically with X fixed; Mac Option-click erases an interior point (PC Ctrl-click unchanged). Original editing, mappings and DSP remain. User-reviewed UI checks are recorded in the gesture contract; commit/deployment was explicitly authorized on 2026-10-27. See [gesture contract](docs/CURVE_GESTURE_CONTRACT.md).
+
+
+## Output peak protection — 2026-10-30
+
+Preview uses a linked0.98 sample-peak ceiling after existing processing, with no lookahead/up-gain and60ms recovery. Channel-relative balance and timing are retained; engaged protection changes output dynamics. WAV applies one shared down-only whole-output gain after the existing transport boundary; normal output bytes remain unchanged. Preview dynamic protection and WAV normalization are different policies. This does not repair clipped recordings or guarantee intersample true peaks. See [policy and limits](docs/OUTPUT_PEAK_PROTECTION_2026-10-30.md).

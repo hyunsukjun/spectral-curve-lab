@@ -18,7 +18,9 @@ for(const length of [1,127,128,511,512,1921,2048,5003])for(let tick=0;tick<16;ti
  send({type:'seek',progress:0,token:8});send({type:'play',token:8});
  while(p.playing&&p.position===0)p.process([],[[new Float32Array(128),new Float32Array(128)]]);
  assert.ok(p.position>0);send({type:'pause',token:9});const paused=p.position;
- p.process([],[[new Float32Array(128),new Float32Array(128)]]);assert.equal(p.position,paused);
+ let releaseCalls=0;while(p.playing&&releaseCalls++<8)p.process([],[[new Float32Array(128),new Float32Array(128)]]);
+ assert.equal(p.playing,false,'Pause finishes its10ms release');assert(p.position>=paused&&p.position<=Math.min(length,paused+481));
+ const retained=p.position; p.process([],[[new Float32Array(128),new Float32Array(128)]]);assert.equal(p.position,retained,'paused engine position stays retained');
  send({type:'stop',token:10});assert.equal(p.position,0);assert.equal(p.messages.at(-1).type,'stopped');
 }
 console.log('128 transport cases: end ordering, restart, pause and stop passed');

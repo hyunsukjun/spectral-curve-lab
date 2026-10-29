@@ -44,3 +44,13 @@
 Stop, forced Stop, and actual source replacement now advance the playback token even before the AudioWorklet node exists. Previously optional chaining skipped token advancement while setup was pending; the original Play could run after Stop or after a completed source replacement. Source chooser cancellation still preserves state. An explicit later Play works normally. DSP, curves, output rate and format are unchanged.
 
 Verification: actual-handler deferred-initialization test `tests/initial-play-cancel.mjs` failed before the fix and passes for Stop, forced Stop, and file replacement plus explicit retry. Existing transport, keyboard and suspended-context import checks pass. Safari public baseline first click started playback; no exact cold-start latency or audible onset measurement was made. This fix addresses stale playback requests, not engine startup speed.
+
+
+## Output sample-peak guard — 2026-10-30 (local review)
+
+Supersedes historical no-output-protection statements only. Linked0.98 Preview sample ceiling,instant attack/60ms recovery,no new latency; below-ceiling unity history stays unchanged. Nonfinite processed output stops/reports with explicit retry recovery. Spectral WAV uses one global down-only output gain; clip status reports its applied attenuation. Raw FFT/phase/mapping/channel/duration are unchanged. See [policy,evidence and unverified listening limits](OUTPUT_PEAK_PROTECTION_2026-10-30.md). Not committed/deployed; no Native implementation.
+
+
+## Neutral Worklet test contract drift — 2026-10-30
+
+`tests/neutral.mjs` failed on both the unchanged522fa45 baseline and the output-protection candidate: it expected raw source samples at the final Worklet output and immediate Pause, ignoring the already shipped10ms transport envelope. Preserve its72raw STFT comparisons and180s finite-output check. Only final Worklet expectations now include an independently calculated10ms linear boundary; complete the existing STFT preparation before measuring audible Pause frames, then verify release/retained position. First attempted preparation timing failure is retained in release QA. No product DSP changed for this repair. All12package test commands and affected input/resampling/guard/transport tests pass across the recorded runs; actual public verification is recorded separately.
